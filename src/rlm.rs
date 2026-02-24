@@ -239,7 +239,7 @@ impl Rlm {
             Ok(Object::String(result))
         } else {
             if self.config.verbose {
-                eprintln!("[depth={}] max depth — direct LLM call", self.config.depth);
+                eprintln!("[depth={}] max depth - direct LLM call", self.config.depth);
             }
             let sub_llm = LlmClient::new(self.config.client.clone(), &self.config.sub_model);
             let result = sub_llm.completion_simple(prompt).await?;

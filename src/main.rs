@@ -13,7 +13,7 @@ use axon::store::ContextStore;
 #[derive(Parser)]
 #[command(
     name = "axon",
-    about = "Recursive Language Model engine — one context, run everywhere"
+    about = "Recursive Language Model engine - one context, run everywhere"
 )]
 struct Cli {
     /// Root LLM model
@@ -152,7 +152,7 @@ async fn main() -> Result<()> {
         }
 
         Commands::Chat { ref thread } => {
-            eprintln!("Axon RLM — thread '{}'. Type 'exit' to quit.", thread);
+            eprintln!("Axon RLM - thread '{}'. Type 'exit' to quit.", thread);
             let stdin = std::io::stdin();
             loop {
                 eprint!("You: ");

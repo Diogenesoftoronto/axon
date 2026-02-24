@@ -2,11 +2,11 @@
 
 ***One context, run everywhere.***
 
-**Recursive Language Model engine in Rust — sandboxed Python execution via [ouros](https://github.com/parcadei/ouros), multi-provider LLM support via [genai](https://github.com/jeremychone/rust-genai).**
+**Recursive Language Model engine in Rust - sandboxed Python execution via [ouros](https://github.com/parcadei/ouros), multi-provider LLM support via [genai](https://github.com/jeremychone/rust-genai).**
 
 Built on the [Recursive Language Model](https://arxiv.org/abs/2512.24601v1) framework where LLMs offload context into a REPL environment and recursively call sub-LLMs to decompose complex tasks.
 
-Axon uses **ouros** (a sandboxed Python runtime in Rust) for safe code execution and **genai** for unified access to OpenAI, Anthropic, Gemini, Ollama, and custom providers. When the RLM calls `llm_query()`, it spawns a **full sub-RLM at the next depth level** — each with its own sandbox — enabling true recursive reasoning.
+Axon uses **ouros** (a sandboxed Python runtime in Rust) for safe code execution and **genai** for unified access to OpenAI, Anthropic, Gemini, Ollama, and custom providers. When the RLM calls `llm_query()`, it spawns a **full sub-RLM at the next depth level** - each with its own sandbox - enabling true recursive reasoning.
 
 ## Architecture
 
@@ -47,6 +47,20 @@ Axon RLM Engine (Rust)
 
 ```bash
 cargo build --release
+```
+
+### Install From GitHub Releases
+
+Download a prebuilt binary from the latest release:
+
+```bash
+gh release download --repo Diogenesoftoronto/axon --pattern "axon-*" --dir .
+```
+
+You can also download a specific version:
+
+```bash
+gh release download v0.1.0 --repo Diogenesoftoronto/axon --pattern "axon-*"
 ```
 
 ### Usage
@@ -110,7 +124,7 @@ Axon uses the [genai](https://github.com/jeremychone/rust-genai) crate for LLM a
 | `claude*` | Anthropic | `ANTHROPIC_API_KEY` |
 | `gemini*` | Google | `GEMINI_API_KEY` |
 | `grok*` | xAI | `XAI_API_KEY` |
-| Custom/unknown | Ollama (local) | — |
+| Custom/unknown | Ollama (local) | - |
 
 For custom providers (like Synthetic), use `--base-url` to set the endpoint:
 ```bash
@@ -127,7 +141,7 @@ Query the RLM with persistent thread context.
 | Param | Type | Description |
 |-------|------|-------------|
 | `query` | string | The question to ask |
-| `thread_id` | string | Thread identifier — context accumulates per thread |
+| `thread_id` | string | Thread identifier - context accumulates per thread |
 
 ### `upload_context`
 
@@ -141,7 +155,7 @@ Upload a transcript to persistent memory.
 
 ## Project Structure
 
-```
+```text
 axon/
 ├── Cargo.toml
 ├── src/
@@ -158,9 +172,60 @@ axon/
 └── data/              # Persistent context (created at runtime)
 ```
 
+## Extending Axon
+
+This project is small and intentionally modular. If you want to add features, use this path:
+
+1. Add a new behavior in the engine (`src/rlm.rs`) and sandbox bridge (`src/sandbox.rs`).
+2. Add a new CLI surface in [`main.rs`](src/main.rs) if users need direct access.
+3. Add or update MCP tools in [`mcp.rs`](src/mcp.rs) if Claude Code should call it.
+4. Update prompts in [`prompts.rs`](src/prompts.rs) when behavior depends on agent instructions.
+5. Add unit tests next to the changed module and integration tests in [`tests/integration.rs`](tests/integration.rs).
+
+Common extension patterns:
+
+- Add a sandbox external function. Register it in `Sandbox::new()` in `src/sandbox.rs`.
+- Add a sandbox external function. Handle it in `Rlm::handle_external()` in `src/rlm.rs`.
+- Add a sandbox external function. Decide whether it should be callable from prompts and document it.
+- Add a new CLI command. Extend the `Commands` enum in `src/main.rs`.
+- Add a new CLI command. Implement the command branch in `main()`.
+- Add a new MCP tool. Add schema in the `tools/list` response in `src/mcp.rs`.
+- Add a new MCP tool. Implement logic in `handle_tool_call()` and return `tool_result(...)` or `tool_error(...)`.
+
+Potential feature design docs:
+
+- [Fork, Checkpoint, and VFS Extension](docs/fork-checkpoint-vfs.md)
+
+Local validation before pushing:
+
+```bash
+cargo fmt --all --check
+cargo clippy --all-targets --all-features -- -D warnings
+cargo test --all-targets --all-features
+cargo build --release
+```
+
+## Release Process
+
+This repo publishes binaries from `.github/workflows/release.yml`.
+
+1. Create a version tag.
+2. Push the tag.
+3. GitHub Actions builds binaries for Linux, macOS (Intel/Apple Silicon), and Windows.
+4. Assets are attached to the GitHub Release automatically.
+
+With `gh`:
+
+```bash
+git tag v0.1.0
+git push origin v0.1.0
+gh run list --repo Diogenesoftoronto/axon --workflow release.yml
+gh release view v0.1.0 --repo Diogenesoftoronto/axon
+```
+
 ## References
 
-- [Recursive Language Models](https://arxiv.org/abs/2512.24601v1) — Zhang, Kraska & Khattab (2025)
-- [ouros](https://github.com/parcadei/ouros) — Sandboxed Python runtime in Rust
-- [genai](https://github.com/jeremychone/rust-genai) — Multi-AI Providers Library for Rust
+- [Recursive Language Models](https://arxiv.org/abs/2512.24601v1) - Zhang, Kraska & Khattab (2025)
+- [ouros](https://github.com/parcadei/ouros) - Sandboxed Python runtime in Rust
+- [genai](https://github.com/jeremychone/rust-genai) - Multi-AI Providers Library for Rust
 - [Model Context Protocol](https://modelcontextprotocol.io)

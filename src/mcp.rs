@@ -19,6 +19,7 @@ pub struct McpServer {
 }
 
 impl McpServer {
+    #[allow(clippy::too_many_arguments)]
     pub fn new(
         client: Client,
         model: String,
@@ -76,7 +77,7 @@ impl McpServer {
                                 "type": "object",
                                 "properties": {
                                     "query": { "type": "string", "description": "The question to ask" },
-                                    "thread_id": { "type": "string", "description": "Thread identifier — context accumulates per thread" }
+                                    "thread_id": { "type": "string", "description": "Thread identifier - context accumulates per thread" }
                                 },
                                 "required": ["query", "thread_id"]
                             }
