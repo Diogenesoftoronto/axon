@@ -15,6 +15,7 @@ pub struct RlmConfig {
     pub depth: usize,
     pub max_depth: usize,
     pub verbose: bool,
+    pub trace_sandbox: bool,
 }
 
 pub struct Rlm {
@@ -56,23 +57,40 @@ impl Rlm {
             messages.push(Message::assistant(&response));
 
             if !code_blocks.is_empty() {
-                for code in &code_blocks {
+                for (idx, code) in code_blocks.iter().enumerate() {
+                    if self.config.trace_sandbox {
+                        eprintln!(
+                            "[depth={}][iter={}/{}][sandbox][block={}] code:\n{}",
+                            self.config.depth,
+                            iteration + 1,
+                            self.config.max_iterations,
+                            idx + 1,
+                            code
+                        );
+                    }
                     let result = self.execute_in_sandbox(&mut sandbox, code).await?;
                     let formatted = format_exec_result(code, &result);
                     messages.push(Message::user(&formatted));
                 }
-                continue;
             }
 
             if let Some(answer) = check_final_answer(&response, &sandbox) {
                 if self.config.verbose {
-                    eprintln!("[depth={}] FINAL: {}...", self.config.depth, &answer[..answer.len().min(120)]);
+                    eprintln!(
+                        "[depth={}] FINAL: {}...",
+                        self.config.depth,
+                        &answer[..answer.len().min(120)]
+                    );
                 }
                 return Ok(answer);
             }
         }
 
-        messages.push(prompts::next_action_prompt(query, self.config.max_iterations, true));
+        messages.push(prompts::next_action_prompt(
+            query,
+            self.config.max_iterations,
+            true,
+        ));
         self.llm.completion(&messages).await
     }
 
@@ -80,6 +98,14 @@ impl Rlm {
         let output = sandbox.execute(code)?;
         let mut stdout = output.stdout;
         let mut progress = output.progress;
+
+        if self.config.trace_sandbox && !stdout.is_empty() {
+            eprintln!(
+                "[depth={}][sandbox] stdout: {}",
+                self.config.depth,
+                truncate_for_trace(&stdout, 600)
+            );
+        }
 
         loop {
             match progress {
@@ -89,13 +115,53 @@ impl Rlm {
                     call_id,
                     ..
                 } => {
+                    if self.config.trace_sandbox {
+                        eprintln!(
+                            "[depth={}][sandbox] external call: {}({})",
+                            self.config.depth,
+                            function_name,
+                            describe_args(&args)
+                        );
+                    }
                     let ret = self.handle_external(sandbox, &function_name, &args).await?;
+                    if self.config.trace_sandbox {
+                        eprintln!(
+                            "[depth={}][sandbox] external return: {}",
+                            self.config.depth,
+                            truncate_for_trace(&ret.to_string(), 300)
+                        );
+                    }
                     let next = sandbox.resume(call_id, ret)?;
                     stdout.push_str(&next.stdout);
+                    if self.config.trace_sandbox && !next.stdout.is_empty() {
+                        eprintln!(
+                            "[depth={}][sandbox] stdout: {}",
+                            self.config.depth,
+                            truncate_for_trace(&next.stdout, 600)
+                        );
+                    }
                     progress = next.progress;
                 }
-                ReplProgress::Complete(_) => break,
-                _ => break,
+                ReplProgress::Complete(_) => {
+                    if self.config.trace_sandbox {
+                        eprintln!(
+                            "[depth={}][sandbox] complete; vars: {}",
+                            self.config.depth,
+                            describe_vars(sandbox)
+                        );
+                    }
+                    break;
+                }
+                _ => {
+                    if self.config.trace_sandbox {
+                        eprintln!(
+                            "[depth={}][sandbox] non-complete progress; vars: {}",
+                            self.config.depth,
+                            describe_vars(sandbox)
+                        );
+                    }
+                    break;
+                }
             }
         }
 
@@ -124,12 +190,13 @@ impl Rlm {
             "FINAL_VAR" => {
                 let name = obj_to_string(args.first().unwrap_or(&Object::None));
                 let name = name.trim().trim_matches('"').trim_matches('\'');
-                Ok(Object::String(
-                    sandbox
-                        .get_variable(name)
-                        .unwrap_or_else(|| format!("Error: Variable '{}' not found", name)),
-                ))
+                Ok(Object::String(sandbox.get_variable(name).unwrap_or_else(
+                    || format!("Error: Variable '{}' not found", name),
+                )))
             }
+            "FINAL" => Ok(Object::String(obj_to_string(
+                args.first().unwrap_or(&Object::None),
+            ))),
             "SHOW_VARS" => {
                 let vars = sandbox.list_variables();
                 let desc: Vec<String> = vars.iter().map(|(n, t)| format!("{}: {}", n, t)).collect();
@@ -162,6 +229,7 @@ impl Rlm {
                 depth: self.config.depth + 1,
                 max_depth: self.config.max_depth,
                 verbose: self.config.verbose,
+                trace_sandbox: self.config.trace_sandbox,
             });
             let result = Box::pin(sub.completion(
                 "Analyze the context and answer the question within it.",
@@ -211,15 +279,15 @@ enum FinalType {
 }
 
 fn find_final_answer(text: &str) -> Option<(FinalType, String)> {
-    let re_var = Regex::new(r"(?m)^\s*FINAL_VAR\(").unwrap();
-    if let Some(m) = re_var.find(text) {
-        if let Some(content) = extract_balanced_parens(text, m.end() - 1) {
+    if let Some(i) = text.find("FINAL_VAR(") {
+        let start = i + "FINAL_VAR".len();
+        if let Some(content) = extract_balanced_parens(text, start) {
             return Some((FinalType::Variable, content.trim().to_string()));
         }
     }
-    let re_final = Regex::new(r"(?m)^\s*FINAL\(").unwrap();
-    if let Some(m) = re_final.find(text) {
-        if let Some(content) = extract_balanced_parens(text, m.end() - 1) {
+    if let Some(i) = text.find("FINAL(") {
+        let start = i + "FINAL".len();
+        if let Some(content) = extract_balanced_parens(text, start) {
             return Some((FinalType::Direct, content.trim().to_string()));
         }
     }
@@ -280,6 +348,49 @@ fn format_exec_result(code: &str, stdout: &str) -> String {
     )
 }
 
+fn truncate_for_trace(text: &str, max_chars: usize) -> String {
+    if text.len() <= max_chars {
+        text.to_string()
+    } else {
+        format!(
+            "{}...[+{} chars]",
+            &text[..max_chars],
+            text.len() - max_chars
+        )
+    }
+}
+
+fn describe_args(args: &[Object]) -> String {
+    args.iter()
+        .map(|a| truncate_for_trace(&a.to_string(), 200))
+        .collect::<Vec<_>>()
+        .join(", ")
+}
+
+fn describe_vars(sandbox: &Sandbox) -> String {
+    let vars = sandbox.list_variables();
+    if vars.is_empty() {
+        return "none".to_string();
+    }
+    let mut parts = Vec::new();
+    for (name, ty) in vars.into_iter().take(12) {
+        let value = sandbox
+            .get_variable(&name)
+            .unwrap_or_else(|| "<unavailable>".to_string());
+        parts.push(format!(
+            "{}:{}={}",
+            name,
+            ty,
+            truncate_for_trace(&value, 120)
+        ));
+    }
+    if parts.len() == 12 {
+        format!("{} ...", parts.join(", "))
+    } else {
+        parts.join(", ")
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -333,6 +444,14 @@ mod tests {
         let (kind, content) = find_final_answer(text).unwrap();
         assert!(matches!(kind, FinalType::Direct));
         assert_eq!(content, "f(x) + g(y)");
+    }
+
+    #[test]
+    fn test_find_final_answer_inline_text() {
+        let text = "Here is my result: FINAL(the answer).";
+        let (kind, content) = find_final_answer(text).unwrap();
+        assert!(matches!(kind, FinalType::Direct));
+        assert_eq!(content, "the answer");
     }
 
     #[test]

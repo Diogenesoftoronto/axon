@@ -15,6 +15,7 @@ pub struct McpServer {
     max_depth: usize,
     store: ContextStore,
     verbose: bool,
+    trace_sandbox: bool,
 }
 
 impl McpServer {
@@ -26,6 +27,7 @@ impl McpServer {
         max_depth: usize,
         store: ContextStore,
         verbose: bool,
+        trace_sandbox: bool,
     ) -> Self {
         Self {
             client,
@@ -35,6 +37,7 @@ impl McpServer {
             max_depth,
             store,
             verbose,
+            trace_sandbox,
         }
     }
 
@@ -99,9 +102,9 @@ impl McpServer {
                     let args = &params["arguments"];
                     Some(self.handle_tool_call(tool_name, args).await)
                 }
-                _ => id.as_ref().map(|_| {
-                    json!({ "error": { "code": -32601, "message": "Method not found" } })
-                }),
+                _ => id
+                    .as_ref()
+                    .map(|_| json!({ "error": { "code": -32601, "message": "Method not found" } })),
             };
 
             if let (Some(id), Some(result)) = (id, response) {
@@ -137,6 +140,7 @@ impl McpServer {
                     depth: 0,
                     max_depth: self.max_depth,
                     verbose: self.verbose,
+                    trace_sandbox: self.trace_sandbox,
                 });
 
                 match rlm.completion(query, &context).await {

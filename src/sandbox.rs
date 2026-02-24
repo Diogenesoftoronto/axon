@@ -14,6 +14,7 @@ impl Sandbox {
             vec![
                 "llm_query".into(),
                 "llm_query_batched".into(),
+                "FINAL".into(),
                 "FINAL_VAR".into(),
                 "SHOW_VARS".into(),
             ],
@@ -26,7 +27,9 @@ impl Sandbox {
     }
 
     pub fn resume(&mut self, call_id: u32, value: Object) -> Result<ExecuteOutput> {
-        Ok(self.mgr.resume(None, call_id, ExternalResult::Return(value))?)
+        Ok(self
+            .mgr
+            .resume(None, call_id, ExternalResult::Return(value))?)
     }
 
     pub fn get_variable(&self, name: &str) -> Option<String> {

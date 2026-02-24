@@ -11,18 +11,25 @@ use axon::rlm::{Rlm, RlmConfig};
 use axon::store::ContextStore;
 
 #[derive(Parser)]
-#[command(name = "axon", about = "Recursive Language Model engine — one context, run everywhere")]
+#[command(
+    name = "axon",
+    about = "Recursive Language Model engine — one context, run everywhere"
+)]
 struct Cli {
     /// Root LLM model
-    #[arg(long, default_value = "hf:minimax/minimax-m2.5")]
+    #[arg(long, default_value = "hf:MiniMaxAI/MiniMax-M2.5")]
     model: String,
 
     /// Sub-RLM model (used for recursive calls)
-    #[arg(long, default_value = "hf:minimax/minimax-m2.5")]
+    #[arg(long, default_value = "hf:MiniMaxAI/MiniMax-M2.5")]
     sub_model: String,
 
     /// Custom provider base URL (e.g. for Synthetic/MiniMax)
-    #[arg(long)]
+    #[arg(
+        long,
+        env = "AXON_BASE_URL",
+        default_value = "https://api.synthetic.new/openai/v1"
+    )]
     base_url: Option<String>,
 
     /// API key (overrides env var auto-detection)
@@ -44,6 +51,10 @@ struct Cli {
     /// Verbose logging to stderr
     #[arg(short, long)]
     verbose: bool,
+
+    /// Trace sandbox execution steps (code blocks, external calls, vars) to stderr
+    #[arg(long)]
+    trace_sandbox: bool,
 
     #[command(subcommand)]
     command: Commands,
@@ -93,27 +104,23 @@ fn build_client(base_url: Option<&str>, api_key: Option<&str>) -> Client {
         let url = url.to_string();
         let key = api_key.map(|k| k.to_string());
 
-        let resolver = ServiceTargetResolver::from_resolver_fn(
-            move |target: ServiceTarget| {
-                Ok(ServiceTarget {
-                    endpoint: Endpoint::from_owned(url.clone()),
-                    auth: key
-                        .as_ref()
-                        .map(|k| AuthData::from_single(k.clone()))
-                        .unwrap_or(target.auth),
-                    model: ModelIden::new(AdapterKind::OpenAI, target.model.model_name),
-                })
-            },
-        );
+        let resolver = ServiceTargetResolver::from_resolver_fn(move |target: ServiceTarget| {
+            Ok(ServiceTarget {
+                endpoint: Endpoint::from_owned(url.clone()),
+                auth: key
+                    .as_ref()
+                    .map(|k| AuthData::from_single(k.clone()))
+                    .unwrap_or(target.auth),
+                model: ModelIden::new(AdapterKind::OpenAI, target.model.model_name),
+            })
+        });
         builder = builder.with_service_target_resolver(resolver);
     } else if let Some(key) = api_key {
         let key = key.to_string();
-        let resolver = ServiceTargetResolver::from_resolver_fn(
-            move |mut target: ServiceTarget| {
-                target.auth = AuthData::from_single(key.clone());
-                Ok(target)
-            },
-        );
+        let resolver = ServiceTargetResolver::from_resolver_fn(move |mut target: ServiceTarget| {
+            target.auth = AuthData::from_single(key.clone());
+            Ok(target)
+        });
         builder = builder.with_service_target_resolver(resolver);
     }
 
@@ -179,7 +186,10 @@ async fn main() -> Result<()> {
             }
         }
 
-        Commands::Store { ref file, ref thread } => {
+        Commands::Store {
+            ref file,
+            ref thread,
+        } => {
             let text = if file == "-" {
                 let mut buf = String::new();
                 std::io::Read::read_to_string(&mut std::io::stdin(), &mut buf)?;
@@ -193,11 +203,7 @@ async fn main() -> Result<()> {
             }
 
             store.append_context(thread, &text)?;
-            eprintln!(
-                "Appended {} chars to thread '{}'.",
-                text.len(),
-                thread
-            );
+            eprintln!("Appended {} chars to thread '{}'.", text.len(), thread);
         }
 
         Commands::Serve => {
@@ -209,6 +215,7 @@ async fn main() -> Result<()> {
                 cli.max_depth,
                 store,
                 cli.verbose,
+                cli.trace_sandbox,
             );
             server.run().await?;
         }
@@ -226,5 +233,6 @@ fn make_rlm(client: &Client, cli: &Cli, depth: usize) -> Rlm {
         depth,
         max_depth: cli.max_depth,
         verbose: cli.verbose,
+        trace_sandbox: cli.trace_sandbox,
     })
 }
