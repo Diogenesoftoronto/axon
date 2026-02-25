@@ -49,7 +49,7 @@ impl McpServer {
         let mut writer = io::BufWriter::new(stdout.lock());
 
         loop {
-            let msg = match read_message(&mut reader) {
+            let (msg, framing) = match read_message(&mut reader) {
                 Ok(m) => m,
                 Err(_) => break,
             };
@@ -114,7 +114,7 @@ impl McpServer {
                     "id": id,
                     "result": result
                 });
-                write_message(&mut writer, &resp)?;
+                write_message(&mut writer, &resp, framing)?;
             }
         }
 
@@ -194,37 +194,77 @@ fn tool_error(text: &str) -> Value {
     })
 }
 
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+enum MessageFraming {
+    ContentLength,
+    Ndjson,
+}
+
 // ---------------------------------------------------------------------------
 // Content-Length framed JSON-RPC I/O
 // ---------------------------------------------------------------------------
 
-fn read_message(reader: &mut impl BufRead) -> Result<Value> {
-    let mut content_length: usize = 0;
-    let mut line = String::new();
-
+fn read_message(reader: &mut impl BufRead) -> Result<(Value, MessageFraming)> {
+    let mut first_line = String::new();
     loop {
+        first_line.clear();
+        let n = reader.read_line(&mut first_line)?;
+        if n == 0 {
+            anyhow::bail!("EOF");
+        }
+        if !first_line.trim().is_empty() {
+            break;
+        }
+    }
+
+    let trimmed = first_line.trim();
+    if trimmed.starts_with('{') || trimmed.starts_with('[') {
+        let msg = serde_json::from_str(trimmed)?;
+        return Ok((msg, MessageFraming::Ndjson));
+    }
+
+    let mut content_length: usize = 0;
+    let mut line = first_line;
+    loop {
+        let trimmed = line.trim();
+        if trimmed.is_empty() {
+            break;
+        }
+        if let Some((name, val)) = trimmed.split_once(':') {
+            if name.eq_ignore_ascii_case("Content-Length") {
+                content_length = val.trim().parse()?;
+            }
+        }
+
         line.clear();
         let n = reader.read_line(&mut line)?;
         if n == 0 {
             anyhow::bail!("EOF");
         }
-        let trimmed = line.trim();
-        if trimmed.is_empty() {
-            break;
-        }
-        if let Some(val) = trimmed.strip_prefix("Content-Length:") {
-            content_length = val.trim().parse()?;
-        }
+    }
+
+    if content_length == 0 {
+        anyhow::bail!("missing Content-Length header");
     }
 
     let mut body = vec![0u8; content_length];
     reader.read_exact(&mut body)?;
-    Ok(serde_json::from_slice(&body)?)
+    Ok((
+        serde_json::from_slice(&body)?,
+        MessageFraming::ContentLength,
+    ))
 }
 
-fn write_message(writer: &mut impl Write, msg: &Value) -> Result<()> {
+fn write_message(writer: &mut impl Write, msg: &Value, framing: MessageFraming) -> Result<()> {
     let body = serde_json::to_string(msg)?;
-    write!(writer, "Content-Length: {}\r\n\r\n{}", body.len(), body)?;
+    match framing {
+        MessageFraming::ContentLength => {
+            write!(writer, "Content-Length: {}\r\n\r\n{}", body.len(), body)?;
+        }
+        MessageFraming::Ndjson => {
+            writeln!(writer, "{}", body)?;
+        }
+    }
     writer.flush()?;
     Ok(())
 }
@@ -238,12 +278,34 @@ mod tests {
     fn test_write_and_read_message() {
         let msg = json!({"jsonrpc": "2.0", "method": "ping", "id": 1});
         let mut buf = Vec::new();
-        write_message(&mut buf, &msg).unwrap();
+        write_message(&mut buf, &msg, MessageFraming::ContentLength).unwrap();
 
         let mut reader = Cursor::new(buf);
-        let parsed = read_message(&mut reader).unwrap();
+        let (parsed, framing) = read_message(&mut reader).unwrap();
+        assert_eq!(framing, MessageFraming::ContentLength);
         assert_eq!(parsed["method"], "ping");
         assert_eq!(parsed["id"], 1);
+    }
+
+    #[test]
+    fn test_read_ndjson_message() {
+        let body = r#"{"jsonrpc":"2.0","method":"ping","id":7}"#;
+        let mut reader = Cursor::new(format!("{body}\n").into_bytes());
+
+        let (parsed, framing) = read_message(&mut reader).unwrap();
+        assert_eq!(framing, MessageFraming::Ndjson);
+        assert_eq!(parsed["method"], "ping");
+        assert_eq!(parsed["id"], 7);
+    }
+
+    #[test]
+    fn test_write_ndjson_message() {
+        let msg = json!({"jsonrpc": "2.0", "result": {"ok": true}, "id": 2});
+        let mut buf = Vec::new();
+        write_message(&mut buf, &msg, MessageFraming::Ndjson).unwrap();
+
+        let out = String::from_utf8(buf).unwrap();
+        assert_eq!(out, format!("{}\n", serde_json::to_string(&msg).unwrap()));
     }
 
     #[test]

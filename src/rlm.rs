@@ -2,10 +2,11 @@ use anyhow::Result;
 use genai::Client;
 use ouros::{Object, ReplProgress};
 use regex::Regex;
+use std::collections::{BTreeMap, HashMap};
 
 use crate::llm::{LlmClient, Message};
 use crate::prompts;
-use crate::sandbox::Sandbox;
+use crate::sandbox::{Sandbox, MAIN_SESSION_ID};
 
 pub struct RlmConfig {
     pub client: Client,
@@ -23,6 +24,85 @@ pub struct Rlm {
     llm: LlmClient,
 }
 
+#[derive(Clone, Default)]
+struct ForkState {
+    session_id: String,
+    code_blocks: Vec<String>,
+    external_returns: Vec<Object>,
+    vfs: BTreeMap<String, String>,
+    strategy_commit: Option<String>,
+}
+
+#[derive(Clone)]
+struct CheckpointState {
+    fork_id: String,
+    session_id: String,
+    code_len: usize,
+    return_len: usize,
+    code_blocks: Vec<String>,
+    external_returns: Vec<Object>,
+    vfs_snapshot: BTreeMap<String, String>,
+    label: String,
+}
+
+#[derive(Clone)]
+enum PendingSandboxAction {
+    CreateCheckpointSession {
+        source_session_id: String,
+        checkpoint_session_id: String,
+    },
+    RestoreFork {
+        fork_id: String,
+        target_session_id: String,
+        source_session_id: String,
+        code_blocks: Vec<String>,
+        external_returns: Vec<Object>,
+        vfs_snapshot: BTreeMap<String, String>,
+    },
+    SwitchFork {
+        fork_id: String,
+        session_id: String,
+    },
+}
+
+struct RuntimeState {
+    active_fork: String,
+    forks: HashMap<String, ForkState>,
+    checkpoints: HashMap<String, CheckpointState>,
+    next_fork_id: usize,
+    next_checkpoint_id: usize,
+    pending_sandbox_actions: Vec<PendingSandboxAction>,
+}
+
+impl RuntimeState {
+    fn new(_context: &str) -> Self {
+        let mut forks = HashMap::new();
+        forks.insert(
+            "main".to_string(),
+            ForkState {
+                session_id: MAIN_SESSION_ID.to_string(),
+                ..ForkState::default()
+            },
+        );
+        Self {
+            active_fork: "main".to_string(),
+            forks,
+            checkpoints: HashMap::new(),
+            next_fork_id: 1,
+            next_checkpoint_id: 1,
+            pending_sandbox_actions: Vec::new(),
+        }
+    }
+
+    fn active_fork(&self) -> Option<&ForkState> {
+        self.forks.get(&self.active_fork)
+    }
+
+    fn active_fork_mut(&mut self) -> Option<&mut ForkState> {
+        self.forks.get_mut(&self.active_fork)
+    }
+}
+
 impl Rlm {
     pub fn new(config: RlmConfig) -> Self {
         let llm = LlmClient::new(config.client.clone(), &config.model);
@@ -31,6 +111,7 @@ impl Rlm {
 
     pub async fn completion(&self, query: &str, context: &str) -> Result<String> {
         let mut sandbox = Sandbox::new()?;
+        let mut runtime = RuntimeState::new(context);
 
         if !context.is_empty() {
             sandbox.set_variable("context", Object::String(context.to_string()))?;
@@ -41,7 +122,9 @@ impl Rlm {
         for iteration in 0..self.config.max_iterations {
             messages.push(prompts::next_action_prompt(query, iteration, false));
 
-            let response = self.llm.completion(&messages).await?;
+            let prompt_chars: usize = messages.iter().map(|m| m.content.len()).sum();
+            let completion = self.llm.completion(&messages).await?;
+            let response = completion.text;
 
             if self.config.verbose {
                 eprintln!(
@@ -50,6 +133,16 @@ impl Rlm {
                     iteration + 1,
                     self.config.max_iterations,
                     response.len()
+                );
+                eprintln!(
+                    "[depth={}][iter={}/{}] usage: prompt_tokens={} completion_tokens={} total_tokens={} prompt_chars={}",
+                    self.config.depth,
+                    iteration + 1,
+                    self.config.max_iterations,
+                    completion.usage.prompt_tokens.unwrap_or(0),
+                    completion.usage.completion_tokens.unwrap_or(0),
+                    completion.usage.total_tokens.unwrap_or(0),
+                    prompt_chars
                 );
             }
 
@@ -68,7 +161,12 @@ impl Rlm {
                             code
                         );
                     }
-                    let result = self.execute_in_sandbox(&mut sandbox, code).await?;
+                    let result = self
+                        .execute_in_sandbox(&mut sandbox, code, &mut runtime)
+                        .await?;
+                    if let Some(fork) = runtime.active_fork_mut() {
+                        fork.code_blocks.push(code.to_string());
+                    }
                     let formatted = format_exec_result(code, &result);
                     messages.push(Message::user(&formatted));
                 }
@@ -91,11 +189,24 @@ impl Rlm {
             self.config.max_iterations,
             true,
         ));
-        self.llm.completion(&messages).await
+        let completion = self.llm.completion(&messages).await?;
+        Ok(completion.text)
     }
 
-    async fn execute_in_sandbox(&self, sandbox: &mut Sandbox, code: &str) -> Result<String> {
-        let output = sandbox.execute(code)?;
+    async fn execute_in_sandbox(
+        &self,
+        sandbox: &mut Sandbox,
+        code: &str,
+        runtime: &mut RuntimeState,
+    ) -> Result<String> {
+        let output = match sandbox.execute(code) {
+            Ok(out) => out,
+            Err(err) => {
+                // Keep the outer RLM loop alive so model-produced FINAL(...) can still be parsed.
+                // This avoids turning single REPL mistakes into hard run failures.
+                return Ok(format!("Sandbox execution error: {}", err));
+            }
+        };
         let mut stdout = output.stdout;
         let mut progress = output.progress;
 
@@ -123,7 +234,9 @@ impl Rlm {
                             describe_args(&args)
                         );
                     }
-                    let ret = self.handle_external(sandbox, &function_name, &args).await?;
+                    let ret = self
+                        .handle_external(sandbox, &function_name, &args, runtime)
+                        .await?;
                     if self.config.trace_sandbox {
                         eprintln!(
                             "[depth={}][sandbox] external return: {}",
@@ -131,7 +244,24 @@ impl Rlm {
                             truncate_for_trace(&ret.to_string(), 300)
                         );
                     }
-                    let next = sandbox.resume(call_id, ret)?;
+                    if let Some(fork) = runtime.active_fork_mut() {
+                        fork.external_returns.push(ret.clone());
+                    }
+                    let next = match sandbox.resume(call_id, ret) {
+                        Ok(next) => next,
+                        Err(err) => {
+                            let msg = format!("\nSandbox resume error: {}", err);
+                            stdout.push_str(&msg);
+                            if self.config.trace_sandbox {
+                                eprintln!(
+                                    "[depth={}][sandbox] {}",
+                                    self.config.depth,
+                                    truncate_for_trace(&msg, 300)
+                                );
+                            }
+                            break;
+                        }
+                    };
                     stdout.push_str(&next.stdout);
                     if self.config.trace_sandbox && !next.stdout.is_empty() {
                         eprintln!(
@@ -165,14 +295,61 @@ impl Rlm {
             }
         }
 
+        self.apply_pending_sandbox_actions(sandbox, runtime)?;
         Ok(stdout)
+    }
+
+    fn apply_pending_sandbox_actions(
+        &self,
+        sandbox: &mut Sandbox,
+        runtime: &mut RuntimeState,
+    ) -> Result<()> {
+        let pending = std::mem::take(&mut runtime.pending_sandbox_actions);
+        for action in pending {
+            match action {
+                PendingSandboxAction::CreateCheckpointSession {
+                    source_session_id,
+                    checkpoint_session_id,
+                } => {
+                    sandbox.fork_session(&source_session_id, &checkpoint_session_id)?;
+                }
+                PendingSandboxAction::RestoreFork {
+                    fork_id,
+                    target_session_id,
+                    source_session_id,
+                    code_blocks,
+                    external_returns,
+                    vfs_snapshot,
+                } => {
+                    if let Some(fork) = runtime.forks.get_mut(&fork_id) {
+                        fork.code_blocks = code_blocks;
+                        fork.external_returns = external_returns;
+                        fork.vfs = vfs_snapshot;
+                    } else {
+                        anyhow::bail!("fork '{}' not found during pending restore", fork_id);
+                    }
+                    runtime.active_fork = fork_id;
+                    sandbox.replace_session_from(&target_session_id, &source_session_id)?;
+                    sandbox.switch_session(&target_session_id)?;
+                }
+                PendingSandboxAction::SwitchFork {
+                    fork_id,
+                    session_id,
+                } => {
+                    runtime.active_fork = fork_id;
+                    sandbox.switch_session(&session_id)?;
+                }
+            }
+        }
+        Ok(())
     }
 
     async fn handle_external(
         &self,
-        sandbox: &Sandbox,
+        sandbox: &mut Sandbox,
         function_name: &str,
         args: &[Object],
+        runtime: &mut RuntimeState,
     ) -> Result<Object> {
         match function_name {
             "llm_query" => {
@@ -204,6 +381,233 @@ impl Rlm {
                     "Available variables: [{}]",
                     desc.join(", ")
                 )))
+            }
+            "CHECKPOINT_CREATE" => {
+                let label = obj_to_string(args.first().unwrap_or(&Object::None));
+                let checkpoint_num = runtime.next_checkpoint_id;
+                let checkpoint_id = format!("checkpoint-{}", checkpoint_num);
+                let checkpoint_session_id = format!("checkpoint-session-{}", checkpoint_num);
+
+                let Some(active_fork) = runtime.active_fork() else {
+                    return Ok(Object::String("Error: active fork not found".to_string()));
+                };
+                let source_session_id = active_fork.session_id.clone();
+                let code_blocks = active_fork.code_blocks.clone();
+                let external_returns = active_fork.external_returns.clone();
+                let vfs_snapshot = active_fork.vfs.clone();
+
+                runtime.pending_sandbox_actions.push(
+                    PendingSandboxAction::CreateCheckpointSession {
+                        source_session_id,
+                        checkpoint_session_id: checkpoint_session_id.clone(),
+                    },
+                );
+                runtime.next_checkpoint_id += 1;
+
+                runtime.checkpoints.insert(
+                    checkpoint_id.clone(),
+                    CheckpointState {
+                        fork_id: runtime.active_fork.clone(),
+                        session_id: checkpoint_session_id,
+                        code_len: code_blocks.len(),
+                        return_len: external_returns.len(),
+                        code_blocks,
+                        external_returns,
+                        vfs_snapshot,
+                        label,
+                    },
+                );
+                Ok(Object::String(checkpoint_id))
+            }
+            "CHECKPOINT_RESTORE" => {
+                let checkpoint_id = obj_to_string(args.first().unwrap_or(&Object::None));
+                let checkpoint_id = checkpoint_id.trim().trim_matches('"').trim_matches('\'');
+                let Some(checkpoint) = runtime.checkpoints.get(checkpoint_id).cloned() else {
+                    return Ok(Object::String(format!(
+                        "Error: checkpoint '{}' not found",
+                        checkpoint_id
+                    )));
+                };
+                let Some(target_session_id) = runtime
+                    .forks
+                    .get(&checkpoint.fork_id)
+                    .map(|f| f.session_id.clone())
+                else {
+                    return Ok(Object::String(format!(
+                        "Error: fork '{}' not found",
+                        checkpoint.fork_id
+                    )));
+                };
+                runtime
+                    .pending_sandbox_actions
+                    .push(PendingSandboxAction::RestoreFork {
+                        fork_id: checkpoint.fork_id.clone(),
+                        target_session_id: target_session_id.clone(),
+                        source_session_id: checkpoint.session_id.clone(),
+                        code_blocks: checkpoint.code_blocks.clone(),
+                        external_returns: checkpoint.external_returns.clone(),
+                        vfs_snapshot: checkpoint.vfs_snapshot.clone(),
+                    });
+                Ok(Object::String(format!(
+                    "Restored checkpoint '{}'",
+                    checkpoint_id
+                )))
+            }
+            "FORK_CREATE" => {
+                let checkpoint_id = obj_to_string(args.first().unwrap_or(&Object::None));
+                let checkpoint_id = checkpoint_id.trim().trim_matches('"').trim_matches('\'');
+                let _name = obj_to_string(args.get(1).unwrap_or(&Object::None));
+
+                let checkpoint = if let Some(c) = runtime.checkpoints.get(checkpoint_id) {
+                    c.clone()
+                } else {
+                    return Ok(Object::String(format!(
+                        "Error: checkpoint '{}' not found",
+                        checkpoint_id
+                    )));
+                };
+                let fork_num = runtime.next_fork_id;
+                let fork_id = format!("fork-{}", fork_num);
+                let fork_session_id = format!("fork-session-{}", fork_num);
+                if let Err(err) = sandbox.fork_session(&checkpoint.session_id, &fork_session_id) {
+                    return Ok(Object::String(format!(
+                        "Error: failed to create fork session: {}",
+                        err
+                    )));
+                }
+                runtime.next_fork_id += 1;
+                let mut new_fork = ForkState {
+                    session_id: fork_session_id,
+                    ..ForkState::default()
+                };
+                new_fork.code_blocks = checkpoint.code_blocks.clone();
+                new_fork.external_returns = checkpoint.external_returns.clone();
+                new_fork.vfs = checkpoint.vfs_snapshot.clone();
+                runtime.forks.insert(fork_id.clone(), new_fork);
+                Ok(Object::String(fork_id))
+            }
+            "FORK_SWITCH" => {
+                let fork_id = obj_to_string(args.first().unwrap_or(&Object::None));
+                let fork_id = fork_id.trim().trim_matches('"').trim_matches('\'');
+                let Some(target_session_id) =
+                    runtime.forks.get(fork_id).map(|f| f.session_id.clone())
+                else {
+                    return Ok(Object::String(format!(
+                        "Error: fork '{}' not found",
+                        fork_id
+                    )));
+                };
+                runtime
+                    .pending_sandbox_actions
+                    .push(PendingSandboxAction::SwitchFork {
+                        fork_id: fork_id.to_string(),
+                        session_id: target_session_id,
+                    });
+                Ok(Object::String(format!("Switched to fork '{}'", fork_id)))
+            }
+            "FORK_LIST" => {
+                let mut lines = Vec::new();
+                for (id, fork) in &runtime.forks {
+                    let active = if *id == runtime.active_fork { "*" } else { " " };
+                    let commit = fork.strategy_commit.as_deref().unwrap_or("-");
+                    lines.push(format!(
+                        "{} {} (code={}, returns={}, committed={})",
+                        active,
+                        id,
+                        fork.code_blocks.len(),
+                        fork.external_returns.len(),
+                        truncate_for_trace(commit, 60)
+                    ));
+                }
+                lines.sort();
+                Ok(Object::String(lines.join("\n")))
+            }
+            "VFS_WRITE" => {
+                let path = obj_to_string(args.first().unwrap_or(&Object::None));
+                let content = obj_to_string(args.get(1).unwrap_or(&Object::None));
+                let path = normalize_vfs_path(&path);
+                if let Some(fork) = runtime.active_fork_mut() {
+                    fork.vfs.insert(path.clone(), content);
+                }
+                Ok(Object::String(format!("Wrote {}", path)))
+            }
+            "VFS_READ" => {
+                let path = obj_to_string(args.first().unwrap_or(&Object::None));
+                let path = normalize_vfs_path(&path);
+                if let Some(fork) = runtime.active_fork() {
+                    return Ok(Object::String(
+                        fork.vfs.get(&path).cloned().unwrap_or_default(),
+                    ));
+                }
+                Ok(Object::String(String::new()))
+            }
+            "VFS_LIST" => {
+                let prefix = obj_to_string(args.first().unwrap_or(&Object::None));
+                let prefix = normalize_vfs_prefix(&prefix);
+                let mut paths = Vec::new();
+                if let Some(fork) = runtime.active_fork() {
+                    for key in fork.vfs.keys() {
+                        if key.starts_with(&prefix) {
+                            paths.push(key.clone());
+                        }
+                    }
+                }
+                paths.sort();
+                Ok(Object::String(paths.join("\n")))
+            }
+            "STRATEGY_COMMIT" => {
+                let (fork_id, rationale) = if args.len() >= 2 {
+                    (
+                        obj_to_string(args.first().unwrap_or(&Object::None)),
+                        obj_to_string(args.get(1).unwrap_or(&Object::None)),
+                    )
+                } else {
+                    (
+                        runtime.active_fork.clone(),
+                        obj_to_string(args.first().unwrap_or(&Object::None)),
+                    )
+                };
+                let fork_id = fork_id
+                    .trim()
+                    .trim_matches('"')
+                    .trim_matches('\'')
+                    .to_string();
+                if let Some(fork) = runtime.forks.get_mut(&fork_id) {
+                    fork.strategy_commit = Some(rationale.clone());
+                    Ok(Object::String(format!(
+                        "Committed strategy on '{}'",
+                        fork_id
+                    )))
+                } else {
+                    Ok(Object::String(format!(
+                        "Error: fork '{}' not found",
+                        fork_id
+                    )))
+                }
+            }
+            "STRATEGY_STATUS" => {
+                let mut lines = vec![format!("active_fork={}", runtime.active_fork)];
+                let mut checkpoints: Vec<_> = runtime.checkpoints.iter().collect();
+                checkpoints.sort_by_key(|(id, _)| *id);
+                for (id, cp) in checkpoints {
+                    lines.push(format!(
+                        "checkpoint {}: fork={}, code_len={}, return_len={}, label={}",
+                        id, cp.fork_id, cp.code_len, cp.return_len, cp.label
+                    ));
+                }
+                let mut forks: Vec<_> = runtime.forks.iter().collect();
+                forks.sort_by_key(|(id, _)| *id);
+                for (id, fork) in forks {
+                    let committed = fork.strategy_commit.as_deref().unwrap_or("-");
+                    lines.push(format!(
+                        "fork {}: code={}, returns={}, committed={}",
+                        id,
+                        fork.code_blocks.len(),
+                        fork.external_returns.len(),
+                        truncate_for_trace(committed, 80)
+                    ));
+                }
+                Ok(Object::String(lines.join("\n")))
             }
             other => Ok(Object::String(format!(
                 "Error: unknown function '{}'",
@@ -391,9 +795,61 @@ fn describe_vars(sandbox: &Sandbox) -> String {
     }
 }
 
+fn normalize_vfs_path(path: &str) -> String {
+    let trimmed = path.trim().trim_matches('"').trim_matches('\'');
+    if trimmed.is_empty() {
+        return "/".to_string();
+    }
+    if trimmed.starts_with('/') {
+        trimmed.to_string()
+    } else {
+        format!("/{}", trimmed)
+    }
+}
+
+fn normalize_vfs_prefix(path: &str) -> String {
+    let mut p = normalize_vfs_path(path);
+    if !p.ends_with('/') && p != "/" {
+        p.push('/');
+    }
+    p
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
+    use genai::Client;
+
+    fn make_test_rlm() -> Rlm {
+        let client = Client::builder().build();
+        Rlm::new(RlmConfig {
+            client,
+            model: "test-model".to_string(),
+            sub_model: "test-sub-model".to_string(),
+            max_iterations: 1,
+            depth: 0,
+            max_depth: 0,
+            verbose: false,
+            trace_sandbox: false,
+        })
+    }
+
+    fn exec_block(
+        rt: &tokio::runtime::Runtime,
+        rlm: &Rlm,
+        sandbox: &mut Sandbox,
+        runtime: &mut RuntimeState,
+        code: &str,
+    ) {
+        let out = rt
+            .block_on(rlm.execute_in_sandbox(sandbox, code, runtime))
+            .unwrap();
+        assert!(
+            !out.contains("Sandbox execution error"),
+            "unexpected sandbox execution error: {}",
+            out
+        );
+    }
 
     #[test]
     fn test_find_code_blocks_single() {
@@ -459,6 +915,120 @@ mod tests {
         assert_eq!(extract_balanced_parens("(hello)", 0), Some("hello".into()));
         assert_eq!(extract_balanced_parens("(a(b)c)", 0), Some("a(b)c".into()));
         assert_eq!(extract_balanced_parens("no parens", 0), None);
+    }
+
+    #[test]
+    fn test_normalize_vfs_path() {
+        assert_eq!(normalize_vfs_path("foo/bar"), "/foo/bar");
+        assert_eq!(normalize_vfs_path("/foo/bar"), "/foo/bar");
+    }
+
+    #[test]
+    fn test_checkpoint_restore_restores_sandbox_state() {
+        let rt = tokio::runtime::Runtime::new().unwrap();
+        let rlm = make_test_rlm();
+        let mut sandbox = Sandbox::new().unwrap();
+        let mut runtime = RuntimeState::new("");
+
+        exec_block(
+            &rt,
+            &rlm,
+            &mut sandbox,
+            &mut runtime,
+            "x = 1\ncp = CHECKPOINT_CREATE('base')",
+        );
+        exec_block(&rt, &rlm, &mut sandbox, &mut runtime, "x = 2");
+        assert_eq!(sandbox.get_variable("x"), Some("2".to_string()));
+
+        exec_block(
+            &rt,
+            &rlm,
+            &mut sandbox,
+            &mut runtime,
+            "CHECKPOINT_RESTORE(cp)",
+        );
+        assert_eq!(sandbox.get_variable("x"), Some("1".to_string()));
+    }
+
+    #[test]
+    fn test_fork_switch_restores_sandbox_state() {
+        let rt = tokio::runtime::Runtime::new().unwrap();
+        let rlm = make_test_rlm();
+        let mut sandbox = Sandbox::new().unwrap();
+        let mut runtime = RuntimeState::new("");
+
+        exec_block(
+            &rt,
+            &rlm,
+            &mut sandbox,
+            &mut runtime,
+            "x = 1\ncp = CHECKPOINT_CREATE('base')",
+        );
+        exec_block(
+            &rt,
+            &rlm,
+            &mut sandbox,
+            &mut runtime,
+            "x = 2\nfork_id = FORK_CREATE(cp, 'branch')",
+        );
+        exec_block(
+            &rt,
+            &rlm,
+            &mut sandbox,
+            &mut runtime,
+            "FORK_SWITCH(fork_id)",
+        );
+
+        assert_eq!(runtime.active_fork, "fork-1");
+        assert_eq!(sandbox.get_variable("x"), Some("1".to_string()));
+    }
+
+    #[test]
+    fn test_fork_create_uses_checkpoint_vfs_snapshot() {
+        let rt = tokio::runtime::Runtime::new().unwrap();
+        let rlm = make_test_rlm();
+        let mut sandbox = Sandbox::new().unwrap();
+        let mut runtime = RuntimeState::new("");
+
+        exec_block(
+            &rt,
+            &rlm,
+            &mut sandbox,
+            &mut runtime,
+            "cp = CHECKPOINT_CREATE('base')",
+        );
+        exec_block(
+            &rt,
+            &rlm,
+            &mut sandbox,
+            &mut runtime,
+            "VFS_WRITE('/after.txt', 'late')\nmain_len = len(VFS_READ('/after.txt'))",
+        );
+        assert_eq!(sandbox.get_variable("main_len"), Some("4".to_string()));
+
+        exec_block(
+            &rt,
+            &rlm,
+            &mut sandbox,
+            &mut runtime,
+            "fork_id = FORK_CREATE(cp, 'branch')",
+        );
+        exec_block(
+            &rt,
+            &rlm,
+            &mut sandbox,
+            &mut runtime,
+            "FORK_SWITCH(fork_id)",
+        );
+        exec_block(
+            &rt,
+            &rlm,
+            &mut sandbox,
+            &mut runtime,
+            "branch_len = len(VFS_READ('/after.txt'))",
+        );
+
+        assert_eq!(sandbox.get_variable("branch_len"), Some("0".to_string()));
     }
 
     #[test]
