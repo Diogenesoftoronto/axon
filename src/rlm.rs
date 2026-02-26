@@ -180,7 +180,7 @@ impl Rlm {
                         &answer[..answer.len().min(120)]
                     );
                 }
-                return Ok(answer);
+                return Ok(strip_final_wrapper(&answer));
             }
         }
 
@@ -190,7 +190,11 @@ impl Rlm {
             true,
         ));
         let completion = self.llm.completion(&messages).await?;
-        Ok(completion.text)
+        let response = &completion.text;
+        if let Some(answer) = check_final_answer(response, &sandbox) {
+            return Ok(strip_final_wrapper(&answer));
+        }
+        Ok(strip_final_wrapper(&completion.text))
     }
 
     async fn execute_in_sandbox(
@@ -719,6 +723,14 @@ fn extract_balanced_parens(text: &str, start: usize) -> Option<String> {
     Some(text[start + 1..].to_string())
 }
 
+fn strip_final_wrapper(text: &str) -> String {
+    let trimmed = text.trim();
+    if let Some((_, content)) = find_final_answer(trimmed) {
+        return content;
+    }
+    trimmed.to_string()
+}
+
 fn check_final_answer(response: &str, sandbox: &Sandbox) -> Option<String> {
     let (kind, content) = find_final_answer(response)?;
     Some(match kind {
@@ -915,6 +927,15 @@ mod tests {
         assert_eq!(extract_balanced_parens("(hello)", 0), Some("hello".into()));
         assert_eq!(extract_balanced_parens("(a(b)c)", 0), Some("a(b)c".into()));
         assert_eq!(extract_balanced_parens("no parens", 0), None);
+    }
+
+    #[test]
+    fn test_strip_final_wrapper() {
+        assert_eq!(strip_final_wrapper("FINAL(88492)"), "88492");
+        assert_eq!(strip_final_wrapper("FINAL_VAR(x)"), "x");
+        assert_eq!(strip_final_wrapper("plain text"), "plain text");
+        assert_eq!(strip_final_wrapper("  FINAL(42)  "), "42");
+        assert_eq!(strip_final_wrapper("The answer is FINAL(hello)"), "hello");
     }
 
     #[test]

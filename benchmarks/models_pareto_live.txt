@@ -1,0 +1,8 @@
+# Models actually responding on Synthetic right now
+hf:MiniMaxAI/MiniMax-M2.5
+hf:Qwen/Qwen3.5-397B-A17B
+hf:deepseek-ai/DeepSeek-V3.2
+hf:moonshotai/Kimi-K2-Thinking
+hf:MiniMaxAI/MiniMax-M2.1
+hf:Qwen/Qwen3-235B-A22B-Thinking-2507
+hf:moonshotai/Kimi-K2.5

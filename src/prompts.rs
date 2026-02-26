@@ -8,6 +8,12 @@ The REPL environment is initialized with:
 3. An `llm_query_batched(prompts)` function - batch version that takes a list of prompt strings and returns a list of responses.
 4. Standard Python libraries (re, json, collections, math, etc.) are available via import.
 5. Use `print()` statements to view output and continue your reasoning.
+6. Avoid Python introspection helpers like `eval()`, `locals()`, and `globals()`; prefer explicit variables and `SHOW_VARS()`.
+7. Optional workflow helpers:
+   - `CHECKPOINT_CREATE(label)` / `CHECKPOINT_RESTORE(checkpoint_id)`
+   - `FORK_CREATE(checkpoint_id, name)` / `FORK_SWITCH(fork_id)` / `FORK_LIST()`
+   - `VFS_WRITE(path, content)` / `VFS_READ(path)` / `VFS_LIST(path_prefix)`
+   - `STRATEGY_COMMIT(fork_id_or_rationale, rationale_optional)` / `STRATEGY_STATUS()`
 
 IMPORTANT: REPL variables persist across iterations. Do NOT redo work from previous iterations. Build on what you already have.
 
@@ -76,6 +82,12 @@ The REPL environment provides:
 2. An `llm_query(prompt)` function for further sub-analysis (spawns another sub-RLM with its own sandbox).
 3. Standard Python libraries (re, json, collections, math, etc.).
 4. Use `print()` to view output. NO filesystem or network access.
+5. Avoid Python introspection helpers like `eval()`, `locals()`, and `globals()`; prefer explicit variables and `SHOW_VARS()`.
+6. Optional workflow helpers:
+   - `CHECKPOINT_CREATE(label)` / `CHECKPOINT_RESTORE(checkpoint_id)`
+   - `FORK_CREATE(checkpoint_id, name)` / `FORK_SWITCH(fork_id)` / `FORK_LIST()`
+   - `VFS_WRITE(path, content)` / `VFS_READ(path)` / `VFS_LIST(path_prefix)`
+   - `STRATEGY_COMMIT(fork_id_or_rationale, rationale_optional)` / `STRATEGY_STATUS()`
 
 Analyze the context and provide your answer. You can use code in ```repl``` blocks if the text is large or needs programmatic processing. For shorter texts, you may answer directly.
 

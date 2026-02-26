@@ -1,5 +1,5 @@
 use anyhow::Result;
-use genai::chat::{ChatMessage, ChatRequest};
+use genai::chat::{ChatMessage, ChatRequest, Usage};
 use genai::Client;
 
 #[derive(Clone, Debug)]
@@ -10,15 +10,24 @@ pub struct Message {
 
 impl Message {
     pub fn system(content: &str) -> Self {
-        Self { role: "system".into(), content: content.into() }
+        Self {
+            role: "system".into(),
+            content: content.into(),
+        }
     }
 
     pub fn user(content: &str) -> Self {
-        Self { role: "user".into(), content: content.into() }
+        Self {
+            role: "user".into(),
+            content: content.into(),
+        }
     }
 
     pub fn assistant(content: &str) -> Self {
-        Self { role: "assistant".into(), content: content.into() }
+        Self {
+            role: "assistant".into(),
+            content: content.into(),
+        }
     }
 
     fn to_chat_message(&self) -> ChatMessage {
@@ -36,6 +45,11 @@ pub struct LlmClient {
     model: String,
 }
 
+pub struct CompletionResult {
+    pub text: String,
+    pub usage: Usage,
+}
+
 impl LlmClient {
     pub fn new(client: Client, model: &str) -> Self {
         Self {
@@ -44,7 +58,7 @@ impl LlmClient {
         }
     }
 
-    pub async fn completion(&self, messages: &[Message]) -> Result<String> {
+    pub async fn completion(&self, messages: &[Message]) -> Result<CompletionResult> {
         let mut request = ChatRequest::default();
 
         for m in messages {
@@ -56,12 +70,14 @@ impl LlmClient {
         }
 
         let response = self.client.exec_chat(&self.model, request, None).await?;
-        response
+        let usage = response.usage.clone();
+        let text = response
             .into_first_text()
-            .ok_or_else(|| anyhow::anyhow!("Empty response from LLM"))
+            .ok_or_else(|| anyhow::anyhow!("Empty response from LLM"))?;
+        Ok(CompletionResult { text, usage })
     }
 
     pub async fn completion_simple(&self, prompt: &str) -> Result<String> {
-        self.completion(&[Message::user(prompt)]).await
+        Ok(self.completion(&[Message::user(prompt)]).await?.text)
     }
 }

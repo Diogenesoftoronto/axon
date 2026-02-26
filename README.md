@@ -223,6 +223,61 @@ gh run list --repo Diogenesoftoronto/axon --workflow release.yml
 gh release view v0.1.0 --repo Diogenesoftoronto/axon
 ```
 
+## Benchmarking
+
+The benchmark suite (`benchmarks/mode_profile_targeted.json`) contains 12 tasks across 5 categories, designed to align with the RLM and agent-scaling literature:
+
+| Category | Tasks | Context | Aligned With |
+|---|---|---|---|
+| Cognitive traps | 2 | ~100 chars | Zhang 2025, Chen 2026 |
+| State tracking | 1 | ~200 chars | Chen 2026 (sub-structure) |
+| Word/delegation puzzles | 2 | ~100–200 chars | Kim 2025 (decomposability) |
+| Multi-step reasoning | 3 | ~200–400 chars | Prime Intellect (math-python), Zhang (recursive) |
+| Long-context distributional | 4 | 10K–15K chars | OOLONG, Prime Intellect (DeepDive) |
+
+### Running benchmarks
+
+```bash
+export SYNTHETIC_API_KEY=...
+
+# Quick single-model run
+python3 scripts/benchmark_axon.py \
+  --dataset benchmarks/mode_profile_targeted.json \
+  --model "hf:MiniMaxAI/MiniMax-M2.5" \
+  --pricing-from-models-api \
+  --timeout 120
+
+# Multi-model Pareto analysis (7 models × 5 modes × 12 tasks)
+python3 scripts/benchmark_axon.py \
+  --dataset benchmarks/mode_profile_targeted.json \
+  --model-list benchmarks/models_pareto_live.txt \
+  --pricing-from-models-api \
+  --runs 1 \
+  --attempts-per-run 3 \
+  --timeout 180 \
+  --out benchmarks/results-latest.json \
+  --summary-md benchmarks/summary-latest.md
+```
+
+### Statistical analysis
+
+```bash
+# Bayesian posteriors, Thompson sampling, latency variability
+python3 scripts/analyze_bayesian.py benchmarks/results-latest.json
+
+# From in-progress benchmark log
+python3 scripts/analyze_bayesian.py --from-log /tmp/benchmark.log
+
+# Generate LaTeX snippets for paper
+python3 scripts/analyze_bayesian.py benchmarks/results-latest.json --latex-out paper/stats.tex
+```
+
+### Documentation
+
+- `docs/benchmarking.md` — benchmark harness reference
+- `docs/testing-playbook.md` — standard testing scripts/commands
+- `paper/main.tex` — research paper (compiles with tectonic/pdflatex)
+
 ## References
 
 - [Recursive Language Models](https://arxiv.org/abs/2512.24601v1) - Zhang, Kraska & Khattab (2025)

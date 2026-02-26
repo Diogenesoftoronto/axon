@@ -1,0 +1,148 @@
+[
+  {
+    "id": "cognitive_trap_bat_ball",
+    "context": "A bat and a ball cost $1.10 in total. The bat costs $1.00 more than the ball.",
+    "query": "How much does the ball cost in cents? Output only the integer number.",
+    "check": {
+      "type": "exact",
+      "value": "5"
+    },
+    "tags": ["cognitive_trap", "zhang2025", "chen2026_substructure"]
+  },
+  {
+    "id": "cognitive_trap_widgets",
+    "context": "If it takes 5 machines 5 minutes to make 5 widgets.",
+    "query": "How many minutes does it take 100 machines to make 100 widgets? Output only the integer number.",
+    "check": {
+      "type": "exact",
+      "value": "5"
+    },
+    "tags": ["cognitive_trap", "zhang2025"]
+  },
+  {
+    "id": "state_trace_7swaps",
+    "context": "Items 1, 2, and 3 are in boxes A, B, and C respectively. Swaps occur in this order: 1&2, 2&3, 1&3, 2&1, 3&2, 1&2, 3&1.",
+    "query": "Which boxes are items 1, 2, and 3 in at the end? Output the sequence of boxes as a comma-separated list without spaces (e.g., A,B,C).",
+    "check": {
+      "type": "exact",
+      "value": "A,C,B"
+    },
+    "tags": ["state_tracking", "chen2026_substructure"]
+  },
+  {
+    "id": "word_puzzle_pearl",
+    "context": "You need to form a valid 5-letter English word using only the letters from the set: {T, R, L, P, A, E}. The word must start with the letter P and end with the letter L.",
+    "query": "What is the word? Output only the word in uppercase.",
+    "check": {
+      "type": "exact",
+      "value": "PEARL"
+    },
+    "tags": ["word_puzzle", "zhang2025"]
+  },
+  {
+    "id": "delegation_unscramble",
+    "context": "Unscramble these words: 'tca', 'gdo', 'tbrbia'.",
+    "query": "Take the first letter of each unscrambled animal name in the order provided and output them as a single string of 3 lowercase letters.",
+    "check": {
+      "type": "exact",
+      "value": "cdr"
+    },
+    "tags": ["delegation", "kim2025_decomposability", "zhang2025_recursive"]
+  },
+  {
+    "id": "dependency_chain_linear",
+    "context": "Package F depends on E. Package E depends on D. Package D depends on C. Package C depends on B. Package B depends on A. Package A has no dependencies.",
+    "query": "List the installation order so that no package is installed before its dependencies. Output exactly as a comma-separated list of letters without spaces (e.g., X,Y,Z).",
+    "check": {
+      "type": "exact",
+      "value": "A,B,C,D,E,F"
+    },
+    "tags": ["dependency_ordering", "kim2025_decomposability"]
+  },
+  {
+    "id": "multi_step_math_chain",
+    "context": "Compute the following chain of operations step by step. Step 1: Multiply 37 by 18. Step 2: Add 259 to the result of Step 1. Step 3: Multiply the result of Step 2 by 4. Step 4: Subtract 1137 from the result of Step 3. Step 5: Take the result of Step 4 modulo 89.",
+    "query": "What is the final result after Step 5? Output only the integer.",
+    "check": {
+      "type": "number_exact",
+      "value": "71"
+    },
+    "tags": ["multi_step_math", "prime_intellect2026_math_python", "chen2026_substructure"]
+  },
+  {
+    "id": "recursive_decomposition_caesar",
+    "context": "You have three encoded messages, each using a Caesar cipher with a DIFFERENT shift.\n\nMessage 1 (shift 3): KHOOR\nMessage 2 (shift 7): DVYSK\nMessage 3 (shift 5): FQUMF\n\nIn a Caesar cipher with shift N, each letter was shifted forward by N positions in the alphabet (A->D for shift 3). To decode, shift each letter BACKWARD by N positions.",
+    "query": "Decode all three messages. Then take the first letter of each decoded word in order and concatenate them. Output only those 3 uppercase letters.",
+    "check": {
+      "type": "exact",
+      "value": "HWA"
+    },
+    "tags": ["recursive_decomposition", "zhang2025_recursive", "kim2025_decomposability"]
+  },
+  {
+    "id": "scattered_facts_salary",
+    "context_gen": {
+      "type": "log_haystack_v1",
+      "size_chars": 10000,
+      "filler": "2025-01-15 INFO  server.core: Health check passed | latency=12ms | node=us-east-1a\n",
+      "insertions": [
+        {"at": 800,   "text": "\n>>> EMPLOYEE_RECORD: Name=Alice, Department=Engineering, Annual_Salary=95000 <<<\n"},
+        {"at": 2500,  "text": "\n>>> EMPLOYEE_RECORD: Name=Bob, Department=Marketing, Annual_Salary=72000 <<<\n"},
+        {"at": 4800,  "text": "\n>>> EMPLOYEE_RECORD: Name=Carol, Department=Engineering, Annual_Salary=105000 <<<\n"},
+        {"at": 6900,  "text": "\n>>> EMPLOYEE_RECORD: Name=Dave, Department=Sales, Annual_Salary=68000 <<<\n"},
+        {"at": 9000,  "text": "\n>>> EMPLOYEE_RECORD: Name=Eve, Department=Engineering, Annual_Salary=112000 <<<\n"}
+      ]
+    },
+    "query": "Find all EMPLOYEE_RECORD entries in the log. How many employees are in the Engineering department, and what is the sum of their annual salaries? Output your answer in the format: count=N,total=AMOUNT (e.g., count=2,total=150000).",
+    "check": {
+      "type": "exact",
+      "value": "count=3,total=312000"
+    },
+    "tags": ["scattered_aggregation", "prime_intellect2026_oolong", "zhang2025_context_folding"]
+  },
+  {
+    "id": "distributional_ledger",
+    "context_gen": {
+      "type": "ledger_v1",
+      "n_rows": 200,
+      "seed": 7
+    },
+    "query": "Examine the transaction ledger above. How many transactions have an amount strictly greater than $50.00? Output only the integer count.",
+    "check": {
+      "type": "number_exact",
+      "value": "71"
+    },
+    "tags": ["distributional_query", "prime_intellect2026_oolong", "prime_intellect2026_deepdive"]
+  },
+  {
+    "id": "distributional_ledger_sum",
+    "context_gen": {
+      "type": "ledger_v1",
+      "n_rows": 200,
+      "seed": 7
+    },
+    "query": "Examine the transaction ledger above. Calculate the total amount (in dollars) of all Debit transactions in the US region. Output the result as a number with exactly two decimal places (e.g., 1234.56).",
+    "check": {
+      "type": "number_exact",
+      "value": "1927.00"
+    },
+    "tags": ["distributional_query", "prime_intellect2026_oolong", "kim2025_coordination_overhead"]
+  },
+  {
+    "id": "haystack_marker_count",
+    "context_gen": {
+      "type": "log_haystack_v1",
+      "size_chars": 15000,
+      "filler": "2025-02-10 DEBUG io.stream: packet received | seq=4821 | size=1024 | status=OK\n",
+      "marker": "CRITICAL ALERT: memory_threshold_exceeded node=gpu-worker-7",
+      "marker_count": 13,
+      "marker_template": "2025-02-10 ERROR monitor.health: {marker}\n"
+    },
+    "query": "Count the total number of lines in the log that contain the exact phrase 'CRITICAL ALERT'. Output only the integer count.",
+    "check": {
+      "type": "number_exact",
+      "value": "13"
+    },
+    "tags": ["distributional_count", "prime_intellect2026_oolong", "zhang2025_context_folding"]
+  }
+]
