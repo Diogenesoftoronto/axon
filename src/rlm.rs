@@ -191,6 +191,15 @@ impl Rlm {
         ));
         let completion = self.llm.completion(&messages).await?;
         let response = &completion.text;
+
+        // Execute any repl code blocks in the fallback response before extracting.
+        let fallback_code_blocks = find_code_blocks(response);
+        for code in &fallback_code_blocks {
+            let _ = self
+                .execute_in_sandbox(&mut sandbox, code, &mut runtime)
+                .await;
+        }
+
         if let Some(answer) = check_final_answer(response, &sandbox) {
             return Ok(strip_final_wrapper(&answer));
         }
