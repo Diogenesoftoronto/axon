@@ -1062,6 +1062,70 @@ mod tests {
     }
 
     #[test]
+    fn test_fallback_repl_blocks_execute() {
+        // Simulates the fallback path: a response contains ```repl blocks
+        // and a FINAL_VAR() referencing a variable set by that code.
+        // The repl block must execute so FINAL_VAR can resolve.
+        let rt = tokio::runtime::Runtime::new().unwrap();
+        let rlm = make_test_rlm();
+        let mut sandbox = Sandbox::new().unwrap();
+        let mut runtime = RuntimeState::new("");
+
+        let fallback_response =
+            "Let me compute:\n```repl\nanswer = 5\n```\nFINAL_VAR(answer)";
+
+        // Execute code blocks found in the fallback response.
+        let code_blocks = find_code_blocks(fallback_response);
+        assert_eq!(code_blocks.len(), 1);
+        for code in &code_blocks {
+            exec_block(&rt, &rlm, &mut sandbox, &mut runtime, code);
+        }
+
+        // Now check_final_answer should resolve FINAL_VAR(answer) -> "5".
+        let answer = check_final_answer(fallback_response, &sandbox);
+        assert_eq!(answer, Some("5".to_string()));
+    }
+
+    #[test]
+    fn test_fallback_repl_direct_final() {
+        // Fallback response has a repl block AND a direct FINAL().
+        // The repl should execute (side effects), and FINAL() should extract directly.
+        let rt = tokio::runtime::Runtime::new().unwrap();
+        let rlm = make_test_rlm();
+        let mut sandbox = Sandbox::new().unwrap();
+        let mut runtime = RuntimeState::new("");
+
+        let fallback_response =
+            "```repl\nx = 42\n```\nFINAL(5)";
+
+        let code_blocks = find_code_blocks(fallback_response);
+        assert_eq!(code_blocks.len(), 1);
+        for code in &code_blocks {
+            exec_block(&rt, &rlm, &mut sandbox, &mut runtime, code);
+        }
+
+        let answer = check_final_answer(fallback_response, &sandbox);
+        assert_eq!(answer, Some("5".to_string()));
+        // The repl block also ran (side effect):
+        assert_eq!(sandbox.get_variable("x"), Some("42".to_string()));
+    }
+
+    #[test]
+    fn test_fallback_no_repl_no_final() {
+        // Fallback response has no repl blocks and no FINAL — returns None.
+        let fallback_response = "The answer is 5.";
+        let code_blocks = find_code_blocks(fallback_response);
+        assert!(code_blocks.is_empty());
+
+        let sandbox = Sandbox::new().unwrap();
+        let answer = check_final_answer(fallback_response, &sandbox);
+        assert!(answer.is_none());
+
+        // strip_final_wrapper should pass through unchanged.
+        assert_eq!(strip_final_wrapper(fallback_response), "The answer is 5.");
+    }
+
+    #[test]
     fn test_format_exec_result_normal() {
         let result = format_exec_result("print(1)", "1\n");
         assert!(result.contains("print(1)"));
