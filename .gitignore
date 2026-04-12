@@ -3,3 +3,19 @@ data/
 *.log
 .env
 .envrc
+
+# Notebook/cache artifacts
+__pycache__/
+__marimo__/
+
+# LaTeX build artifacts (keep PDF)
+*.aux
+*.bbl
+*.blg
+*.fdb_latexmk
+*.fls
+*.out
+*.synctex.gz
+
+# Local tool config
+.claude/
