@@ -1,0 +1,1768 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Axon — Your LLM's LLM</title>
+  <meta name="description" content="Axon is a Recursive Language Model engine built in Rust. When your LLM runs out of context, it spawns a child. That child can spawn another. Turtles all the way down." />
+
+  <!-- Canonical -->
+  <link rel="canonical" href="https://axon.dio.computer" />
+
+  <!-- Open Graph (Facebook, Discord, LinkedIn, Slack) -->
+  <meta property="og:type"        content="website" />
+  <meta property="og:url"         content="https://axon.dio.computer" />
+  <meta property="og:site_name"   content="Axon" />
+  <meta property="og:title"       content="Axon — Your LLM's LLM" />
+  <meta property="og:description" content="A Recursive Language Model engine built in Rust. When your LLM runs out of context, it spawns a child agent with its own sandbox. That child can spawn another. Turtles all the way down." />
+  <meta property="og:image"       content="https://axon.dio.computer/og-image.png" />
+  <meta property="og:image:type"  content="image/png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt"   content="Axon — We need to go deeper. Your LLM's LLM." />
+
+  <!-- Twitter / X Card -->
+  <meta name="twitter:card"        content="summary_large_image" />
+  <meta name="twitter:title"       content="Axon — Your LLM's LLM" />
+  <meta name="twitter:description" content="A Recursive Language Model engine built in Rust. Sandboxed Python REPL at every depth. Multi-provider. Open source." />
+  <meta name="twitter:image"       content="https://axon.dio.computer/og-image.png" />
+  <meta name="twitter:image:alt"   content="Axon — We need to go deeper. Your LLM's LLM." />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:ital,wght@0,400;0,500;0,700;1,400&display=swap" rel="stylesheet" />
+
+  <style>
+    /* ─── Design tokens ──────────────────────────────────── */
+    :root {
+      --bg:         #080808;
+      --surface:    #111111;
+      --surface-2:  #191919;
+      --border:     #242424;
+      --border-hi:  #3a3a3a;
+      --text:       #f0ece2;
+      --muted:      #666666;
+      --muted-2:    #444444;
+      --amber:      #f5a623;
+      --amber-dim:  #c4831a;
+      --cyan:       #00bfff;
+      --rust:       #c65b2b;
+      --green:      #4caf74;
+      --red:        #e84855;
+      --font-sans:  'Space Grotesk', system-ui, sans-serif;
+      --font-mono:  'JetBrains Mono', 'Courier New', monospace;
+    }
+
+    /* ─── Reset ──────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; font-size: 16px; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font-sans);
+      line-height: 1.65;
+      overflow-x: hidden;
+    }
+    a { color: inherit; text-decoration: none; }
+    img, svg { display: block; max-width: 100%; }
+
+    /* ─── Utility ────────────────────────────────────────── */
+    .mono { font-family: var(--font-mono); }
+    .amber { color: var(--amber); }
+    .cyan  { color: var(--cyan); }
+    .green { color: var(--green); }
+    .rust  { color: var(--rust); }
+    .muted { color: var(--muted); }
+    .label {
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    /* ─── Nav ────────────────────────────────────────────── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 2.5rem;
+      height: 60px;
+      border-bottom: 1px solid var(--border);
+      background: rgba(8, 8, 8, 0.92);
+      backdrop-filter: blur(8px);
+    }
+    .nav-logo {
+      font-family: var(--font-mono);
+      font-weight: 700;
+      font-size: 1.15rem;
+      color: var(--amber);
+      letter-spacing: -0.02em;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .nav-logo-dot {
+      width: 8px; height: 8px;
+      background: var(--amber);
+      border-radius: 50%;
+      animation: pulse 2s ease-in-out infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.3; }
+    }
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+      list-style: none;
+      font-size: 0.875rem;
+      font-weight: 500;
+    }
+    .nav-links a {
+      color: var(--muted);
+      transition: color 0.15s;
+    }
+    .nav-links a:hover { color: var(--text); }
+    .nav-cta {
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      font-weight: 600;
+      padding: 0.45rem 1rem;
+      border: 1.5px solid var(--amber);
+      color: var(--amber);
+      transition: background 0.15s, color 0.15s;
+    }
+    .nav-cta:hover {
+      background: var(--amber);
+      color: var(--bg);
+    }
+
+    /* ─── Hero ───────────────────────────────────────────── */
+    #hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 8rem 2.5rem 5rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero-grid-bg {
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(var(--border) 1px, transparent 1px),
+        linear-gradient(90deg, var(--border) 1px, transparent 1px);
+      background-size: 40px 40px;
+      opacity: 0.35;
+      mask-image: radial-gradient(ellipse 80% 70% at 50% 50%, black 30%, transparent 100%);
+      -webkit-mask-image: radial-gradient(ellipse 80% 70% at 50% 50%, black 30%, transparent 100%);
+    }
+    .hero-inner {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 5rem;
+      max-width: 1200px;
+      width: 100%;
+      align-items: center;
+    }
+    .hero-text {}
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      color: var(--rust);
+      border: 1px solid var(--rust);
+      padding: 0.25rem 0.7rem;
+      margin-bottom: 1.75rem;
+      letter-spacing: 0.05em;
+    }
+    .hero-badge::before {
+      content: '';
+      width: 6px; height: 6px;
+      background: var(--rust);
+      border-radius: 50%;
+    }
+    .hero-h1 {
+      font-size: clamp(3rem, 6vw, 5.5rem);
+      font-weight: 700;
+      line-height: 1.05;
+      letter-spacing: -0.03em;
+      margin-bottom: 0.5rem;
+    }
+    .hero-h1 span { color: var(--amber); }
+    .hero-tagline {
+      font-family: var(--font-mono);
+      font-size: 1.1rem;
+      color: var(--cyan);
+      margin-bottom: 1.5rem;
+      letter-spacing: -0.01em;
+    }
+    .hero-desc {
+      font-size: 1.05rem;
+      color: var(--muted);
+      max-width: 480px;
+      margin-bottom: 2.5rem;
+      line-height: 1.75;
+    }
+    .hero-desc strong { color: var(--text); font-weight: 600; }
+    .hero-actions {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-family: var(--font-mono);
+      font-size: 0.875rem;
+      font-weight: 700;
+      background: var(--amber);
+      color: #080808;
+      padding: 0.8rem 1.75rem;
+      transition: background 0.15s;
+      letter-spacing: 0.02em;
+    }
+    .btn-primary:hover { background: #ffba3f; }
+    .btn-secondary {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-family: var(--font-mono);
+      font-size: 0.875rem;
+      font-weight: 500;
+      border: 1.5px solid var(--border-hi);
+      color: var(--muted);
+      padding: 0.8rem 1.75rem;
+      transition: border-color 0.15s, color 0.15s;
+    }
+    .btn-secondary:hover { border-color: var(--text); color: var(--text); }
+    .hero-stats {
+      display: flex;
+      gap: 2rem;
+      margin-top: 3.5rem;
+      padding-top: 2rem;
+      border-top: 1px solid var(--border);
+    }
+    .stat-item {}
+    .stat-number {
+      font-family: var(--font-mono);
+      font-size: 1.6rem;
+      font-weight: 700;
+      color: var(--text);
+      line-height: 1;
+    }
+    .stat-label {
+      font-size: 0.78rem;
+      color: var(--muted);
+      margin-top: 0.25rem;
+    }
+
+    /* Terminal */
+    .hero-terminal {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      font-family: var(--font-mono);
+      font-size: 0.78rem;
+      line-height: 1.7;
+      overflow: hidden;
+    }
+    .terminal-bar {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.6rem 1rem;
+      background: var(--surface-2);
+      border-bottom: 1px solid var(--border);
+    }
+    .terminal-dot {
+      width: 10px; height: 10px;
+      border-radius: 50%;
+    }
+    .dot-red { background: #e84855; }
+    .dot-amber { background: #f5a623; }
+    .dot-green { background: #4caf74; }
+    .terminal-title {
+      margin-left: auto;
+      font-size: 0.65rem;
+      color: var(--muted);
+    }
+    .terminal-body {
+      padding: 1.25rem 1.25rem;
+      min-height: 320px;
+    }
+    .t-line { display: block; white-space: pre; }
+    .t-cmd    { color: var(--text); }
+    .t-prompt { color: var(--amber); }
+    .t-d0     { color: var(--cyan); }
+    .t-d1     { color: #74b9ff; }
+    .t-d2     { color: #a29bfe; }
+    .t-final  { color: var(--green); }
+    .t-stats  { color: var(--muted); }
+    .t-spawn  { color: var(--amber); }
+    .t-blank  { color: transparent; user-select: none; }
+    .cursor {
+      display: inline-block;
+      width: 7px; height: 1em;
+      background: var(--amber);
+      vertical-align: text-bottom;
+      animation: blink 1s step-end infinite;
+    }
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0; }
+    }
+
+    /* ─── Section base ───────────────────────────────────── */
+    section { padding: 6rem 2.5rem; }
+    .section-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    .section-header {
+      margin-bottom: 4rem;
+    }
+    .section-header h2 {
+      font-size: clamp(2rem, 4vw, 3rem);
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      line-height: 1.1;
+      margin-top: 0.75rem;
+    }
+    .section-header p {
+      color: var(--muted);
+      font-size: 1.05rem;
+      max-width: 560px;
+      margin-top: 1rem;
+      line-height: 1.75;
+    }
+
+    /* ─── Problem ────────────────────────────────────────── */
+    #problem {
+      background: var(--surface);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+    .problem-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: center;
+    }
+    .problem-text h2 {
+      font-size: clamp(2rem, 3.5vw, 2.75rem);
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      line-height: 1.15;
+      margin-bottom: 1.5rem;
+    }
+    .problem-text h2 span { color: var(--amber); }
+    .problem-text p {
+      color: var(--muted);
+      font-size: 1rem;
+      line-height: 1.8;
+      margin-bottom: 1rem;
+    }
+    .problem-text p strong { color: var(--text); }
+    .context-meter {
+      border: 1px solid var(--border);
+      overflow: hidden;
+    }
+    .context-meter-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.75rem 1rem;
+      background: var(--surface-2);
+      border-bottom: 1px solid var(--border);
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      color: var(--muted);
+    }
+    .context-bar-wrap {
+      padding: 1.5rem 1rem;
+    }
+    .context-bar-label {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      color: var(--muted);
+      margin-bottom: 0.4rem;
+    }
+    .context-bar {
+      height: 24px;
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      margin-bottom: 1rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .context-bar-fill {
+      height: 100%;
+      transition: width 1s ease;
+    }
+    .bar-safe { background: var(--green); }
+    .bar-warn { background: var(--amber); }
+    .bar-dead { background: var(--red); }
+    .context-bar-text {
+      position: absolute;
+      right: 0.5rem;
+      top: 50%;
+      transform: translateY(-50%);
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      color: var(--bg);
+      font-weight: 700;
+    }
+    .context-vs {
+      padding: 1rem;
+      border-top: 1px solid var(--border);
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+    }
+    .vs-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 0.3rem 0;
+      color: var(--muted);
+    }
+    .vs-row .win { color: var(--green); }
+    .vs-row .lose { color: var(--red); }
+
+    /* ─── How it works ───────────────────────────────────── */
+    #how {
+      border-bottom: 1px solid var(--border);
+    }
+    .how-grid {
+      display: grid;
+      grid-template-columns: 1fr 1.2fr;
+      gap: 5rem;
+      align-items: start;
+    }
+    .how-steps {}
+    .step {
+      display: flex;
+      gap: 1.25rem;
+      margin-bottom: 2.5rem;
+      opacity: 0;
+      transform: translateX(-20px);
+      transition: opacity 0.5s ease, transform 0.5s ease;
+    }
+    .step.visible {
+      opacity: 1;
+      transform: translateX(0);
+    }
+    .step-num {
+      flex-shrink: 0;
+      width: 32px; height: 32px;
+      border: 1.5px solid var(--amber);
+      color: var(--amber);
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: 0.1rem;
+    }
+    .step-content h3 {
+      font-size: 1.1rem;
+      font-weight: 600;
+      margin-bottom: 0.4rem;
+    }
+    .step-content p { color: var(--muted); font-size: 0.9rem; line-height: 1.7; }
+    .step-content p strong { color: var(--text); }
+    .step-content code {
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      background: var(--surface-2);
+      padding: 0.1rem 0.4rem;
+      border: 1px solid var(--border);
+      color: var(--cyan);
+    }
+
+    /* Recursion diagram */
+    .recursion-diagram {
+      position: relative;
+    }
+    .rdepth {
+      border: 1.5px solid;
+      padding: 1.25rem;
+      position: relative;
+      opacity: 0;
+      transition: opacity 0.6s ease;
+    }
+    .rdepth.visible { opacity: 1; }
+    .rdepth-0 {
+      border-color: var(--cyan);
+      background: rgba(0, 191, 255, 0.03);
+    }
+    .rdepth-1 {
+      border-color: #74b9ff;
+      background: rgba(116, 185, 255, 0.03);
+      margin: 1rem 0 0 0;
+    }
+    .rdepth-2 {
+      border-color: #a29bfe;
+      background: rgba(162, 155, 254, 0.04);
+      margin: 1rem 0 0 0;
+    }
+    .rdepth-label {
+      font-family: var(--font-mono);
+      font-size: 0.68rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 0.75rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .depth-0-label { color: var(--cyan); }
+    .depth-1-label { color: #74b9ff; }
+    .depth-2-label { color: #a29bfe; }
+    .rdepth-badge {
+      font-family: var(--font-mono);
+      font-size: 0.6rem;
+      padding: 0.1rem 0.5rem;
+      border: 1px solid currentColor;
+      opacity: 0.6;
+    }
+    .rdepth-pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-top: 0.75rem;
+    }
+    .pill {
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      padding: 0.2rem 0.6rem;
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      color: var(--muted);
+    }
+    .pill.active { color: var(--green); border-color: var(--green); background: rgba(76, 175, 116, 0.08); }
+    .arrow-down {
+      text-align: center;
+      color: var(--muted-2);
+      font-size: 1.2rem;
+      padding: 0.25rem 0;
+      font-family: var(--font-mono);
+    }
+    .spawn-label {
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      color: var(--amber);
+      text-align: center;
+      display: block;
+      letter-spacing: 0.05em;
+    }
+
+    /* ─── Features ───────────────────────────────────────── */
+    #features {
+      background: var(--surface);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1px;
+      background: var(--border);
+      border: 1px solid var(--border);
+    }
+    .feature-card {
+      background: var(--surface);
+      padding: 2rem;
+      position: relative;
+      overflow: hidden;
+      transition: background 0.2s;
+    }
+    .feature-card:hover { background: var(--surface-2); }
+    .feature-icon {
+      font-family: var(--font-mono);
+      font-size: 1.4rem;
+      margin-bottom: 1rem;
+      line-height: 1;
+    }
+    .feature-card h3 {
+      font-size: 1.05rem;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+      line-height: 1.3;
+    }
+    .feature-card p {
+      font-size: 0.875rem;
+      color: var(--muted);
+      line-height: 1.7;
+    }
+    .feature-card p strong { color: var(--text); font-weight: 500; }
+    .feature-tag {
+      margin-top: 1rem;
+      display: inline-block;
+      font-family: var(--font-mono);
+      font-size: 0.62rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted-2);
+      border: 1px solid var(--border);
+      padding: 0.15rem 0.5rem;
+    }
+
+    /* ─── Benchmarks ─────────────────────────────────────── */
+    #benchmarks {
+      border-bottom: 1px solid var(--border);
+    }
+    .bench-intro {
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      color: var(--muted);
+      margin-top: 1rem;
+      font-style: italic;
+    }
+    .bench-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+    }
+    .bench-card {
+      border: 1px solid var(--border);
+      background: var(--surface);
+    }
+    .bench-card-head {
+      padding: 1rem 1.25rem;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .bench-card-title {
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--text);
+    }
+    .bench-card-n {
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      color: var(--muted);
+    }
+    .bench-card-body { padding: 1.25rem; }
+    .bench-row {
+      margin-bottom: 1.25rem;
+    }
+    .bench-row:last-child { margin-bottom: 0; }
+    .bench-row-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.4rem;
+    }
+    .bench-mode {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      color: var(--muted);
+    }
+    .bench-pct {
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: var(--text);
+    }
+    .bench-bar-track {
+      height: 10px;
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      position: relative;
+      overflow: hidden;
+    }
+    .bench-bar-fill {
+      height: 100%;
+      transition: width 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+      width: 0;
+    }
+    .bar-amber { background: var(--amber); }
+    .bar-cyan  { background: var(--cyan); }
+    .bar-green { background: var(--green); }
+    .bar-rust  { background: var(--rust); }
+    .ci-note {
+      font-family: var(--font-mono);
+      font-size: 0.62rem;
+      color: var(--muted-2);
+      margin-top: 0.3rem;
+    }
+    .bench-insight {
+      margin-top: 2.5rem;
+      padding: 1.5rem;
+      border: 1px solid var(--amber);
+      background: rgba(245, 166, 35, 0.04);
+      display: flex;
+      gap: 1rem;
+    }
+    .insight-icon {
+      font-size: 1.2rem;
+      flex-shrink: 0;
+      margin-top: 0.1rem;
+    }
+    .insight-text {
+      font-size: 0.875rem;
+      color: var(--muted);
+      line-height: 1.7;
+    }
+    .insight-text strong { color: var(--text); }
+
+    /* ─── Providers ──────────────────────────────────────── */
+    #providers {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+    }
+    .providers-grid {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 1px;
+      background: var(--border);
+      border: 1px solid var(--border);
+      margin-top: 3rem;
+    }
+    .provider-card {
+      background: var(--surface);
+      padding: 1.5rem 1rem;
+      text-align: center;
+      transition: background 0.2s;
+    }
+    .provider-card:hover { background: var(--surface-2); }
+    .provider-name {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--text);
+      display: block;
+      margin-top: 0.5rem;
+    }
+    .provider-models {
+      font-family: var(--font-mono);
+      font-size: 0.6rem;
+      color: var(--muted);
+      display: block;
+      margin-top: 0.2rem;
+    }
+    .provider-glyph {
+      font-size: 1.5rem;
+      line-height: 1;
+    }
+
+    /* ─── Quick start ────────────────────────────────────── */
+    #start {
+      border-bottom: 1px solid var(--border);
+    }
+    .start-grid {
+      display: grid;
+      grid-template-columns: 1fr 1.4fr;
+      gap: 5rem;
+      align-items: start;
+    }
+    .start-text h2 {
+      font-size: clamp(1.8rem, 3vw, 2.5rem);
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      margin-top: 0.75rem;
+      margin-bottom: 1.25rem;
+    }
+    .start-text p {
+      color: var(--muted);
+      font-size: 0.95rem;
+      line-height: 1.75;
+      margin-bottom: 1rem;
+    }
+    .code-block {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      overflow: hidden;
+    }
+    .code-block-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.6rem 1rem;
+      background: var(--surface-2);
+      border-bottom: 1px solid var(--border);
+    }
+    .code-block-lang {
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+    .code-block-copy {
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      color: var(--muted);
+      cursor: pointer;
+      border: none;
+      background: none;
+      transition: color 0.15s;
+      letter-spacing: 0.05em;
+    }
+    .code-block-copy:hover { color: var(--text); }
+    .code-block pre {
+      padding: 1.25rem;
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      line-height: 1.8;
+      overflow-x: auto;
+      color: var(--text);
+    }
+    .code-block pre .kw  { color: var(--amber); }
+    .code-block pre .str { color: var(--green); }
+    .code-block pre .cmt { color: var(--muted); font-style: italic; }
+    .code-block pre .flag { color: var(--cyan); }
+    .code-block pre .val  { color: #a29bfe; }
+    .code-tabs {
+      display: flex;
+      border-bottom: 1px solid var(--border);
+    }
+    .code-tab {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      padding: 0.5rem 1rem;
+      cursor: pointer;
+      color: var(--muted);
+      border-right: 1px solid var(--border);
+      border-bottom: 2px solid transparent;
+      transition: color 0.15s;
+    }
+    .code-tab.active {
+      color: var(--amber);
+      border-bottom-color: var(--amber);
+      background: rgba(245, 166, 35, 0.04);
+    }
+    .code-pane { display: none; }
+    .code-pane.active { display: block; }
+
+    /* ─── Quote ──────────────────────────────────────────── */
+    #quote {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      text-align: center;
+    }
+    .quote-text {
+      font-size: clamp(1.3rem, 2.5vw, 2rem);
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      line-height: 1.4;
+      max-width: 700px;
+      margin: 0 auto;
+      color: var(--text);
+    }
+    .quote-text em { color: var(--amber); font-style: normal; }
+    .quote-attr {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      color: var(--muted);
+      margin-top: 1.5rem;
+    }
+
+    /* ─── Footer ─────────────────────────────────────────── */
+    footer {
+      padding: 3rem 2.5rem;
+      border-top: 1px solid var(--border);
+    }
+    .footer-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1.5rem;
+    }
+    .footer-logo {
+      font-family: var(--font-mono);
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--amber);
+    }
+    .footer-byline {
+      font-size: 0.8rem;
+      color: var(--muted);
+      margin-top: 0.25rem;
+    }
+    .footer-links {
+      display: flex;
+      gap: 1.5rem;
+      list-style: none;
+      font-size: 0.8rem;
+    }
+    .footer-links a {
+      color: var(--muted);
+      transition: color 0.15s;
+      font-family: var(--font-mono);
+    }
+    .footer-links a:hover { color: var(--text); }
+    .footer-rust {
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      color: var(--rust);
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    /* ─── Scroll reveal ──────────────────────────────────── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(16px);
+      transition: opacity 0.5s ease, transform 0.5s ease;
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .reveal-delay-1 { transition-delay: 0.1s; }
+    .reveal-delay-2 { transition-delay: 0.2s; }
+    .reveal-delay-3 { transition-delay: 0.3s; }
+
+    /* ─── Responsive ─────────────────────────────────────── */
+    @media (max-width: 900px) {
+      .hero-inner { grid-template-columns: 1fr; gap: 3rem; }
+      .hero-h1 { font-size: 2.8rem; }
+      .problem-grid { grid-template-columns: 1fr; }
+      .how-grid { grid-template-columns: 1fr; }
+      .features-grid { grid-template-columns: 1fr 1fr; }
+      .bench-grid { grid-template-columns: 1fr; }
+      .start-grid { grid-template-columns: 1fr; gap: 3rem; }
+      .providers-grid { grid-template-columns: repeat(3, 1fr); }
+      nav { padding: 0 1.25rem; }
+      section { padding: 4rem 1.25rem; }
+    }
+    @media (max-width: 600px) {
+      .features-grid { grid-template-columns: 1fr; }
+      .providers-grid { grid-template-columns: repeat(2, 1fr); }
+      .nav-links { display: none; }
+      .hero-stats { flex-wrap: wrap; gap: 1.5rem; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ─── Nav ──────────────────────────────────────────────── -->
+<nav>
+  <a href="#" class="nav-logo">
+    <span class="nav-logo-dot"></span>
+    axon
+  </a>
+  <ul class="nav-links">
+    <li><a href="#how">How it works</a></li>
+    <li><a href="#features">Features</a></li>
+    <li><a href="#benchmarks">Benchmarks</a></li>
+    <li><a href="#start">Quick start</a></li>
+  </ul>
+  <a href="https://github.com/Diogenesoftoronto/axon" class="nav-cta">GitHub ↗</a>
+</nav>
+
+
+<!-- ─── Hero ─────────────────────────────────────────────── -->
+<section id="hero">
+  <div class="hero-grid-bg"></div>
+  <div class="hero-inner">
+    <div class="hero-text">
+      <div class="hero-badge">Built in Rust · Recursive LLM Engine · Open Source</div>
+      <h1 class="hero-h1">We need to<br><span>go deeper.</span></h1>
+      <p class="hero-tagline">// Your LLM's LLM.</p>
+      <p class="hero-desc">
+        Axon is a <strong>Recursive Language Model engine</strong>. When your LLM runs out of context,
+        it spawns a child agent with its own isolated sandbox. That child can spawn another.
+        <strong>Turtles all the way down</strong> — until you have your answer.
+      </p>
+      <div class="hero-actions">
+        <a href="#start" class="btn-primary">Get started →</a>
+        <a href="#benchmarks" class="btn-secondary">View benchmarks</a>
+      </div>
+      <div class="hero-stats">
+        <div class="stat-item">
+          <div class="stat-number amber">∞</div>
+          <div class="stat-label">recursion depth</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-number">6</div>
+          <div class="stat-label">LLM providers</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-number">12<span class="muted" style="font-size:1rem">+</span></div>
+          <div class="stat-label">benchmark suites</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-number rust">🦀</div>
+          <div class="stat-label">written in Rust</div>
+        </div>
+      </div>
+    </div>
+    <div class="hero-terminal">
+      <div class="terminal-bar">
+        <span class="terminal-dot dot-red"></span>
+        <span class="terminal-dot dot-amber"></span>
+        <span class="terminal-dot dot-green"></span>
+        <span class="terminal-title">axon · depth=3 · claude-sonnet-4</span>
+      </div>
+      <div class="terminal-body" id="terminal-body">
+        <span class="cursor" id="terminal-cursor"></span>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ─── Problem ───────────────────────────────────────────── -->
+<section id="problem">
+  <div class="section-inner">
+    <div class="problem-grid">
+      <div class="problem-text reveal">
+        <span class="label">The problem</span>
+        <h2>Context windows<br>are <span>a lie.</span></h2>
+        <p>
+          128K tokens sounds like a lot. Until you need to analyze a 200-page document,
+          track 50 steps of state, or recursively decompose a hard planning problem.
+        </p>
+        <p>
+          Suddenly you're <strong>truncating, chunking manually, and hallucinating</strong>
+          the parts that didn't fit. The model runs out of brain.
+        </p>
+        <p>
+          Axon gives it more. When context overflows, the model calls <code>llm_query()</code>
+          and a fresh sub-agent spawns with its own workspace. Divide. Delegate. Conquer.
+        </p>
+      </div>
+      <div class="reveal reveal-delay-1">
+        <div class="context-meter">
+          <div class="context-meter-header">
+            <span>context_window.monitor</span>
+            <span class="amber">● LIVE</span>
+          </div>
+          <div class="context-bar-wrap">
+            <div class="context-bar-label">Without recursion — context stuffing</div>
+            <div class="context-bar">
+              <div class="context-bar-fill bar-dead" style="width:98%" id="bar-no-rec"></div>
+              <span class="context-bar-text">127,847 / 128K</span>
+            </div>
+            <div class="context-bar-label" style="color: var(--red)">⚠ truncated · quality collapse · hallucination risk</div>
+
+            <div style="margin-top: 1.5rem;" class="context-bar-label">With Axon — recursive delegation</div>
+            <div class="context-bar">
+              <div class="context-bar-fill bar-green" style="width:28%" id="bar-rec-root"></div>
+              <span class="context-bar-text" style="color:var(--bg)">depth:0 · 35K</span>
+            </div>
+            <div class="context-bar" style="margin-top:0.4rem">
+              <div class="context-bar-fill bar-safe" style="width:22%"></div>
+              <span class="context-bar-text" style="color:var(--bg)">depth:1 · 28K</span>
+            </div>
+            <div class="context-bar" style="margin-top:0.4rem">
+              <div class="context-bar-fill bar-safe" style="width:18%"></div>
+              <span class="context-bar-text" style="color:var(--bg)">depth:2 · 22K</span>
+            </div>
+            <div class="context-bar-label" style="color: var(--green); margin-top: 0.3rem">✓ each agent focused · full precision · no truncation</div>
+          </div>
+          <div class="context-vs">
+            <div class="vs-row">
+              <span>Quality on hard reasoning tasks</span>
+              <span><span class="lose">50%</span> → <span class="win">100%</span></span>
+            </div>
+            <div class="vs-row">
+              <span>Long-context extraction</span>
+              <span><span class="lose">fails</span> → <span class="win">works</span></span>
+            </div>
+            <div class="vs-row">
+              <span>Hallucination risk</span>
+              <span><span class="lose">high</span> → <span class="win">guarded</span></span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ─── How it works ──────────────────────────────────────── -->
+<section id="how">
+  <div class="section-inner">
+    <div class="section-header">
+      <span class="label">Architecture</span>
+      <h2>Strange loops,<br>all the way down.</h2>
+      <p>
+        Axon implements true recursive LLM execution. Each depth level is a complete agent
+        with its own Python sandbox — not a prompt chain. Not a tool call. A <em>full sub-brain</em>.
+      </p>
+    </div>
+    <div class="how-grid">
+      <div class="how-steps">
+        <div class="step" id="step-1">
+          <div class="step-num">01</div>
+          <div class="step-content">
+            <h3>Root RLM receives the task</h3>
+            <p>At <strong>depth:0</strong>, the engine spawns a Python REPL sandbox. The model can write
+            code, introspect the context, and decide whether it needs help — or can go solo.</p>
+          </div>
+        </div>
+        <div class="step" id="step-2">
+          <div class="step-num">02</div>
+          <div class="step-content">
+            <h3>Delegate to a sub-agent</h3>
+            <p>When the model needs deeper reasoning, it calls <code>llm_query(chunk)</code>.
+            Axon spawns a <strong>full child RLM at depth:1</strong> with an isolated sandbox.
+            The parent waits. The child thinks.</p>
+          </div>
+        </div>
+        <div class="step" id="step-3">
+          <div class="step-num">03</div>
+          <div class="step-content">
+            <h3>Recurse as deep as needed</h3>
+            <p>Each child can spawn its own children, down to <code>--max-depth</code>.
+            At the leaf level, calls hit the LLM directly. <strong>Divide. Delegate. Conquer.</strong>
+            Results bubble back up the chain.</p>
+          </div>
+        </div>
+        <div class="step" id="step-4">
+          <div class="step-num">04</div>
+          <div class="step-content">
+            <h3>Aggregate and surface FINAL()</h3>
+            <p>The root RLM collects sub-agent results, runs aggregation logic in its sandbox,
+            and calls <code>FINAL(answer)</code>. You get one clean answer. No assembly required.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="recursion-diagram" id="rdepth-container">
+        <div class="rdepth rdepth-0" id="rd0">
+          <div class="rdepth-label depth-0-label">
+            <span>RLM · depth:0</span>
+            <span class="rdepth-badge">root</span>
+          </div>
+          <p style="font-size:0.78rem; color: var(--muted); margin-bottom:0.75rem">
+            Orchestrator. Analyzes query, delegates chunks, aggregates results.
+          </p>
+          <div class="rdepth-pills">
+            <span class="pill active">Python REPL</span>
+            <span class="pill active">llm_query()</span>
+            <span class="pill">FINAL()</span>
+            <span class="pill">VFS /plans/</span>
+            <span class="pill">CHECKPOINT</span>
+          </div>
+
+          <div class="arrow-down">↓</div>
+          <div class="spawn-label">spawns ↓</div>
+
+          <div class="rdepth rdepth-1" id="rd1">
+            <div class="rdepth-label depth-1-label">
+              <span>RLM · depth:1</span>
+              <span class="rdepth-badge">sub-agent</span>
+            </div>
+            <p style="font-size:0.78rem; color: var(--muted); margin-bottom:0.75rem">
+              Focused analyzer. Processes a context chunk. Can recurse further.
+            </p>
+            <div class="rdepth-pills">
+              <span class="pill active">Python REPL</span>
+              <span class="pill active">llm_query()</span>
+              <span class="pill active">FINAL()</span>
+              <span class="pill">VFS /evidence/</span>
+            </div>
+
+            <div class="arrow-down">↓</div>
+            <div class="spawn-label">spawns ↓</div>
+
+            <div class="rdepth rdepth-2" id="rd2">
+              <div class="rdepth-label depth-2-label">
+                <span>RLM · depth:2</span>
+                <span class="rdepth-badge">leaf</span>
+              </div>
+              <p style="font-size:0.78rem; color: var(--muted); margin-bottom:0.75rem">
+                Verifier / extractor. Hits LLM directly. Returns result up the chain.
+              </p>
+              <div class="rdepth-pills">
+                <span class="pill active">Python REPL</span>
+                <span class="pill">llm_query() → direct</span>
+                <span class="pill active">FINAL()</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ─── Features ──────────────────────────────────────────── -->
+<section id="features">
+  <div class="section-inner">
+    <div class="section-header">
+      <span class="label">What you get</span>
+      <h2>Built for the<br>hard problems.</h2>
+    </div>
+    <div class="features-grid">
+
+      <div class="feature-card reveal">
+        <div class="feature-icon cyan">⟳</div>
+        <h3>True Recursive Reasoning</h3>
+        <p>
+          Not chain-of-thought. Not tool calls.
+          <strong>Full sub-agents at every depth level</strong>, each with its own sandbox and decision loop.
+          Inspired by divide-and-conquer algorithms — for reasoning.
+        </p>
+        <span class="feature-tag">rlm · depth</span>
+      </div>
+
+      <div class="feature-card reveal reveal-delay-1">
+        <div class="feature-icon green">⬡</div>
+        <h3>Sandboxed Python REPL</h3>
+        <p>
+          Code runs in <strong>ouros</strong> — an isolated Python environment.
+          No filesystem. No network. No surprises. Variables persist across iterations.
+          The model thinks in code; the sandbox keeps it honest.
+        </p>
+        <span class="feature-tag">ouros · sandbox</span>
+      </div>
+
+      <div class="feature-card reveal reveal-delay-2">
+        <div class="feature-icon amber">⑂</div>
+        <h3>Checkpoint &amp; Fork</h3>
+        <p>
+          Branch your reasoning like git branches your code.
+          <strong>CHECKPOINT_CREATE()</strong> snapshots sandbox state.
+          <strong>FORK_CREATE()</strong> spawns parallel hypothesis paths.
+          <strong>STRATEGY_COMMIT()</strong> picks the winner. Science, not vibes.
+        </p>
+        <span class="feature-tag">hypothesis · branching</span>
+      </div>
+
+      <div class="feature-card reveal">
+        <div class="feature-icon" style="color:#a29bfe">◫</div>
+        <h3>Virtual Filesystem</h3>
+        <p>
+          A model-visible scratchpad: <strong>/plans/</strong> for strategy,
+          <strong>/evidence/</strong> for extracted facts,
+          <strong>/artifacts/</strong> for generated work.
+          Think of it as version control for the model's reasoning process.
+        </p>
+        <span class="feature-tag">vfs · artifacts</span>
+      </div>
+
+      <div class="feature-card reveal reveal-delay-1">
+        <div class="feature-icon rust">⬡</div>
+        <h3>Multi-Provider Routing</h3>
+        <p>
+          OpenAI, Anthropic, Gemini, xAI, Ollama.
+          <strong>One engine to route them all.</strong>
+          Auto-detects provider from model name prefix.
+          Swap models without rewriting your workflow.
+        </p>
+        <span class="feature-tag">openai · claude · gemini · grok</span>
+      </div>
+
+      <div class="feature-card reveal reveal-delay-2">
+        <div class="feature-icon" style="color:#e84855">◈</div>
+        <h3>MCP Integration</h3>
+        <p>
+          Native <strong>Model Context Protocol</strong> server.
+          Use Axon as a tool inside Claude Code, any MCP-compatible agent,
+          or your own agentic workflow. Recursive reasoning as a service.
+        </p>
+        <span class="feature-tag">mcp · claude-code</span>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- ─── Benchmarks ────────────────────────────────────────── -->
+<section id="benchmarks">
+  <div class="section-inner">
+    <div class="section-header">
+      <span class="label">Results</span>
+      <h2>Numbers don't lie.</h2>
+      <p class="bench-intro">
+        (Confidence intervals do. So we show those too.)
+      </p>
+    </div>
+    <div class="bench-grid">
+
+      <div class="bench-card reveal">
+        <div class="bench-card-head">
+          <span class="bench-card-title">Hard Planning &amp; Reasoning</span>
+          <span class="bench-card-n">rlm_challenges.json</span>
+        </div>
+        <div class="bench-card-body">
+          <div class="bench-row">
+            <div class="bench-row-header">
+              <span class="bench-mode">with recursion (depth=2)</span>
+              <span class="bench-pct amber">100%</span>
+            </div>
+            <div class="bench-bar-track">
+              <div class="bench-bar-fill bar-amber bench-animate" data-width="100"></div>
+            </div>
+            <div class="ci-note">Tower of Hanoi, 8-Queens, Josephus, LIS, Edit Distance</div>
+          </div>
+          <div class="bench-row">
+            <div class="bench-row-header">
+              <span class="bench-mode">no recursion (depth=0)</span>
+              <span class="bench-pct muted">50%</span>
+            </div>
+            <div class="bench-bar-track">
+              <div class="bench-bar-fill bar-rust bench-animate" data-width="50"></div>
+            </div>
+            <div class="ci-note">Direct LLM, no decomposition</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="bench-card reveal reveal-delay-1">
+        <div class="bench-card-head">
+          <span class="bench-card-title">Long Context · Books + Distractors</span>
+          <span class="bench-card-n">n=15 · 10K+ tokens</span>
+        </div>
+        <div class="bench-card-body">
+          <div class="bench-row">
+            <div class="bench-row-header">
+              <span class="bench-mode">pass rate</span>
+              <span class="bench-pct green">73.3%</span>
+            </div>
+            <div class="bench-bar-track">
+              <div class="bench-bar-fill bar-green bench-animate" data-width="73.3"></div>
+            </div>
+            <div class="ci-note">CI₉₅: [48.1%, 89.1%] — small N, honest error bars</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="bench-card reveal">
+        <div class="bench-card-head">
+          <span class="bench-card-title">Information-Dense Ledger</span>
+          <span class="bench-card-n">n=18 · transaction aggregation</span>
+        </div>
+        <div class="bench-card-body">
+          <div class="bench-row">
+            <div class="bench-row-header">
+              <span class="bench-mode">pass rate</span>
+              <span class="bench-pct cyan">61.1%</span>
+            </div>
+            <div class="bench-bar-track">
+              <div class="bench-bar-fill bar-cyan bench-animate" data-width="61.1"></div>
+            </div>
+            <div class="ci-note">CI₉₅: [38.6%, 79.7%] — deterministic eval, no rubric games</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="bench-card reveal reveal-delay-1">
+        <div class="bench-card-head">
+          <span class="bench-card-title">Deep Recursion · Long Horizon</span>
+          <span class="bench-card-n">depth=6 vs depth=0</span>
+        </div>
+        <div class="bench-card-body">
+          <div class="bench-row">
+            <div class="bench-row-header">
+              <span class="bench-mode">depth=6 (max recursion)</span>
+              <span class="bench-pct amber">100%</span>
+            </div>
+            <div class="bench-bar-track">
+              <div class="bench-bar-fill bar-amber bench-animate" data-width="100"></div>
+            </div>
+          </div>
+          <div class="bench-row">
+            <div class="bench-row-header">
+              <span class="bench-mode">depth=0 (flat)</span>
+              <span class="bench-pct muted">50%</span>
+            </div>
+            <div class="bench-bar-track">
+              <div class="bench-bar-fill bar-rust bench-animate" data-width="50"></div>
+            </div>
+            <div class="ci-note">+50pp improvement on long-horizon tasks requiring decomposition</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="bench-insight reveal">
+      <div class="insight-icon">⚗️</div>
+      <div class="insight-text">
+        <strong>Science corner:</strong> These benchmarks use 12+ task suites covering cognitive traps,
+        state tracking, multi-step reasoning, and long-context distributional tasks.
+        We show confidence intervals because <strong>n=15 isn't a proof — it's a hypothesis</strong>.
+        Codeforces-hard tasks still show 0% across all modes. We report that too.
+        <br><br>
+        <a href="https://github.com/Diogenesoftoronto/axon/tree/main/benchmarks" style="color: var(--amber); font-family: var(--font-mono); font-size: 0.8rem;">
+          View full benchmark suite →
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ─── Providers ─────────────────────────────────────────── -->
+<section id="providers">
+  <div class="section-inner">
+    <div class="section-header" style="margin-bottom: 0;">
+      <span class="label">Providers</span>
+      <h2>One engine.<br>Every frontier model.</h2>
+      <p>Auto-detect from model name. Zero config switching. Bring your own keys.</p>
+    </div>
+    <div class="providers-grid reveal">
+      <div class="provider-card">
+        <div class="provider-glyph">⬡</div>
+        <span class="provider-name">OpenAI</span>
+        <span class="provider-models">gpt-4o · o1 · o3</span>
+      </div>
+      <div class="provider-card">
+        <div class="provider-glyph" style="color: var(--amber);">◈</div>
+        <span class="provider-name">Anthropic</span>
+        <span class="provider-models">claude-3 · claude-4</span>
+      </div>
+      <div class="provider-card">
+        <div class="provider-glyph" style="color: #4285f4;">◇</div>
+        <span class="provider-name">Google</span>
+        <span class="provider-models">gemini-1.5 · 2.0</span>
+      </div>
+      <div class="provider-card">
+        <div class="provider-glyph" style="color: #00d4ff;">✦</div>
+        <span class="provider-name">xAI</span>
+        <span class="provider-models">grok-2 · grok-3</span>
+      </div>
+      <div class="provider-card">
+        <div class="provider-glyph" style="color: var(--green);">⟳</div>
+        <span class="provider-name">Ollama</span>
+        <span class="provider-models">any local model</span>
+      </div>
+      <div class="provider-card">
+        <div class="provider-glyph" style="color: var(--muted);">+</div>
+        <span class="provider-name">Custom</span>
+        <span class="provider-models">--base-url · any API</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ─── Quick start ───────────────────────────────────────── -->
+<section id="start">
+  <div class="section-inner">
+    <div class="start-grid">
+      <div class="start-text">
+        <span class="label">Quick start</span>
+        <h2>Up and running<br>in 60 seconds.</h2>
+        <p>
+          Build from source with Cargo. Set your API key. Pick a model.
+          Axon takes care of the rest — recursion, sandboxing, context management.
+        </p>
+        <p>
+          Need Claude Code integration? The MCP server is built in.
+          Just configure the tool path and you're orchestrating recursive agents
+          from inside your editor.
+        </p>
+        <div style="margin-top: 2rem; padding: 1rem; border: 1px solid var(--border); font-family: var(--font-mono); font-size: 0.75rem; color: var(--muted);">
+          <div style="color: var(--text); margin-bottom: 0.5rem; font-size: 0.8rem;">Requirements</div>
+          <div>Rust 1.75+</div>
+          <div>Python 3.9+ (for sandboxing)</div>
+          <div>API key for your preferred provider</div>
+        </div>
+      </div>
+      <div>
+        <div class="code-block">
+          <div class="code-tabs">
+            <span class="code-tab active" data-tab="install">install</span>
+            <span class="code-tab" data-tab="basic">basic usage</span>
+            <span class="code-tab" data-tab="advanced">advanced</span>
+            <span class="code-tab" data-tab="mcp">mcp setup</span>
+          </div>
+          <div class="code-pane active" id="pane-install">
+            <div class="code-block-header">
+              <span class="code-block-lang">shell</span>
+              <button class="code-block-copy" onclick="copyCode('install')">copy</button>
+            </div>
+            <pre id="code-install"><span class="cmt"># clone and build</span>
+git clone https://github.com/Diogenesoftoronto/axon
+cd axon
+cargo build --release
+
+<span class="cmt"># set your API key</span>
+export OPENAI_API_KEY=<span class="str">"sk-..."</span>
+<span class="cmt"># or Anthropic</span>
+export ANTHROPIC_API_KEY=<span class="str">"sk-ant-..."</span>
+<span class="cmt"># or Google</span>
+export GEMINI_API_KEY=<span class="str">"AIza..."</span></pre>
+          </div>
+          <div class="code-pane" id="pane-basic">
+            <div class="code-block-header">
+              <span class="code-block-lang">shell</span>
+              <button class="code-block-copy" onclick="copyCode('basic')">copy</button>
+            </div>
+            <pre id="code-basic"><span class="cmt"># run a one-shot query with recursion depth 2</span>
+./target/release/axon run \
+  <span class="flag">--model</span> <span class="val">claude-sonnet-4</span> \
+  <span class="flag">--max-depth</span> <span class="val">2</span> \
+  <span class="flag">--query</span> <span class="str">"Analyze this document..."</span>
+
+<span class="cmt"># interactive chat mode with thread persistence</span>
+./target/release/axon chat \
+  <span class="flag">--model</span> <span class="val">gemini-2.0-flash</span> \
+  <span class="flag">--thread</span> <span class="val">my-project</span>
+
+<span class="cmt"># upload context from file</span>
+./target/release/axon upload \
+  <span class="flag">--thread</span> <span class="val">my-project</span> \
+  <span class="flag">--file</span> <span class="val">big-doc.txt</span></pre>
+          </div>
+          <div class="code-pane" id="pane-advanced">
+            <div class="code-block-header">
+              <span class="code-block-lang">shell</span>
+              <button class="code-block-copy" onclick="copyCode('advanced')">copy</button>
+            </div>
+            <pre id="code-advanced"><span class="cmt"># deep recursion with strict depth enforcement</span>
+axon run \
+  <span class="flag">--model</span> <span class="val">gpt-4o</span> \
+  <span class="flag">--max-depth</span> <span class="val">4</span> \
+  <span class="flag">--depth-enforcement</span> <span class="val">strict</span> \
+  <span class="flag">--require-min-recursive-calls</span> <span class="val">3</span> \
+  <span class="flag">--query</span> <span class="str">"..."</span>
+
+<span class="cmt"># enable checkpoints, forks, and VFS</span>
+axon run \
+  <span class="flag">--enable-checkpoints</span> \
+  <span class="flag">--enable-forks</span> \
+  <span class="flag">--enable-vfs</span> \
+  <span class="flag">--max-iterations</span> <span class="val">20</span> \
+  <span class="flag">--model</span> <span class="val">claude-sonnet-4</span> \
+  <span class="flag">--query</span> <span class="str">"..."</span>
+
+<span class="cmt"># verbose mode — see every thought</span>
+axon run <span class="flag">--verbose</span> <span class="flag">--model</span> <span class="val">gemini-flash</span> <span class="flag">--query</span> <span class="str">"..."</span></pre>
+          </div>
+          <div class="code-pane" id="pane-mcp">
+            <div class="code-block-header">
+              <span class="code-block-lang">json</span>
+              <button class="code-block-copy" onclick="copyCode('mcp')">copy</button>
+            </div>
+            <pre id="code-mcp"><span class="cmt">// .claude/settings.json — Claude Code integration</span>
+{
+  <span class="kw">"mcpServers"</span>: {
+    <span class="kw">"axon"</span>: {
+      <span class="kw">"command"</span>: <span class="str">"/path/to/axon"</span>,
+      <span class="kw">"args"</span>: [<span class="str">"mcp"</span>],
+      <span class="kw">"env"</span>: {
+        <span class="kw">"ANTHROPIC_API_KEY"</span>: <span class="str">"sk-ant-..."</span>
+      }
+    }
+  }
+}</pre>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ─── Quote ─────────────────────────────────────────────── -->
+<section id="quote">
+  <div class="section-inner">
+    <div class="quote-text reveal">
+      "The system knows itself. The loop is <em>strange</em>. The answer emerges."
+    </div>
+    <div class="quote-attr reveal reveal-delay-1">
+      — inspired by Douglas Hofstadter, <em>Gödel, Escher, Bach</em> (1979) · and now, Axon (2025)
+    </div>
+  </div>
+</section>
+
+
+<!-- ─── Footer ────────────────────────────────────────────── -->
+<footer>
+  <div class="footer-inner">
+    <div>
+      <div class="footer-logo">axon</div>
+      <div class="footer-byline">Recursive Language Model Engine · Open Source</div>
+    </div>
+    <ul class="footer-links">
+      <li><a href="https://github.com/Diogenesoftoronto/axon">GitHub</a></li>
+      <li><a href="https://github.com/Diogenesoftoronto/axon/tree/main/docs">Docs</a></li>
+      <li><a href="https://github.com/Diogenesoftoronto/axon/tree/main/benchmarks">Benchmarks</a></li>
+      <li><a href="https://github.com/Diogenesoftoronto/axon/blob/main/README.md">README</a></li>
+    </ul>
+    <div class="footer-rust">
+      <span>🦀</span>
+      <span>Written in Rust</span>
+    </div>
+  </div>
+</footer>
+
+
+<script>
+  /* ─── Terminal animation ────────────────────────────────── */
+  const lines = [
+    { text: '$ axon run --model claude-sonnet-4 --max-depth 3 \\', cls: 't-cmd' },
+    { text: '    --query "trace the causal chain across this corpus"', cls: 't-cmd' },
+    { text: '', cls: 't-blank' },
+    { text: '[depth:0] Context received. 47,293 tokens.', cls: 't-d0' },
+    { text: '[depth:0] Strategy: divide → delegate → aggregate.', cls: 't-d0' },
+    { text: '[depth:0] Spawning sub-agents for each chunk...', cls: 't-spawn' },
+    { text: '', cls: 't-blank' },
+    { text: '  [depth:1] Scanning chunk A (11,204 tokens)', cls: 't-d1' },
+    { text: '  [depth:1] Found 3 candidate claims. Verifying...', cls: 't-d1' },
+    { text: '  [depth:1] Spawning verifier...', cls: 't-spawn' },
+    { text: '    [depth:2] Extracting evidence for claim #2...', cls: 't-d2' },
+    { text: '    [depth:2] ✓ FINAL: "Claim confirmed. Confidence: 0.91"', cls: 't-final' },
+    { text: '  [depth:1] ✓ FINAL: "3 claims verified, 1 rejected"', cls: 't-final' },
+    { text: '', cls: 't-blank' },
+    { text: '  [depth:1] Scanning chunk B (14,887 tokens)', cls: 't-d1' },
+    { text: '  [depth:1] ✓ FINAL: "No causal links in this section"', cls: 't-final' },
+    { text: '', cls: 't-blank' },
+    { text: '[depth:0] Aggregating results from 2 sub-agents...', cls: 't-d0' },
+    { text: '[depth:0] ✓ FINAL: "Causal chain identified across 4 events."', cls: 't-final' },
+    { text: '', cls: 't-blank' },
+    { text: 'depth_max=2 · calls=3 · tokens=9,847 · time=5.1s', cls: 't-stats' },
+  ];
+
+  let lineIndex = 0;
+  let charIndex = 0;
+  let currentSpan = null;
+  const body = document.getElementById('terminal-body');
+  const cursor = document.getElementById('terminal-cursor');
+
+  function getDelay(cls) {
+    if (cls === 't-blank') return 180;
+    return 22 + Math.random() * 18;
+  }
+
+  function nextLine() {
+    if (lineIndex >= lines.length) {
+      body.appendChild(cursor);
+      return;
+    }
+    const { text, cls } = lines[lineIndex];
+    lineIndex++;
+    charIndex = 0;
+    if (text === '') {
+      const blank = document.createElement('span');
+      blank.className = 't-line t-blank';
+      blank.textContent = '\u00a0';
+      body.appendChild(blank);
+      setTimeout(nextLine, 180);
+      return;
+    }
+    currentSpan = document.createElement('span');
+    currentSpan.className = 't-line ' + cls;
+    body.appendChild(currentSpan);
+    body.appendChild(cursor);
+    typeChar(text, cls);
+  }
+
+  function typeChar(text, cls) {
+    if (charIndex >= text.length) {
+      setTimeout(nextLine, cls === 't-cmd' ? 80 : 40);
+      return;
+    }
+    currentSpan.textContent = text.slice(0, charIndex + 1);
+    charIndex++;
+    setTimeout(() => typeChar(text, cls), getDelay(cls));
+  }
+
+  setTimeout(nextLine, 600);
+
+
+  /* ─── Scroll reveal ─────────────────────────────────────── */
+  const revealObs = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible');
+        revealObs.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.12 });
+
+  document.querySelectorAll('.reveal').forEach(el => revealObs.observe(el));
+
+
+  /* ─── Step reveal ────────────────────────────────────────── */
+  const stepObs = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible');
+      }
+    });
+  }, { threshold: 0.3 });
+  document.querySelectorAll('.step').forEach(el => stepObs.observe(el));
+
+
+  /* ─── Recursion diagram reveal ──────────────────────────── */
+  const rdObs = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        const rd0 = document.getElementById('rd0');
+        const rd1 = document.getElementById('rd1');
+        const rd2 = document.getElementById('rd2');
+        setTimeout(() => rd0 && rd0.classList.add('visible'), 100);
+        setTimeout(() => rd1 && rd1.classList.add('visible'), 600);
+        setTimeout(() => rd2 && rd2.classList.add('visible'), 1100);
+        rdObs.disconnect();
+      }
+    });
+  }, { threshold: 0.2 });
+  const rdContainer = document.getElementById('rdepth-container');
+  if (rdContainer) rdObs.observe(rdContainer);
+
+
+  /* ─── Benchmark bar animation ────────────────────────────── */
+  const barObs = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.querySelectorAll('.bench-animate').forEach(bar => {
+          const w = bar.dataset.width;
+          setTimeout(() => { bar.style.width = w + '%'; }, 200);
+        });
+        barObs.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.3 });
+  document.querySelectorAll('.bench-card').forEach(el => barObs.observe(el));
+
+
+  /* ─── Code tabs ─────────────────────────────────────────── */
+  document.querySelectorAll('.code-tab').forEach(tab => {
+    tab.addEventListener('click', () => {
+      const tabId = tab.dataset.tab;
+      document.querySelectorAll('.code-tab').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('.code-pane').forEach(p => p.classList.remove('active'));
+      tab.classList.add('active');
+      const pane = document.getElementById('pane-' + tabId);
+      if (pane) pane.classList.add('active');
+    });
+  });
+
+
+  /* ─── Copy code ─────────────────────────────────────────── */
+  function copyCode(tabId) {
+    const pre = document.getElementById('code-' + tabId);
+    if (!pre) return;
+    const text = pre.innerText;
+    navigator.clipboard.writeText(text).then(() => {
+      const btn = pre.closest('.code-block').querySelector('.code-block-copy');
+      if (btn) {
+        btn.textContent = 'copied!';
+        setTimeout(() => { btn.textContent = 'copy'; }, 2000);
+      }
+    });
+  }
+</script>
+</body>
+</html>
