@@ -1,0 +1,62 @@
+[
+  {
+    "id": "cf_tree_dp_weighted_independent_set",
+    "context": "Codeforces-style tree DP.\nTree has 15 nodes with weights:\n1:7, 2:4, 3:9, 4:6, 5:8, 6:5, 7:3, 8:10, 9:2, 10:11, 11:1, 12:12, 13:13, 14:14, 15:4\nEdges:\n(1,2),(1,3),(2,4),(2,5),(3,6),(3,7),(4,8),(4,9),(5,10),(5,11),(6,12),(6,13),(7,14),(7,15)\nFind maximum possible sum of weights in an independent set.",
+    "query": "Submission must be Rust. Return a complete Rust program in a ```rust fenced block that reads no input and prints exactly one line with the integer answer only.",
+    "check": {"type": "rust_exec_exact", "value": "80"}
+  },
+  {
+    "id": "cf_bitmask_dp_count_toposorts",
+    "context": "Codeforces-style DAG counting with bitmask DP.\nNodes: 1..8\nDirected edges:\n(1,3),(1,4),(2,4),(2,5),(3,6),(4,6),(4,7),(5,7),(6,8),(7,8)\nCount number of topological orderings.",
+    "query": "Submission must be Rust. Return a complete Rust program in a ```rust fenced block that reads no input and prints exactly one line with the integer answer only.",
+    "check": {"type": "rust_exec_exact", "value": "42"}
+  },
+  {
+    "id": "cf_linear_basis_max_xor",
+    "context": "Codeforces-style XOR basis problem.\nArray: [91,123,57,214,77,156,99,45,201,88]\nFind the maximum XOR value obtainable by XOR-ing any subset.",
+    "query": "Submission must be Rust. Return a complete Rust program in a ```rust fenced block that reads no input and prints exactly one line with the integer answer only.",
+    "check": {"type": "rust_exec_exact", "value": "255"}
+  },
+  {
+    "id": "cf_automaton_dp_forbidden_pattern",
+    "context": "Hard string DP.\nCount binary strings of length 30 with exactly 12 ones that do NOT contain substring '1011'.",
+    "query": "Submission must be Rust. Return a complete Rust program in a ```rust fenced block that reads no input and prints exactly one line with the integer answer only.",
+    "check": {"type": "rust_exec_exact", "value": "25675017"}
+  },
+  {
+    "id": "cf_dag_dp_longest_weighted_path",
+    "context": "DAG DP with vertex weights.\nNode weights (1..9): [5,7,4,6,9,3,8,10,2]\nEdges:\n(1,3),(1,4),(2,4),(2,5),(3,6),(4,6),(4,7),(5,7),(6,8),(7,8),(8,9)\nFind maximum sum of vertex weights along any directed path.",
+    "query": "Submission must be Rust. Return a complete Rust program in a ```rust fenced block that reads no input and prints exactly one line with the integer answer only.",
+    "check": {"type": "rust_exec_exact", "value": "36"}
+  },
+  {
+    "id": "cf_maxflow_mincut",
+    "context": "Flow network (directed, capacities). Source=1, sink=6.\nEdges (u,v,c):\n(1,2,7),(1,3,4),(2,3,3),(2,4,5),(3,4,6),(3,5,5),(4,6,8),(5,4,3),(5,6,7)\nCompute maximum s-t flow.",
+    "query": "Submission must be Rust. Return a complete Rust program in a ```rust fenced block that reads no input and prints exactly one line with the integer answer only.",
+    "check": {"type": "rust_exec_exact", "value": "11"}
+  },
+  {
+    "id": "cf_cht_dp_value",
+    "context": "Convex hull trick style DP benchmark.\nArrays:\na=[3,5,8,13,21,34,55]\nb=[20,17,15,11,8,5,3]\nc=[4,7,6,8,5,9,10]\nDP definition:\ndp[0]=c[0]\nfor i>0: dp[i]=min over j<i of (dp[j] + b[j]*a[i]) + c[i]\n",
+    "query": "Submission must be Rust. Return a complete Rust program in a ```rust fenced block that reads no input and prints exactly one line with the integer answer only.",
+    "check": {"type": "rust_exec_exact", "value": "879"}
+  },
+  {
+    "id": "cf_scc_condensation_shape",
+    "context": "SCC + condensation graph analysis.\nDirected graph nodes 1..10 with edges:\n(1,2),(2,3),(3,1),(3,4),(4,5),(5,4),(5,6),(6,7),(7,6),(7,8),(8,9),(9,10),(10,8)\nLet C be the SCC condensation DAG. Determine number of source SCCs and sink SCCs.",
+    "query": "Submission must be Rust. Return a complete Rust program in a ```rust fenced block that reads no input and prints exactly one line in format sources,sinks with no spaces.",
+    "check": {"type": "rust_exec_exact", "value": "1,1"}
+  },
+  {
+    "id": "cf_bipartite_coloring_count",
+    "context": "Combinatorics counting similar to difficult CF math tasks.\nHow many proper colorings exist for complete bipartite graph K(5,7) using exactly 3 available colors, where adjacent vertices must have different colors?",
+    "query": "Submission must be Rust. Return a complete Rust program in a ```rust fenced block that reads no input and prints exactly one line with the integer answer only.",
+    "check": {"type": "rust_exec_exact", "value": "474"}
+  },
+  {
+    "id": "cf_xor_zero_subsets",
+    "context": "Bitwise combinatorics.\nArray: [1,2,3,4,5,6,7,8,9,10]\nCount number of subsets (including empty set) whose XOR is 0.",
+    "query": "Submission must be Rust. Return a complete Rust program in a ```rust fenced block that reads no input and prints exactly one line with the integer answer only.",
+    "check": {"type": "rust_exec_exact", "value": "64"}
+  }
+]

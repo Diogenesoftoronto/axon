@@ -1,6 +1,8 @@
 use anyhow::Result;
 use genai::chat::{ChatMessage, ChatRequest, Usage};
 use genai::Client;
+use std::time::Duration;
+use tokio::time::sleep;
 
 #[derive(Clone, Debug)]
 pub struct Message {
@@ -59,22 +61,51 @@ impl LlmClient {
     }
 
     pub async fn completion(&self, messages: &[Message]) -> Result<CompletionResult> {
-        let mut request = ChatRequest::default();
+        let max_retries = 3;
+        let mut delay = Duration::from_secs(2);
 
-        for m in messages {
-            if m.role == "system" {
-                request = request.with_system(m.content.as_str());
-            } else {
-                request = request.append_message(m.to_chat_message());
+        for attempt in 0..=max_retries {
+            let mut request = ChatRequest::default();
+            for m in messages {
+                if m.role == "system" {
+                    request = request.with_system(m.content.as_str());
+                } else {
+                    request = request.append_message(m.to_chat_message());
+                }
+            }
+
+            match self.client.exec_chat(&self.model, request, None).await {
+                Ok(response) => {
+                    let usage = response.usage.clone();
+                    let text = response
+                        .into_first_text()
+                        .ok_or_else(|| anyhow::anyhow!("Empty response from LLM"))?;
+                    return Ok(CompletionResult { text, usage });
+                }
+                Err(e) if attempt < max_retries => {
+                    let err_str = e.to_string();
+                    let retryable = ["429", "402", "500", "502", "503", "504"]
+                        .iter()
+                        .any(|code| err_str.contains(code));
+                    if retryable {
+                        eprintln!(
+                            "LLM request failed (attempt {}/{}), retrying in {:?}: {}",
+                            attempt + 1,
+                            max_retries,
+                            delay,
+                            err_str
+                        );
+                        sleep(delay).await;
+                        delay *= 2;
+                        continue;
+                    }
+                    return Err(e.into());
+                }
+                Err(e) => return Err(e.into()),
             }
         }
 
-        let response = self.client.exec_chat(&self.model, request, None).await?;
-        let usage = response.usage.clone();
-        let text = response
-            .into_first_text()
-            .ok_or_else(|| anyhow::anyhow!("Empty response from LLM"))?;
-        Ok(CompletionResult { text, usage })
+        unreachable!()
     }
 
     pub async fn completion_simple(&self, prompt: &str) -> Result<String> {

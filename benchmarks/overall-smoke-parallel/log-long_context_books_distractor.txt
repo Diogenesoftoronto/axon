@@ -1,0 +1,14 @@
+[hf:MiniMaxAI/MiniMax-M2.5][current-default] books_distractor_compass_700k run=1 -> PASS (32.14s)
+[hf:MiniMaxAI/MiniMax-M2.5][current-no-recursion-best-of-3] books_distractor_compass_700k run=1 -> FAIL (151.16s)
+[hf:MiniMaxAI/MiniMax-M2.5][current-depth6-single-pass] books_distractor_compass_700k run=1 -> PASS (38.62s)
+[hf:MiniMaxAI/MiniMax-M2.5][current-depth1-iter3] books_distractor_compass_700k run=1 -> ERROR (12.72s)
+
+Benchmark summary
+model	sub_model	mode	pass_rate	ok_rate	halluc_rate	avg_cost_usd	composite	readiness
+hf:MiniMaxAI/MiniMax-M2.5	hf:MiniMaxAI/MiniMax-M2.5	current-default	100.0%	100.0%	0.0%	0.003176	96.37	Production Candidate
+hf:MiniMaxAI/MiniMax-M2.5	hf:MiniMaxAI/MiniMax-M2.5	current-depth1-iter3	0.0%	0.0%	0.0%	0.003224	36.32	NotProductionReady
+hf:MiniMaxAI/MiniMax-M2.5	hf:MiniMaxAI/MiniMax-M2.5	current-depth6-single-pass	100.0%	100.0%	0.0%	0.003929	93.6	Production Candidate
+hf:MiniMaxAI/MiniMax-M2.5	hf:MiniMaxAI/MiniMax-M2.5	current-no-recursion-best-of-3	0.0%	100.0%	0.0%	0.006452	49.49	NotProductionReady
+
+Wrote report: benchmarks/overall-smoke-parallel/results-long_context_books_distractor.json
+Wrote markdown summary: benchmarks/overall-smoke-parallel/summary-long_context_books_distractor.md

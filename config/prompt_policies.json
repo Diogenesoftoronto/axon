@@ -1,0 +1,46 @@
+{
+  "default_profile": "baseline",
+  "profiles": [
+    {
+      "name": "baseline",
+      "format_contract_template": "Return the final answer in FINAL(...) with no extra text.",
+      "depth_strategy_template": "Use recursive decomposition when needed, otherwise answer directly.",
+      "prepend_to_context": false,
+      "default_depth_enforcement": "off"
+    },
+    {
+      "name": "format_strict",
+      "format_contract_template": "STRICT OUTPUT CONTRACT: one line FINAL(<answer>); no prose, no code blocks, no tool traces.",
+      "depth_strategy_template": "",
+      "prepend_to_context": true,
+      "default_depth_enforcement": "off"
+    },
+    {
+      "name": "depth_soft",
+      "format_contract_template": "Return only FINAL(<answer>) in the final response.",
+      "depth_strategy_template": "Decompose into subproblems and call llm_query for independent/high-complexity parts before FINAL(...).",
+      "prepend_to_context": true,
+      "default_depth_enforcement": "soft",
+      "default_require_min_depth": 1,
+      "default_require_min_recursive_calls": 1
+    },
+    {
+      "name": "depth_strict",
+      "format_contract_template": "Return only FINAL(<answer>) in the final response.",
+      "depth_strategy_template": "You must use recursive llm_query calls and verify sub-results before FINAL(...).",
+      "prepend_to_context": true,
+      "default_depth_enforcement": "strict",
+      "default_require_min_depth": 1,
+      "default_require_min_recursive_calls": 1
+    },
+    {
+      "name": "format_plus_depth",
+      "format_contract_template": "STRICT OUTPUT CONTRACT: exactly FINAL(<answer>) on one line; no markdown, no repl blocks, no scratchpad.",
+      "depth_strategy_template": "Break task into 2-4 subproblems, use llm_query for hard parts, merge, verify, then FINAL(...).",
+      "prepend_to_context": true,
+      "default_depth_enforcement": "soft",
+      "default_require_min_depth": 1,
+      "default_require_min_recursive_calls": 1
+    }
+  ]
+}

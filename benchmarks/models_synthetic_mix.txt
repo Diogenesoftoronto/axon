@@ -1,0 +1,5 @@
+# Models available on Synthetic OpenAI-compatible endpoint as of 2026-02-24
+hf:MiniMaxAI/MiniMax-M2.5
+hf:Qwen/Qwen3.5-397B-A17B
+hf:deepseek-ai/DeepSeek-V3-0324
+hf:deepseek-ai/DeepSeek-R1-0528

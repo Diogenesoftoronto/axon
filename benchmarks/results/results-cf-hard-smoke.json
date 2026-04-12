@@ -1,0 +1,172 @@
+{
+  "created_at": 1771962857,
+  "dataset": "benchmarks/codeforces_hard_like.json",
+  "base_url": "https://api.synthetic.new/openai/v1/",
+  "runs": 1,
+  "timeout": 45,
+  "modes": [
+    {
+      "name": "current-default",
+      "binary": "/home/diogenes/Monolith/target/release/axon",
+      "extra_args": [
+        "--max-depth",
+        "2",
+        "--max-iterations",
+        "6"
+      ]
+    },
+    {
+      "name": "current-no-recursion",
+      "binary": "/home/diogenes/Monolith/target/release/axon",
+      "extra_args": [
+        "--max-depth",
+        "0",
+        "--max-iterations",
+        "6"
+      ]
+    },
+    {
+      "name": "current-low-budget",
+      "binary": "/home/diogenes/Monolith/target/release/axon",
+      "extra_args": [
+        "--max-depth",
+        "2",
+        "--max-iterations",
+        "3"
+      ]
+    }
+  ],
+  "summary": [
+    {
+      "mode": "current-default",
+      "total": 1,
+      "ok": 1,
+      "matched": 1,
+      "ok_rate": 100.0,
+      "pass_rate": 100.0,
+      "avg_time_s": 17.889,
+      "total_tokens": 6026,
+      "avg_tokens_per_task": 6026.0,
+      "llm_calls": 3,
+      "avg_calls_per_task": 3.0,
+      "total_cost_usd": 0.002784,
+      "avg_cost_usd": 0.002784,
+      "hallucination_tasks": 0,
+      "hallucinations": 0,
+      "hallucination_rate": 0.0,
+      "quality_score": 100.0,
+      "efficiency_score": 100.0,
+      "reliability_score": 100.0,
+      "composite_score": 100.0,
+      "readiness": "Production Candidate"
+    },
+    {
+      "mode": "current-low-budget",
+      "total": 1,
+      "ok": 0,
+      "matched": 0,
+      "ok_rate": 0.0,
+      "pass_rate": 0.0,
+      "avg_time_s": 45.008,
+      "total_tokens": 0,
+      "avg_tokens_per_task": 0.0,
+      "llm_calls": 0,
+      "avg_calls_per_task": 0.0,
+      "total_cost_usd": 0.0,
+      "avg_cost_usd": 0.0,
+      "hallucination_tasks": 0,
+      "hallucinations": 0,
+      "hallucination_rate": 0.0,
+      "quality_score": 30.0,
+      "efficiency_score": 11.92,
+      "reliability_score": 0.0,
+      "composite_score": 18.88,
+      "readiness": "NotProductionReady"
+    },
+    {
+      "mode": "current-no-recursion",
+      "total": 1,
+      "ok": 1,
+      "matched": 1,
+      "ok_rate": 100.0,
+      "pass_rate": 100.0,
+      "avg_time_s": 43.981,
+      "total_tokens": 18529,
+      "avg_tokens_per_task": 18529.0,
+      "llm_calls": 6,
+      "avg_calls_per_task": 6.0,
+      "total_cost_usd": 0.007461,
+      "avg_cost_usd": 0.007461,
+      "hallucination_tasks": 0,
+      "hallucinations": 0,
+      "hallucination_rate": 0.0,
+      "quality_score": 100.0,
+      "efficiency_score": 37.36,
+      "reliability_score": 100.0,
+      "composite_score": 87.47,
+      "readiness": "Production Candidate"
+    }
+  ],
+  "results": [
+    {
+      "mode": "current-default",
+      "task_id": "cf_tree_dp_weighted_independent_set",
+      "run_idx": 1,
+      "ok": true,
+      "matched": true,
+      "elapsed_s": 17.889357566833496,
+      "context_chars": 299,
+      "query_chars": 36,
+      "llm_calls": 3,
+      "prompt_tokens": 4941,
+      "completion_tokens": 1085,
+      "total_tokens": 6026,
+      "prompt_chars_logged": 18799,
+      "response_chars_logged": 1848,
+      "estimated_cost_usd": 0.0027843,
+      "is_hallucination_probe": false,
+      "answer": "80",
+      "error": ""
+    },
+    {
+      "mode": "current-no-recursion",
+      "task_id": "cf_tree_dp_weighted_independent_set",
+      "run_idx": 1,
+      "ok": true,
+      "matched": true,
+      "elapsed_s": 43.98137331008911,
+      "context_chars": 299,
+      "query_chars": 36,
+      "llm_calls": 6,
+      "prompt_tokens": 16415,
+      "completion_tokens": 2114,
+      "total_tokens": 18529,
+      "prompt_chars_logged": 56785,
+      "response_chars_logged": 4379,
+      "estimated_cost_usd": 0.0074613,
+      "is_hallucination_probe": false,
+      "answer": "80",
+      "error": ""
+    },
+    {
+      "mode": "current-low-budget",
+      "task_id": "cf_tree_dp_weighted_independent_set",
+      "run_idx": 1,
+      "ok": false,
+      "matched": false,
+      "elapsed_s": 45.00828433036804,
+      "context_chars": 299,
+      "query_chars": 36,
+      "llm_calls": 0,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "total_tokens": 0,
+      "prompt_chars_logged": 0,
+      "response_chars_logged": 0,
+      "estimated_cost_usd": 0.0,
+      "is_hallucination_probe": false,
+      "answer": "",
+      "error": "timeout after 45s"
+    }
+  ]
+}

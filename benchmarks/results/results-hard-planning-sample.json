@@ -1,0 +1,199 @@
+{
+  "created_at": 1771959391,
+  "dataset": "benchmarks/rlm_hard_coding_planning.json",
+  "base_url": "https://api.synthetic.new/openai/v1/",
+  "runs": 1,
+  "timeout": 60,
+  "modes": [
+    {
+      "name": "current-default",
+      "binary": "/home/diogenes/Monolith/target/release/axon",
+      "extra_args": [
+        "--max-depth",
+        "2",
+        "--max-iterations",
+        "6"
+      ]
+    },
+    {
+      "name": "current-no-recursion",
+      "binary": "/home/diogenes/Monolith/target/release/axon",
+      "extra_args": [
+        "--max-depth",
+        "0",
+        "--max-iterations",
+        "6"
+      ]
+    },
+    {
+      "name": "current-low-budget",
+      "binary": "/home/diogenes/Monolith/target/release/axon",
+      "extra_args": [
+        "--max-depth",
+        "2",
+        "--max-iterations",
+        "3"
+      ]
+    }
+  ],
+  "summary": [
+    {
+      "mode": "current-default",
+      "total": 2,
+      "ok": 2,
+      "matched": 2,
+      "pass_rate": 100.0,
+      "avg_time_s": 15.533,
+      "total_tokens": 13558,
+      "avg_tokens_per_task": 6779.0,
+      "llm_calls": 6,
+      "avg_calls_per_task": 3.0,
+      "total_cost_usd": 0.005959,
+      "avg_cost_usd": 0.00298
+    },
+    {
+      "mode": "current-low-budget",
+      "total": 2,
+      "ok": 2,
+      "matched": 2,
+      "pass_rate": 100.0,
+      "avg_time_s": 20.758,
+      "total_tokens": 11466,
+      "avg_tokens_per_task": 5733.0,
+      "llm_calls": 6,
+      "avg_calls_per_task": 3.0,
+      "total_cost_usd": 0.005168,
+      "avg_cost_usd": 0.002584
+    },
+    {
+      "mode": "current-no-recursion",
+      "total": 2,
+      "ok": 2,
+      "matched": 1,
+      "pass_rate": 50.0,
+      "avg_time_s": 11.921,
+      "total_tokens": 10811,
+      "avg_tokens_per_task": 5405.5,
+      "llm_calls": 6,
+      "avg_calls_per_task": 3.0,
+      "total_cost_usd": 0.00455,
+      "avg_cost_usd": 0.002275
+    }
+  ],
+  "results": [
+    {
+      "mode": "current-default",
+      "task_id": "critical_path_release_plan",
+      "run_idx": 1,
+      "ok": true,
+      "matched": true,
+      "elapsed_s": 22.17257523536682,
+      "context_chars": 244,
+      "query_chars": 70,
+      "llm_calls": 3,
+      "prompt_tokens": 7258,
+      "completion_tokens": 1718,
+      "total_tokens": 8976,
+      "prompt_chars_logged": 27754,
+      "response_chars_logged": 3712,
+      "estimated_cost_usd": 0.004239,
+      "answer": "17",
+      "error": ""
+    },
+    {
+      "mode": "current-default",
+      "task_id": "mini_swe_bug_localization",
+      "run_idx": 1,
+      "ok": true,
+      "matched": true,
+      "elapsed_s": 8.894151449203491,
+      "context_chars": 467,
+      "query_chars": 89,
+      "llm_calls": 3,
+      "prompt_tokens": 4198,
+      "completion_tokens": 384,
+      "total_tokens": 4582,
+      "prompt_chars_logged": 17170,
+      "response_chars_logged": 243,
+      "estimated_cost_usd": 0.0017202,
+      "answer": "parse_config",
+      "error": ""
+    },
+    {
+      "mode": "current-no-recursion",
+      "task_id": "critical_path_release_plan",
+      "run_idx": 1,
+      "ok": true,
+      "matched": true,
+      "elapsed_s": 14.159292459487915,
+      "context_chars": 244,
+      "query_chars": 70,
+      "llm_calls": 3,
+      "prompt_tokens": 4688,
+      "completion_tokens": 843,
+      "total_tokens": 5531,
+      "prompt_chars_logged": 18635,
+      "response_chars_logged": 1590,
+      "estimated_cost_usd": 0.002418,
+      "answer": "17",
+      "error": ""
+    },
+    {
+      "mode": "current-no-recursion",
+      "task_id": "mini_swe_bug_localization",
+      "run_idx": 1,
+      "ok": true,
+      "matched": false,
+      "elapsed_s": 9.683692216873169,
+      "context_chars": 467,
+      "query_chars": 89,
+      "llm_calls": 3,
+      "prompt_tokens": 4671,
+      "completion_tokens": 609,
+      "total_tokens": 5280,
+      "prompt_chars_logged": 18999,
+      "response_chars_logged": 1082,
+      "estimated_cost_usd": 0.0021321,
+      "answer": "'parse_config'",
+      "error": ""
+    },
+    {
+      "mode": "current-low-budget",
+      "task_id": "critical_path_release_plan",
+      "run_idx": 1,
+      "ok": true,
+      "matched": true,
+      "elapsed_s": 25.140805959701538,
+      "context_chars": 244,
+      "query_chars": 70,
+      "llm_calls": 3,
+      "prompt_tokens": 4705,
+      "completion_tokens": 995,
+      "total_tokens": 5700,
+      "prompt_chars_logged": 18470,
+      "response_chars_logged": 1688,
+      "estimated_cost_usd": 0.0026055,
+      "answer": "17",
+      "error": ""
+    },
+    {
+      "mode": "current-low-budget",
+      "task_id": "mini_swe_bug_localization",
+      "run_idx": 1,
+      "ok": true,
+      "matched": true,
+      "elapsed_s": 16.376008987426758,
+      "context_chars": 467,
+      "query_chars": 89,
+      "llm_calls": 3,
+      "prompt_tokens": 4841,
+      "completion_tokens": 925,
+      "total_tokens": 5766,
+      "prompt_chars_logged": 19778,
+      "response_chars_logged": 1859,
+      "estimated_cost_usd": 0.0025623,
+      "answer": "parse_config",
+      "error": ""
+    }
+  ]
+}

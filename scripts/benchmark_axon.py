@@ -45,6 +45,17 @@ class RunResult:
     error: str
 
 
+def mode_max_depth(mode: Mode) -> Optional[int]:
+    args = mode.extra_args
+    for i, token in enumerate(args):
+        if token == "--max-depth" and i + 1 < len(args):
+            try:
+                return int(args[i + 1])
+            except ValueError:
+                return None
+    return None
+
+
 USAGE_RE = re.compile(
     r"usage: prompt_tokens=(?P<prompt>\d+) completion_tokens=(?P<completion>\d+) total_tokens=(?P<total>\d+) prompt_chars=(?P<prompt_chars>\d+)"
 )
@@ -397,12 +408,66 @@ RUST_ONLY_NEGATIVE_EXAMPLES = [
     ("javascript", "console.log(answer);"),
 ]
 
+RECURSIVE_MODES = {"d1-i3", "d3-i1", "d6-i1"}
 
-def build_task_query(task: Dict[str, Any]) -> str:
+
+def _recursive_strategy_suffix(mode_name: str) -> str:
+    if mode_name not in RECURSIVE_MODES:
+        return ""
+    return (
+        "DEPTH-AWARE RECURSIVE STRATEGY (required in this mode):\n"
+        "1) Decompose the task into 2-4 concrete subproblems.\n"
+        "2) Use recursive delegation for independent or high-complexity subproblems.\n"
+        "3) Keep each sub-result short and machine-checkable (numbers/tokens/ordered fields).\n"
+        "4) Synthesize sub-results and run one consistency check before finalizing.\n"
+        "5) Emit a single canonical final answer only after verification.\n"
+        "Use this mini-template internally:\n"
+        "- Subproblem 1 -> Subresult 1\n"
+        "- Subproblem 2 -> Subresult 2\n"
+        "- Verification -> final canonical answer\n"
+    )
+
+
+def _non_rust_output_contract(check: Dict[str, Any]) -> str:
+    ctype = str(check.get("type", "exact"))
+    hint = "Inside FINAL(...), include only the canonical answer text with no extra prose."
+    if ctype == "number_exact":
+        hint = "Inside FINAL(...), include only the numeric answer (no words, no units)."
+    elif ctype == "choice_exact":
+        hint = "Inside FINAL(...), include only the chosen option token/index."
+    elif ctype == "yesno_exact":
+        hint = "Inside FINAL(...), include only yes or no."
+    elif ctype == "lines_in_order":
+        hint = "Inside FINAL(...), include only the required lines in the required order."
+    elif ctype == "regex":
+        hint = "Inside FINAL(...), include only a compact answer matching the required pattern."
+    elif ctype == "contains":
+        hint = "Inside FINAL(...), include a minimal answer that contains the required target text."
+
+    return (
+        "STRICT FINAL OUTPUT CONTRACT (must follow exactly):\n"
+        "Any text outside FINAL(...) is an automatic failure.\n"
+        "Evaluator gate: output must match regex ^FINAL\\(.*\\)$ on a single line.\n"
+        "1) Do reasoning in scratch steps, but do not leave that in the final output.\n"
+        "2) Final output must be exactly one line in this form: FINAL(<answer>).\n"
+        "3) Do not include markdown fences (especially ```repl), XML/tool-call tags, or explanation outside FINAL(...).\n"
+        f"4) {hint}\n"
+        "5) Never emit pseudo-tool output or REPL snippets.\n"
+        "Formatting examples:\n"
+        "- Invalid: Let me solve this... the answer is 17\n"
+        "- Invalid: ```repl ... ```\n"
+        "- Invalid: {\"answer\": \"17\"}\n"
+        "- Valid: FINAL(17)\n"
+    )
+
+
+def build_task_query(task: Dict[str, Any], mode_name: str) -> str:
     base = str(task.get("query", "")).strip()
     check = task.get("check", {}) or {}
+    recursive_suffix = _recursive_strategy_suffix(mode_name)
     if check.get("type") != "rust_exec_exact":
-        return base
+        strict_suffix = _non_rust_output_contract(check)
+        return f"{base}\n\n{recursive_suffix}\n{strict_suffix}".strip()
 
     task_id = str(task.get("id", ""))
     start = sum(ord(ch) for ch in task_id) % len(RUST_ONLY_NEGATIVE_EXAMPLES)
@@ -427,7 +492,7 @@ def build_task_query(task: Dict[str, Any]) -> str:
         f"{invalid_samples}\n\n"
         "Return Rust code only."
     )
-    return f"{base}\n\n{strict_suffix}"
+    return f"{base}\n\n{recursive_suffix}\n{strict_suffix}".strip()
 
 
 def run_one(
@@ -443,9 +508,14 @@ def run_one(
     axon_verbose: bool,
     is_hallucination_probe: bool,
     pricing: Optional[Dict[str, Dict[str, float]]] = None,
+    policy_profile: Optional[str] = None,
+    inject_policy_into_context: bool = False,
+    depth_enforcement: Optional[str] = None,
+    require_min_depth: Optional[int] = None,
+    require_min_recursive_calls: Optional[int] = None,
 ) -> RunResult:
     context_text = build_context(task)
-    task_query = build_task_query(task)
+    task_query = build_task_query(task, mode.name)
     query_chars = len(task_query)
     with tempfile.NamedTemporaryFile("w", suffix=".txt", delete=False) as f:
         f.write(context_text)
@@ -470,6 +540,17 @@ def run_one(
         "--context",
         context_path,
     ]
+    if mode.name != "previous-default":
+        if policy_profile:
+            cmd += ["--policy-profile", policy_profile]
+        if inject_policy_into_context:
+            cmd += ["--inject-policy-into-context"]
+        if depth_enforcement:
+            cmd += ["--depth-enforcement", depth_enforcement]
+        if require_min_depth is not None:
+            cmd += ["--require-min-depth", str(require_min_depth)]
+        if require_min_recursive_calls is not None:
+            cmd += ["--require-min-recursive-calls", str(require_min_recursive_calls)]
 
     start = time.monotonic()
     try:
@@ -767,6 +848,20 @@ def main() -> int:
     )
     parser.add_argument("--summary-md", default=None, help="Optional markdown summary output path")
     parser.add_argument("--no-axon-verbose", action="store_true", help="Disable -v on axon runs")
+    parser.add_argument("--policy-profile", default=None, help="Optional axon policy profile name")
+    parser.add_argument(
+        "--inject-policy-into-context",
+        action="store_true",
+        help="Enable axon policy preamble injection into runtime context",
+    )
+    parser.add_argument(
+        "--depth-enforcement",
+        choices=["off", "soft", "strict"],
+        default=None,
+        help="Optional axon depth enforcement mode",
+    )
+    parser.add_argument("--require-min-depth", type=int, default=None)
+    parser.add_argument("--require-min-recursive-calls", type=int, default=None)
     parser.add_argument("--out", default=None, help="Output json file path")
     args = parser.parse_args()
 
@@ -838,6 +933,89 @@ def main() -> int:
         for mode in modes:
             for task in tasks:
                 for i in range(args.runs):
+                    if (
+                        args.depth_enforcement == "strict"
+                        and args.require_min_depth is not None
+                    ):
+                        mdepth = mode_max_depth(mode)
+                        if mdepth is not None and args.require_min_depth > mdepth:
+                            label = model if model else "(default)"
+                            print(
+                                f"[{label}][{mode.name}] {task['id']} run={i+1} -> ERROR (strict depth invalid: require_min_depth={args.require_min_depth} > mode max_depth={mdepth})"
+                            )
+                            results.append(
+                                RunResult(
+                                    mode=mode.name,
+                                    model=(model or ""),
+                                    sub_model=(effective_sub_model or ""),
+                                    task_id=task["id"],
+                                    run_idx=i + 1,
+                                    ok=False,
+                                    matched=False,
+                                    elapsed_s=0.0,
+                                    context_chars=len(build_context(task)),
+                                    query_chars=len(build_task_query(task, mode.name)),
+                                    llm_calls=0,
+                                    prompt_tokens=0,
+                                    completion_tokens=0,
+                                    total_tokens=0,
+                                    prompt_chars_logged=0,
+                                    response_chars_logged=0,
+                                    estimated_cost_usd=0.0,
+                                    is_hallucination_probe=(
+                                        normalize_text(task.get("check", {}).get("value", ""))
+                                        == "insufficient_information"
+                                    ),
+                                    answer="",
+                                    error=(
+                                        f"strict depth invalid: require_min_depth={args.require_min_depth} > mode max_depth={mdepth}"
+                                    ),
+                                )
+                            )
+                            continue
+                    if (
+                        args.depth_enforcement == "strict"
+                        and args.require_min_recursive_calls is not None
+                        and args.require_min_recursive_calls > 0
+                    ):
+                        mdepth = mode_max_depth(mode)
+                        if mdepth is not None and mdepth <= 0:
+                            label = model if model else "(default)"
+                            print(
+                                f"[{label}][{mode.name}] {task['id']} run={i+1} -> ERROR (strict recursive-call policy invalid: require_min_recursive_calls={args.require_min_recursive_calls} but mode max_depth={mdepth})"
+                            )
+                            results.append(
+                                RunResult(
+                                    mode=mode.name,
+                                    model=(model or ""),
+                                    sub_model=(effective_sub_model or ""),
+                                    task_id=task["id"],
+                                    run_idx=i + 1,
+                                    ok=False,
+                                    matched=False,
+                                    elapsed_s=0.0,
+                                    context_chars=len(build_context(task)),
+                                    query_chars=len(build_task_query(task, mode.name)),
+                                    llm_calls=0,
+                                    prompt_tokens=0,
+                                    completion_tokens=0,
+                                    total_tokens=0,
+                                    prompt_chars_logged=0,
+                                    response_chars_logged=0,
+                                    estimated_cost_usd=0.0,
+                                    is_hallucination_probe=(
+                                        normalize_text(task.get("check", {}).get("value", ""))
+                                        == "insufficient_information"
+                                    ),
+                                    answer="",
+                                    error=(
+                                        "strict recursive-call policy invalid: "
+                                        f"require_min_recursive_calls={args.require_min_recursive_calls} "
+                                        f"but mode max_depth={mdepth}"
+                                    ),
+                                )
+                            )
+                            continue
                     attempts = args.attempts_per_run
                     r: Optional[RunResult] = None
                     for attempt in range(1, attempts + 1):
@@ -857,6 +1035,11 @@ def main() -> int:
                                 == "insufficient_information"
                             ),
                             pricing=pricing,
+                            policy_profile=args.policy_profile,
+                            inject_policy_into_context=args.inject_policy_into_context,
+                            depth_enforcement=args.depth_enforcement,
+                            require_min_depth=args.require_min_depth,
+                            require_min_recursive_calls=args.require_min_recursive_calls,
                         )
                         attempt_result.run_idx = i + 1
                         r = attempt_result
@@ -888,7 +1071,11 @@ def main() -> int:
     summary = summarize(results)
     print_summary(summary)
 
-    out_path = Path(args.out) if args.out else (repo_dir / "benchmarks" / f"results-{int(time.time())}.json")
+    out_path = (
+        Path(args.out)
+        if args.out
+        else (repo_dir / "benchmarks" / "results" / f"results-{int(time.time())}.json")
+    )
     payload = {
         "created_at": int(time.time()),
         "dataset": args.dataset,
@@ -900,14 +1087,21 @@ def main() -> int:
         "attempts_per_run": args.attempts_per_run,
         "retry_backoff_s": args.retry_backoff_s,
         "timeout": args.timeout,
+        "policy_profile": args.policy_profile,
+        "inject_policy_into_context": bool(args.inject_policy_into_context),
+        "depth_enforcement": args.depth_enforcement,
+        "require_min_depth": args.require_min_depth,
+        "require_min_recursive_calls": args.require_min_recursive_calls,
         "modes": [asdict(m) for m in modes],
         "summary": summary,
         "results": [asdict(r) for r in results],
     }
+    out_path.parent.mkdir(parents=True, exist_ok=True)
     out_path.write_text(json.dumps(payload, indent=2))
     print(f"\nWrote report: {out_path}")
     if args.summary_md:
         md_path = Path(args.summary_md)
+        md_path.parent.mkdir(parents=True, exist_ok=True)
         write_summary_markdown(summary, md_path)
         print(f"Wrote markdown summary: {md_path}")
 

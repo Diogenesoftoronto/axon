@@ -4,6 +4,7 @@ use anyhow::Result;
 use genai::Client;
 use serde_json::{json, Value};
 
+use crate::policy::{DepthEnforcementMode, PolicyCatalog, RuntimePolicy};
 use crate::rlm::{Rlm, RlmConfig};
 use crate::store::ContextStore;
 
@@ -16,6 +17,8 @@ pub struct McpServer {
     store: ContextStore,
     verbose: bool,
     trace_sandbox: bool,
+    policy_catalog: PolicyCatalog,
+    default_runtime_policy: RuntimePolicy,
 }
 
 impl McpServer {
@@ -29,6 +32,8 @@ impl McpServer {
         store: ContextStore,
         verbose: bool,
         trace_sandbox: bool,
+        policy_catalog: PolicyCatalog,
+        default_runtime_policy: RuntimePolicy,
     ) -> Self {
         Self {
             client,
@@ -39,6 +44,8 @@ impl McpServer {
             store,
             verbose,
             trace_sandbox,
+            policy_catalog,
+            default_runtime_policy,
         }
     }
 
@@ -77,7 +84,12 @@ impl McpServer {
                                 "type": "object",
                                 "properties": {
                                     "query": { "type": "string", "description": "The question to ask" },
-                                    "thread_id": { "type": "string", "description": "Thread identifier - context accumulates per thread" }
+                                    "thread_id": { "type": "string", "description": "Thread identifier - context accumulates per thread" },
+                                    "policy_profile": { "type": "string", "description": "Optional policy profile override for this call" },
+                                    "inject_policy_into_context": { "type": "boolean", "description": "Optional: prepend policy text into context for this call" },
+                                    "depth_enforcement": { "type": "string", "enum": ["off", "soft", "strict"], "description": "Optional depth enforcement mode" },
+                                    "require_min_depth": { "type": "integer", "minimum": 0, "description": "Optional strict minimum depth threshold" },
+                                    "require_min_recursive_calls": { "type": "integer", "minimum": 0, "description": "Optional strict minimum recursive call threshold" }
                                 },
                                 "required": ["query", "thread_id"]
                             }
@@ -126,12 +138,43 @@ impl McpServer {
             "chat_rlm_query" => {
                 let query = args["query"].as_str().unwrap_or("").trim();
                 let thread_id = args["thread_id"].as_str().unwrap_or("default");
+                let profile_override = args["policy_profile"].as_str();
+                let inject_override = args
+                    .get("inject_policy_into_context")
+                    .and_then(|v| v.as_bool());
+                let depth_mode_override = parse_depth_mode(args.get("depth_enforcement"));
+                let require_min_depth = args
+                    .get("require_min_depth")
+                    .and_then(|v| v.as_u64())
+                    .map(|v| v as usize);
+                let require_min_recursive_calls = args
+                    .get("require_min_recursive_calls")
+                    .and_then(|v| v.as_u64())
+                    .map(|v| v as usize);
 
                 if query.is_empty() {
                     return tool_error("query cannot be empty");
                 }
 
                 let context = self.store.read_context(thread_id);
+                let mut runtime_policy = if let Some(profile) = profile_override {
+                    self.policy_catalog
+                        .build_runtime_policy(Some(profile), None, None, None, None)
+                } else {
+                    self.default_runtime_policy.clone()
+                };
+                if let Some(v) = inject_override {
+                    runtime_policy.inject_policy_into_context = v;
+                }
+                if let Some(v) = depth_mode_override {
+                    runtime_policy.depth_enforcement = v;
+                }
+                if let Some(v) = require_min_depth {
+                    runtime_policy.require_min_depth = Some(v);
+                }
+                if let Some(v) = require_min_recursive_calls {
+                    runtime_policy.require_min_recursive_calls = Some(v);
+                }
 
                 let rlm = Rlm::new(RlmConfig {
                     client: self.client.clone(),
@@ -142,6 +185,7 @@ impl McpServer {
                     max_depth: self.max_depth,
                     verbose: self.verbose,
                     trace_sandbox: self.trace_sandbox,
+                    runtime_policy,
                 });
 
                 match rlm.completion(query, &context).await {
@@ -178,6 +222,16 @@ impl McpServer {
             }
             _ => tool_error(&format!("Unknown tool: {}", tool_name)),
         }
+    }
+}
+
+fn parse_depth_mode(v: Option<&Value>) -> Option<DepthEnforcementMode> {
+    let s = v?.as_str()?.trim().to_lowercase();
+    match s.as_str() {
+        "off" => Some(DepthEnforcementMode::Off),
+        "soft" => Some(DepthEnforcementMode::Soft),
+        "strict" => Some(DepthEnforcementMode::Strict),
+        _ => None,
     }
 }
 

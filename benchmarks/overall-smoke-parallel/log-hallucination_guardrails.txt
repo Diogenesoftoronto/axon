@@ -1,0 +1,14 @@
+[hf:MiniMaxAI/MiniMax-M2.5][current-default] missing_owner_field run=1 -> FAIL (14.95s)
+[hf:MiniMaxAI/MiniMax-M2.5][current-no-recursion-best-of-3] missing_owner_field run=1 -> FAIL (17.42s)
+[hf:MiniMaxAI/MiniMax-M2.5][current-depth6-single-pass] missing_owner_field run=1 -> FAIL (8.15s)
+[hf:MiniMaxAI/MiniMax-M2.5][current-depth1-iter3] missing_owner_field run=1 -> ERROR (14.61s)
+
+Benchmark summary
+model	sub_model	mode	pass_rate	ok_rate	halluc_rate	avg_cost_usd	composite	readiness
+hf:MiniMaxAI/MiniMax-M2.5	hf:MiniMaxAI/MiniMax-M2.5	current-default	0.0%	100.0%	100.0%	0.000962	41.72	NotProductionReady
+hf:MiniMaxAI/MiniMax-M2.5	hf:MiniMaxAI/MiniMax-M2.5	current-depth1-iter3	0.0%	0.0%	0.0%	0.00406	23.16	NotProductionReady
+hf:MiniMaxAI/MiniMax-M2.5	hf:MiniMaxAI/MiniMax-M2.5	current-depth6-single-pass	0.0%	100.0%	100.0%	0.000914	45.0	NotProductionReady
+hf:MiniMaxAI/MiniMax-M2.5	hf:MiniMaxAI/MiniMax-M2.5	current-no-recursion-best-of-3	0.0%	100.0%	100.0%	0.003953	31.4	NotProductionReady
+
+Wrote report: benchmarks/overall-smoke-parallel/results-hallucination_guardrails.json
+Wrote markdown summary: benchmarks/overall-smoke-parallel/summary-hallucination_guardrails.md

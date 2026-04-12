@@ -1,0 +1,50 @@
+[
+  {
+    "id": "hanoi_moves_12",
+    "context": "You are given the classic Tower of Hanoi puzzle with 3 pegs and 12 disks. Disks start on peg A sorted by size. Rules: move one disk at a time; never place a larger disk on a smaller disk.",
+    "query": "What is the minimum number of moves required? Return just the integer.",
+    "check": {"type": "exact", "value": "4095"}
+  },
+  {
+    "id": "hanoi_moves_20",
+    "context": "Classic Tower of Hanoi with 3 pegs and 20 disks.",
+    "query": "What is the minimum number of moves? Return just the integer.",
+    "check": {"type": "exact", "value": "1048575"}
+  },
+  {
+    "id": "hanoi_recurrence_6",
+    "context": "For Tower of Hanoi, M(1)=1 and M(n)=2*M(n-1)+1 for n>1.",
+    "query": "Compute M(6). Return just the integer.",
+    "check": {"type": "exact", "value": "63"}
+  },
+  {
+    "id": "josephus_41_3",
+    "context": "Josephus problem: n=41 people in a circle, every 3rd person is removed repeatedly until one remains.",
+    "query": "Which 1-indexed position survives? Return just the integer.",
+    "check": {"type": "exact", "value": "31"}
+  },
+  {
+    "id": "eight_queens_count",
+    "context": "In the standard 8-queens puzzle on an 8x8 chessboard, count all distinct solutions.",
+    "query": "How many valid solutions exist? Return just the integer.",
+    "check": {"type": "exact", "value": "92"}
+  },
+  {
+    "id": "lis_length",
+    "context": "Sequence: 10, 22, 9, 33, 21, 50, 41, 60, 80",
+    "query": "What is the length of the longest increasing subsequence? Return just the integer.",
+    "check": {"type": "exact", "value": "6"}
+  },
+  {
+    "id": "edit_distance",
+    "context": "Compute Levenshtein edit distance between strings 'kitten' and 'sitting'.",
+    "query": "Return just the integer edit distance.",
+    "check": {"type": "exact", "value": "3"}
+  },
+  {
+    "id": "coin_change_count",
+    "context": "Coin change combinations problem: amount=10, coin denominations=[1,2,5]. Count combinations where order does not matter.",
+    "query": "How many combinations? Return just the integer.",
+    "check": {"type": "exact", "value": "10"}
+  }
+]

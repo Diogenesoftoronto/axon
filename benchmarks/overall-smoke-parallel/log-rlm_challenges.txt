@@ -1,0 +1,14 @@
+[hf:MiniMaxAI/MiniMax-M2.5][current-default] hanoi_moves_12 run=1 -> FAIL (10.82s)
+[hf:MiniMaxAI/MiniMax-M2.5][current-no-recursion-best-of-3] hanoi_moves_12 run=1 -> PASS (24.00s)
+[hf:MiniMaxAI/MiniMax-M2.5][current-depth6-single-pass] hanoi_moves_12 run=1 -> FAIL (5.90s)
+[hf:MiniMaxAI/MiniMax-M2.5][current-depth1-iter3] hanoi_moves_12 run=1 -> PASS (15.24s)
+
+Benchmark summary
+model	sub_model	mode	pass_rate	ok_rate	halluc_rate	avg_cost_usd	composite	readiness
+hf:MiniMaxAI/MiniMax-M2.5	hf:MiniMaxAI/MiniMax-M2.5	current-default	0.0%	100.0%	0.0%	0.00129	56.28	NotProductionReady
+hf:MiniMaxAI/MiniMax-M2.5	hf:MiniMaxAI/MiniMax-M2.5	current-depth1-iter3	100.0%	100.0%	0.0%	0.003774	86.08	Production Candidate
+hf:MiniMaxAI/MiniMax-M2.5	hf:MiniMaxAI/MiniMax-M2.5	current-depth6-single-pass	0.0%	100.0%	0.0%	0.001005	61.5	NotProductionReady
+hf:MiniMaxAI/MiniMax-M2.5	hf:MiniMaxAI/MiniMax-M2.5	current-no-recursion-best-of-3	100.0%	100.0%	0.0%	0.003763	85.23	Production Candidate
+
+Wrote report: benchmarks/overall-smoke-parallel/results-rlm_challenges.json
+Wrote markdown summary: benchmarks/overall-smoke-parallel/summary-rlm_challenges.md

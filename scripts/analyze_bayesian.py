@@ -8,7 +8,7 @@ Reads results JSON files and produces:
   - LaTeX-ready output for paper figures/tables
 
 Usage:
-  python3 scripts/analyze_bayesian.py benchmarks/results-pareto-multimodel.json [more.json ...]
+  python3 scripts/analyze_bayesian.py benchmarks/results/results-pareto-multimodel.json [more.json ...]
   python3 scripts/analyze_bayesian.py --from-log /tmp/full-5profile.log
 """
 import argparse

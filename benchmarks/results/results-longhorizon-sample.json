@@ -1,0 +1,199 @@
+{
+  "created_at": 1771959574,
+  "dataset": "benchmarks/rlm_hard_coding_planning.json",
+  "base_url": "https://api.synthetic.new/openai/v1/",
+  "runs": 1,
+  "timeout": 60,
+  "modes": [
+    {
+      "name": "current-default",
+      "binary": "/home/diogenes/Monolith/target/release/axon",
+      "extra_args": [
+        "--max-depth",
+        "2",
+        "--max-iterations",
+        "6"
+      ]
+    },
+    {
+      "name": "current-no-recursion",
+      "binary": "/home/diogenes/Monolith/target/release/axon",
+      "extra_args": [
+        "--max-depth",
+        "0",
+        "--max-iterations",
+        "6"
+      ]
+    },
+    {
+      "name": "current-low-budget",
+      "binary": "/home/diogenes/Monolith/target/release/axon",
+      "extra_args": [
+        "--max-depth",
+        "2",
+        "--max-iterations",
+        "3"
+      ]
+    }
+  ],
+  "summary": [
+    {
+      "mode": "current-default",
+      "total": 2,
+      "ok": 2,
+      "matched": 2,
+      "pass_rate": 100.0,
+      "avg_time_s": 19.588,
+      "total_tokens": 10548,
+      "avg_tokens_per_task": 5274.0,
+      "llm_calls": 4,
+      "avg_calls_per_task": 2.0,
+      "total_cost_usd": 0.005325,
+      "avg_cost_usd": 0.002663
+    },
+    {
+      "mode": "current-low-budget",
+      "total": 2,
+      "ok": 0,
+      "matched": 0,
+      "pass_rate": 0.0,
+      "avg_time_s": 45.902,
+      "total_tokens": 4996,
+      "avg_tokens_per_task": 2498.0,
+      "llm_calls": 2,
+      "avg_calls_per_task": 1.0,
+      "total_cost_usd": 0.002774,
+      "avg_cost_usd": 0.001387
+    },
+    {
+      "mode": "current-no-recursion",
+      "total": 2,
+      "ok": 2,
+      "matched": 1,
+      "pass_rate": 50.0,
+      "avg_time_s": 23.604,
+      "total_tokens": 8955,
+      "avg_tokens_per_task": 4477.5,
+      "llm_calls": 4,
+      "avg_calls_per_task": 2.0,
+      "total_cost_usd": 0.00455,
+      "avg_cost_usd": 0.002275
+    }
+  ],
+  "results": [
+    {
+      "mode": "current-default",
+      "task_id": "long_horizon_incident_state",
+      "run_idx": 1,
+      "ok": true,
+      "matched": true,
+      "elapsed_s": 20.060916662216187,
+      "context_chars": 663,
+      "query_chars": 105,
+      "llm_calls": 2,
+      "prompt_tokens": 4760,
+      "completion_tokens": 1307,
+      "total_tokens": 6067,
+      "prompt_chars_logged": 17542,
+      "response_chars_logged": 3383,
+      "estimated_cost_usd": 0.0029964,
+      "answer": "{\"ALPHA\":\"ON\",\"BETA\":\"ON\"}",
+      "error": ""
+    },
+    {
+      "mode": "current-default",
+      "task_id": "dependency_order",
+      "run_idx": 1,
+      "ok": true,
+      "matched": true,
+      "elapsed_s": 19.11603856086731,
+      "context_chars": 188,
+      "query_chars": 120,
+      "llm_calls": 2,
+      "prompt_tokens": 3387,
+      "completion_tokens": 1094,
+      "total_tokens": 4481,
+      "prompt_chars_logged": 13585,
+      "response_chars_logged": 3143,
+      "estimated_cost_usd": 0.0023289,
+      "answer": "lexer,parser,typecheck,optimizer,codegen,packager",
+      "error": ""
+    },
+    {
+      "mode": "current-no-recursion",
+      "task_id": "long_horizon_incident_state",
+      "run_idx": 1,
+      "ok": true,
+      "matched": true,
+      "elapsed_s": 14.238536596298218,
+      "context_chars": 663,
+      "query_chars": 105,
+      "llm_calls": 2,
+      "prompt_tokens": 3875,
+      "completion_tokens": 967,
+      "total_tokens": 4842,
+      "prompt_chars_logged": 14467,
+      "response_chars_logged": 1997,
+      "estimated_cost_usd": 0.0023229,
+      "answer": "{\"ALPHA\":\"ON\",\"BETA\":\"ON\"}",
+      "error": ""
+    },
+    {
+      "mode": "current-no-recursion",
+      "task_id": "dependency_order",
+      "run_idx": 1,
+      "ok": true,
+      "matched": false,
+      "elapsed_s": 32.96914601325989,
+      "context_chars": 188,
+      "query_chars": 120,
+      "llm_calls": 2,
+      "prompt_tokens": 3009,
+      "completion_tokens": 1104,
+      "total_tokens": 4113,
+      "prompt_chars_logged": 12029,
+      "response_chars_logged": 2511,
+      "estimated_cost_usd": 0.0022275,
+      "answer": "build_order",
+      "error": ""
+    },
+    {
+      "mode": "current-low-budget",
+      "task_id": "long_horizon_incident_state",
+      "run_idx": 1,
+      "ok": false,
+      "matched": false,
+      "elapsed_s": 60.00906157493591,
+      "context_chars": 663,
+      "query_chars": 105,
+      "llm_calls": 0,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "total_tokens": 0,
+      "prompt_chars_logged": 0,
+      "response_chars_logged": 0,
+      "estimated_cost_usd": 0.0,
+      "answer": "",
+      "error": "timeout after 60s"
+    },
+    {
+      "mode": "current-low-budget",
+      "task_id": "dependency_order",
+      "run_idx": 1,
+      "ok": false,
+      "matched": false,
+      "elapsed_s": 31.794703245162964,
+      "context_chars": 188,
+      "query_chars": 120,
+      "llm_calls": 2,
+      "prompt_tokens": 3579,
+      "completion_tokens": 1417,
+      "total_tokens": 4996,
+      "prompt_chars_logged": 14164,
+      "response_chars_logged": 3734,
+      "estimated_cost_usd": 0.0027741,
+      "answer": "",
+      "error": "[depth=0][iter=1/3] response: 1904 chars\n[depth=0][iter=1/3] usage: prompt_tokens=1129 completion_tokens=555 total_tokens=1684 prompt_chars=4663\n[depth=0][iter=2/3] response: 1830 chars\n[depth=0][iter=2/3] usage: prompt_tokens=2450 completion_tokens=862 total_tokens=3312 prompt_chars=9501\nError: Traceback (most recent call last):\n  File \"repl.py\", line 13, in <module>\n    dep_targets = set(dependencies.values())\n                  ~~~~~~~~~~~~~~~~~~~~~~~~~~\nTypeError: cannot use 'list' as a set element (unhashable type: 'list')"
+    }
+  ]
+}

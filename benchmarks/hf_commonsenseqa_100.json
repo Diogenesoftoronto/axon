@@ -1,0 +1,902 @@
+[
+  {
+    "id": "commonsenseqa_validation_0000",
+    "context": "Answer exactly with the single correct option label.",
+    "query": "Multiple-choice commonsense reasoning question. Return only the option label.\n\nQuestion: A revolving door is convenient for two direction travel, but it also serves as a security measure at a what?\nOptions:\nA) bank\nB) library\nC) department store\nD) mall\nE) new york",
+    "check": {
+      "type": "choice_exact",
+      "value": "A"
+    }
+  },
+  {
+    "id": "commonsenseqa_validation_0001",
+    "context": "Answer exactly with the single correct option label.",
+    "query": "Multiple-choice commonsense reasoning question. Return only the option label.\n\nQuestion: What do people aim to do at work?\nOptions:\nA) complete job\nB) learn from each other\nC) kill animals\nD) wear hats\nE) talk to each other",
+    "check": {
+      "type": "choice_exact",
+      "value": "A"
+    }
+  },
+  {
+    "id": "commonsenseqa_validation_0002",
+    "context": "Answer exactly with the single correct option label.",
+    "query": "Multiple-choice commonsense reasoning question. Return only the option label.\n\nQuestion: Where would you find magazines along side many other printed works?\nOptions:\nA) doctor\nB) bookstore\nC) market\nD) train station\nE) mortuary",
+    "check": {
+      "type": "choice_exact",
+      "value": "B"
+    }
+  },
+  {
+    "id": "commonsenseqa_validation_0003",
+    "context": "Answer exactly with the single correct option label.",
+    "query": "Multiple-choice commonsense reasoning question. Return only the option label.\n\nQuestion: Where are  you likely to find a hamburger?\nOptions:\nA) fast food restaurant\nB) pizza\nC) ground up dead cows\nD) mouth\nE) cow carcus",
+    "check": {
+      "type": "choice_exact",
+      "value": "A"
+    }
+  },
+  {
+    "id": "commonsenseqa_validation_0004",
+    "context": "Answer exactly with the single correct option label.",
+    "query": "Multiple-choice commonsense reasoning question. Return only the option label.\n\nQuestion: James was looking for a good place to buy farmland.  Where might he look?\nOptions:\nA) midwest\nB) countryside\nC) estate\nD) farming areas\nE) illinois",
+    "check": {
+      "type": "choice_exact",
+      "value": "A"
+    }
+  },
+  {
+    "id": "commonsenseqa_validation_0005",
+    "context": "Answer exactly with the single correct option label.",
+    "query": "Multiple-choice commonsense reasoning question. Return only the option label.\n\nQuestion: What island country is ferret popular?\nOptions:\nA) own home\nB) north carolina\nC) great britain\nD) hutch\nE) outdoors",
+    "check": {
+      "type": "choice_exact",
+      "value": "C"
+    }
+  },
+  {
+    "id": "commonsenseqa_validation_0006",
+    "context": "Answer exactly with the single correct option label.",
+    "query": "Multiple-choice commonsense reasoning question. Return only the option label.\n\nQuestion: In what Spanish speaking North American country can you get a great cup of coffee?\nOptions:\nA) mildred's coffee shop\nB) mexico\nC) diner\nD) kitchen\nE) canteen",
+    "check": {
+      "type": "choice_exact",
+      "value": "B"
+    }
+  },
+  {
+    "id": "commonsenseqa_validation_0007",
+    "context": "Answer exactly with the single correct option label.",
+    "query": "Multiple-choice commonsense reasoning question. Return only the option label.\n\nQuestion: What do animals do when an enemy is approaching?\nOptions:\nA) feel pleasure\nB) procreate\nC) pass water\nD) listen to each other\nE) sing",
+    "check": {
+      "type": "choice_exact",
+      "value": "D"
+    }
+  },
+  {
+    "id": "commonsenseqa_validation_0008",
+    "context": "Answer exactly with the single correct option label.",
+    "query": "Multiple-choice commonsense reasoning question. Return only the option label.\n\nQuestion: Reading newspaper one of many ways to practice your what?\nOptions:\nA) literacy\nB) knowing how to read\nC) money\nD) buying\nE) money bank",
+    "check": {
+      "type": "choice_exact",
+      "value": "A"
+    }
+  },
+  {
+    "id": "commonsenseqa_validation_0009",
+    "context": "Answer exactly with the single correct option label.",
+    "query": "Multiple-choice commonsense reasoning question. Return only the option label.\n\nQuestion: What do people typically do while playing guitar?\nOptions:\nA) cry\nB) hear sounds\nC) singing\nD) arthritis\nE) making music",
+    "check": {
+      "type": "choice_exact",
+      "value": "C"
+    }
+  },
+  {
+    "id": "commonsenseqa_validation_0010",
+    "context": "Answer exactly with the single correct option label.",
+    "query": "Multiple-choice commonsense reasoning question. Return only the option label.\n\nQuestion: What would vinyl be an odd thing to replace?\nOptions:\nA) pants\nB) record albums\nC) record store\nD) cheese\nE) wallpaper",
+    "check": {
+      "type": "choice_exact",
+      "value": "E"
+    }
+  },
+  {
+    "id": "commonsenseqa_validation_0011",
+    "context": "Answer exactly with the single correct option label.",
+    "query": "Multiple-choice commonsense reasoning question. Return only the option label.\n\nQuestion: If you want harmony, what is something you should try to do with the world?\nOptions:\nA) take time\nB) make noise\nC) make war\nD) make peace\nE) make haste",
+    "check": {
+      "type": "choice_exact",
+      "value": "D"
+    }
+  },
+  {
+    "id": "commonsenseqa_validation_0012",
+    "context": "Answer exactly with the single correct option label.",
+    "query": "Multiple-choice commonsense reasoning question. Return only the option label.\n\nQuestion: Where does a heifer's master live?\nOptions:\nA) farm house\nB) barnyard\nC) stockyard\nD) slaughter house\nE) eat cake",
+    "check": {
+      "type": "choice_exact",
+      "value": "A"
+    }
+  },
+  {
+    "id": "commonsenseqa_validation_0013",
+    "context": "Answer exactly with the single correct option label.",
+    "query": "Multiple-choice commonsense reasoning question. Return only the option label.\n\nQuestion: Aside from water and nourishment what does your dog need?\nOptions:\nA) bone\nB) charm\nC) petted\nD) lots of attention\nE) walked",
+    "check": {
+      "type": "choice_exact",
+      "value": "D"
+    }
+  },
+  {
+    "id": "commonsenseqa_validation_0014",
+    "context": "Answer exactly with the single correct option label.",
+    "query": "Multiple-choice commonsense reasoning question. Return only the option label.\n\nQuestion: Janet was watching the film because she liked what?\nOptions:\nA) erection\nB) laughter\nC) being entertained\nD) fear\nE) bordem",
+    "check": {
+      "type": "choice_exact",
+      "value": "C"
+    }
+  },
+  {
+    "id": "commonsenseqa_validation_0015",
+    "context": "Answer exactly with the single correct option label.",
+    "query": "Multiple-choice commonsense reasoning question. Return only the option label.\n\nQuestion: What are you waiting alongside with when you're in a reception area?\nOptions:\nA) motel\nB) chair\nC) hospital\nD) people\nE) hotels",
+    "check": {
+      "type": "choice_exact",
+      "value": "D"
+    }
+  },
+  {
+    "id": "commonsenseqa_validation_0016",
+    "context": "Answer exactly with the single correct option label.",
+    "query": "Multiple-choice commonsense reasoning question. Return only the option label.\n\nQuestion: When drinking booze what can you do to stay busy?\nOptions:\nA) reach tentative agreement\nB) stay in bed\nC) stop bicycle\nD) examine thing\nE) suicide",
+    "check": {
+      "type": "choice_exact",
+      "value": "D"
+    }
+  },
+  {
+    "id": "commonsenseqa_validation_0017",
+    "context": "Answer exactly with the single correct option label.",
+    "query": "Multiple-choice commonsense reasoning question. Return only the option label.\n\nQuestion: A fencing thrust with a sharp sword towards a person would result in what?\nOptions:\nA) injury\nB) small cuts\nC) fever\nD) competition\nE) puncture wound",
+    "check": {
+      "type": "choice_exact",
+      "value": "E"
+    }
+  },
+  {
+    "id": "commonsenseqa_validation_0018",
+    "context": "Answer exactly with the single correct option label.",
+    "query": "Multiple-choice commonsense reasoning question. Return only the option label.\n\nQuestion: Unlike a spider and his many sight seers, people only have what?\nOptions:\nA) tongues\nB) names\nC) brains\nD) feelings\nE) two eyes",
+    "check": {
+      "type": "choice_exact",
+      "value": "E"
+    }
+  },
+  {
+    "id": "commonsenseqa_validation_0019",
+    "context": "Answer exactly with the single correct option label.",
+    "query": "Multiple-choice commonsense reasoning question. Return only the option label.\n\nQuestion: Where do adults use glue sticks?\nOptions:\nA) classroom\nB) desk drawer\nC) at school\nD) office\nE) kitchen drawer",
+    "check": {
+      "type": "choice_exact",
+      "value": "D"
+    }
+  },
+  {
+    "id": "commonsenseqa_validation_0020",
+    "context": "Answer exactly with the single correct option label.",
+    "query": "Multiple-choice commonsense reasoning question. Return only the option label.\n\nQuestion: What could go on top of wood?\nOptions:\nA) lumberyard\nB) synagogue\nC) floor\nD) carpet\nE) hardware store",
+    "check": {
+      "type": "choice_exact",
+      "value": "D"
+    }
+  },
+  {
+    "id": "commonsenseqa_validation_0021",
+    "context": "Answer exactly with the single correct option label.",
+    "query": "Multiple-choice commonsense reasoning question. Return only the option label.\n\nQuestion: The artist was sitting quietly pondering, then suddenly he began to paint when what struck him?\nOptions:\nA) sadness\nB) anxiety\nC) inspiration\nD) discomfort\nE) insights",
+    "check": {
+      "type": "choice_exact",
+      "value": "C"
+    }
+  },
+  {
+    "id": "commonsenseqa_validation_0022",
+    "context": "Answer exactly with the single correct option label.",
+    "query": "Multiple-choice commonsense reasoning question. Return only the option label.\n\nQuestion: Though the thin film seemed fragile, for it's intended purpose it was actually nearly what?\nOptions:\nA) indestructible\nB) durable\nC) undestroyable\nD) indestructible\nE) unbreakable",
+    "check": {
+      "type": "choice_exact",
+      "value": "D"
+    }
+  },
+  {
+    "id": "commonsenseqa_validation_0023",
+    "context": "Answer exactly with the single correct option label.",
+    "query": "Multiple-choice commonsense reasoning question. Return only the option label.\n\nQuestion: Where could you find a toilet that only friends can use?\nOptions:\nA) rest area\nB) school\nC) stadium\nD) apartment\nE) hospital",
+    "check": {
+      "type": "choice_exact",
+      "value": "D"
+    }
+  },
+  {
+    "id": "commonsenseqa_validation_0024",
+    "context": "Answer exactly with the single correct option label.",
+    "query": "Multiple-choice commonsense reasoning question. Return only the option label.\n\nQuestion: What is someone who isn't clever, bright, or competent called?\nOptions:\nA) clumsy\nB) ineffectual\nC) dull\nD) clumsy\nE) stupid",
+    "check": {
+      "type": "choice_exact",
+      "value": "E"
+    }
+  },
+  {
+    "id": "commonsenseqa_validation_0025",
+    "context": "Answer exactly with the single correct option label.",
+    "query": "Multiple-choice commonsense reasoning question. Return only the option label.\n\nQuestion: When wildlife reproduce we often refer to what comes out as what?\nOptions:\nA) raise children\nB) have children\nC) photo copy\nD) offspring\nE) accidently got pregnant somehow",
+    "check": {
+      "type": "choice_exact",
+      "value": "D"
+    }
+  },
+  {
+    "id": "commonsenseqa_validation_0026",
+    "context": "Answer exactly with the single correct option label.",
+    "query": "Multiple-choice commonsense reasoning question. Return only the option label.\n\nQuestion: The weasel was becoming a problem, it kept getting into the chicken eggs kept in the what?\nOptions:\nA) forrest\nB) barn\nC) public office\nD) out of doors\nE) freezer",
+    "check": {
+      "type": "choice_exact",
+      "value": "B"
+    }
+  },
+  {
+    "id": "commonsenseqa_validation_0027",
+    "context": "Answer exactly with the single correct option label.",
+    "query": "Multiple-choice commonsense reasoning question. Return only the option label.\n\nQuestion: Blue read material outside of his comfort zone because he wanted to gain what?\nOptions:\nA) new perspective\nB) entertained\nC) understanding\nD) hunger\nE) tired eyes",
+    "check": {
+      "type": "choice_exact",
+      "value": "A"
+    }
+  },
+  {
+    "id": "commonsenseqa_validation_0028",
+    "context": "Answer exactly with the single correct option label.",
+    "query": "Multiple-choice commonsense reasoning question. Return only the option label.\n\nQuestion: After he got hired he hoped for success at his what?\nOptions:\nA) vocation\nB) new job\nC) michigan\nD) working hard\nE) manual",
+    "check": {
+      "type": "choice_exact",
+      "value": "B"
+    }
+  },
+  {
+    "id": "commonsenseqa_validation_0029",
+    "context": "Answer exactly with the single correct option label.",
+    "query": "Multiple-choice commonsense reasoning question. Return only the option label.\n\nQuestion: Committing perjury is a serious what?\nOptions:\nA) indictment\nB) crime\nC) violence\nD) lie\nE) go to jail",
+    "check": {
+      "type": "choice_exact",
+      "value": "B"
+    }
+  },
+  {
+    "id": "commonsenseqa_validation_0030",
+    "context": "Answer exactly with the single correct option label.",
+    "query": "Multiple-choice commonsense reasoning question. Return only the option label.\n\nQuestion: If you are prone to postpone work what will you have to do in order to finish on time?\nOptions:\nA) eat\nB) hasten\nC) antedate\nD) bring forward\nE) advance",
+    "check": {
+      "type": "choice_exact",
+      "value": "B"
+    }
+  },
+  {
+    "id": "commonsenseqa_validation_0031",
+    "context": "Answer exactly with the single correct option label.",
+    "query": "Multiple-choice commonsense reasoning question. Return only the option label.\n\nQuestion: James wanted to find an old underground map from the 50s.  Where might he look for one?\nOptions:\nA) library\nB) subway station\nC) county engineer's office\nD) super market\nE) home",
+    "check": {
+      "type": "choice_exact",
+      "value": "A"
+    }
+  },
+  {
+    "id": "commonsenseqa_validation_0032",
+    "context": "Answer exactly with the single correct option label.",
+    "query": "Multiple-choice commonsense reasoning question. Return only the option label.\n\nQuestion: Sean was in a rush to get home, but the light turned yellow and he was forced to do what?\nOptions:\nA) take time\nB) dawdle\nC) go slowly\nD) ocean\nE) slow down",
+    "check": {
+      "type": "choice_exact",
+      "value": "E"
+    }
+  },
+  {
+    "id": "commonsenseqa_validation_0033",
+    "context": "Answer exactly with the single correct option label.",
+    "query": "Multiple-choice commonsense reasoning question. Return only the option label.\n\nQuestion: Where would a person be doing when having to wait their turn?\nOptions:\nA) have patience\nB) get in line\nC) sing\nD) stand in line\nE) turn left",
+    "check": {
+      "type": "choice_exact",
+      "value": "D"
+    }
+  },
+  {
+    "id": "commonsenseqa_validation_0034",
+    "context": "Answer exactly with the single correct option label.",
+    "query": "Multiple-choice commonsense reasoning question. Return only the option label.\n\nQuestion: She was always helping at the senior center, it brought her what?\nOptions:\nA) satisfaction\nB) heart\nC) feel better\nD) pay\nE) happiness",
+    "check": {
+      "type": "choice_exact",
+      "value": "E"
+    }
+  },
+  {
+    "id": "commonsenseqa_validation_0035",
+    "context": "Answer exactly with the single correct option label.",
+    "query": "Multiple-choice commonsense reasoning question. Return only the option label.\n\nQuestion: The lock kept the steering wheel from moving, but the thief still took his chances and began to work on the what?\nOptions:\nA) keep cloesd\nB) train\nC) ignition switch\nD) drawer\nE) firearm",
+    "check": {
+      "type": "choice_exact",
+      "value": "C"
+    }
+  },
+  {
+    "id": "commonsenseqa_validation_0036",
+    "context": "Answer exactly with the single correct option label.",
+    "query": "Multiple-choice commonsense reasoning question. Return only the option label.\n\nQuestion: Who is a police officer likely to work for?\nOptions:\nA) beat\nB) direct traffic\nC) city\nD) street\nE) president",
+    "check": {
+      "type": "choice_exact",
+      "value": "C"
+    }
+  },
+  {
+    "id": "commonsenseqa_validation_0037",
+    "context": "Answer exactly with the single correct option label.",
+    "query": "Multiple-choice commonsense reasoning question. Return only the option label.\n\nQuestion: If you have leftover cake, where would you put it?\nOptions:\nA) quandry\nB) refrigerator\nC) oven\nD) night stand\nE) bakery",
+    "check": {
+      "type": "choice_exact",
+      "value": "B"
+    }
+  },
+  {
+    "id": "commonsenseqa_validation_0038",
+    "context": "Answer exactly with the single correct option label.",
+    "query": "Multiple-choice commonsense reasoning question. Return only the option label.\n\nQuestion: A human wants to submerge himself in water, what should he use?\nOptions:\nA) whirlpool bath\nB) coffee cup\nC) cup\nD) soft drink\nE) puddle",
+    "check": {
+      "type": "choice_exact",
+      "value": "A"
+    }
+  },
+  {
+    "id": "commonsenseqa_validation_0039",
+    "context": "Answer exactly with the single correct option label.",
+    "query": "Multiple-choice commonsense reasoning question. Return only the option label.\n\nQuestion: Where is a doormat likely to be in front of?\nOptions:\nA) facade\nB) front door\nC) doorway\nD) entrance porch\nE) hallway",
+    "check": {
+      "type": "choice_exact",
+      "value": "B"
+    }
+  },
+  {
+    "id": "commonsenseqa_validation_0040",
+    "context": "Answer exactly with the single correct option label.",
+    "query": "Multiple-choice commonsense reasoning question. Return only the option label.\n\nQuestion: Bob the lizard lives in a warm place with lots of water.  Where does he probably live?\nOptions:\nA) rock\nB) tropical rainforest\nC) jazz club\nD) new mexico\nE) rocky places",
+    "check": {
+      "type": "choice_exact",
+      "value": "B"
+    }
+  },
+  {
+    "id": "commonsenseqa_validation_0041",
+    "context": "Answer exactly with the single correct option label.",
+    "query": "Multiple-choice commonsense reasoning question. Return only the option label.\n\nQuestion: August needed  money because he was afraid that he'd be kicked out of his house.  What did he need money to do?\nOptions:\nA) control people\nB) pay bills\nC) hurt people\nD) buy food\nE) get things",
+    "check": {
+      "type": "choice_exact",
+      "value": "B"
+    }
+  },
+  {
+    "id": "commonsenseqa_validation_0042",
+    "context": "Answer exactly with the single correct option label.",
+    "query": "Multiple-choice commonsense reasoning question. Return only the option label.\n\nQuestion: He needed more information to fix it, so he consulted the what?\nOptions:\nA) chickens\nB) google\nC) newspaper\nD) online\nE) manual",
+    "check": {
+      "type": "choice_exact",
+      "value": "E"
+    }
+  },
+  {
+    "id": "commonsenseqa_validation_0043",
+    "context": "Answer exactly with the single correct option label.",
+    "query": "Multiple-choice commonsense reasoning question. Return only the option label.\n\nQuestion: Where can you put a picture frame when it's not hung vertically?\nOptions:\nA) art show\nB) wall\nC) newspaper\nD) car\nE) table",
+    "check": {
+      "type": "choice_exact",
+      "value": "E"
+    }
+  },
+  {
+    "id": "commonsenseqa_validation_0044",
+    "context": "Answer exactly with the single correct option label.",
+    "query": "Multiple-choice commonsense reasoning question. Return only the option label.\n\nQuestion: James knew that he shouldn't have been buying beer for minors.  He didn't even get paid for it.  Why was this bad?\nOptions:\nA) lose money\nB) fun\nC) have no money\nD) broken law\nE) relaxation",
+    "check": {
+      "type": "choice_exact",
+      "value": "D"
+    }
+  },
+  {
+    "id": "commonsenseqa_validation_0045",
+    "context": "Answer exactly with the single correct option label.",
+    "query": "Multiple-choice commonsense reasoning question. Return only the option label.\n\nQuestion: What is the result of applying for  job?\nOptions:\nA) anxiety and fear\nB) increased workload\nC) praise\nD) less sleep\nE) being employed",
+    "check": {
+      "type": "choice_exact",
+      "value": "E"
+    }
+  },
+  {
+    "id": "commonsenseqa_validation_0046",
+    "context": "Answer exactly with the single correct option label.",
+    "query": "Multiple-choice commonsense reasoning question. Return only the option label.\n\nQuestion: What must someone do before they shop?\nOptions:\nA) get money\nB) have money\nC) bring cash\nD) go to market\nE) bring cash",
+    "check": {
+      "type": "choice_exact",
+      "value": "A"
+    }
+  },
+  {
+    "id": "commonsenseqa_validation_0047",
+    "context": "Answer exactly with the single correct option label.",
+    "query": "Multiple-choice commonsense reasoning question. Return only the option label.\n\nQuestion: Because John was first violin, he had to bring something important to work ever day. What did he need to bring to work?\nOptions:\nA) music store\nB) obesity\nC) symphony orchestra\nD) ochestra\nE) violin case",
+    "check": {
+      "type": "choice_exact",
+      "value": "E"
+    }
+  },
+  {
+    "id": "commonsenseqa_validation_0048",
+    "context": "Answer exactly with the single correct option label.",
+    "query": "Multiple-choice commonsense reasoning question. Return only the option label.\n\nQuestion: What is a place that usually does not have an elevator and that sometimes has a telephone book?\nOptions:\nA) at hotel\nB) kitchen\nC) library\nD) telephone booth\nE) house",
+    "check": {
+      "type": "choice_exact",
+      "value": "E"
+    }
+  },
+  {
+    "id": "commonsenseqa_validation_0049",
+    "context": "Answer exactly with the single correct option label.",
+    "query": "Multiple-choice commonsense reasoning question. Return only the option label.\n\nQuestion: Who is likely to be excited about a crab?\nOptions:\nA) fish market\nB) pet shop\nC) fishmongers\nD) intertidal zone\nE) obesity",
+    "check": {
+      "type": "choice_exact",
+      "value": "C"
+    }
+  },
+  {
+    "id": "commonsenseqa_validation_0050",
+    "context": "Answer exactly with the single correct option label.",
+    "query": "Multiple-choice commonsense reasoning question. Return only the option label.\n\nQuestion: Where can a human find clothes that aren't pants?\nOptions:\nA) pants shop\nB) on planet earth\nC) dress shop\nD) school\nE) train wreck",
+    "check": {
+      "type": "choice_exact",
+      "value": "C"
+    }
+  },
+  {
+    "id": "commonsenseqa_validation_0051",
+    "context": "Answer exactly with the single correct option label.",
+    "query": "Multiple-choice commonsense reasoning question. Return only the option label.\n\nQuestion: If I was getting drunk, and people couldn't understand me, what might I be having?\nOptions:\nA) a seizure\nB) slurred speech\nC) death\nD) forgetfulness\nE) pass out",
+    "check": {
+      "type": "choice_exact",
+      "value": "B"
+    }
+  },
+  {
+    "id": "commonsenseqa_validation_0052",
+    "context": "Answer exactly with the single correct option label.",
+    "query": "Multiple-choice commonsense reasoning question. Return only the option label.\n\nQuestion: When a person is beginning work, what are they building?\nOptions:\nA) time\nB) accomplishing\nC) working\nD) momentum\nE) tiredness",
+    "check": {
+      "type": "choice_exact",
+      "value": "D"
+    }
+  },
+  {
+    "id": "commonsenseqa_validation_0053",
+    "context": "Answer exactly with the single correct option label.",
+    "query": "Multiple-choice commonsense reasoning question. Return only the option label.\n\nQuestion: A child wants to play, what would they likely want?\nOptions:\nA) fall down\nB) breathe\nC) play tag\nD) be dismembered by a chainsaw\nE) become adult",
+    "check": {
+      "type": "choice_exact",
+      "value": "C"
+    }
+  },
+  {
+    "id": "commonsenseqa_validation_0054",
+    "context": "Answer exactly with the single correct option label.",
+    "query": "Multiple-choice commonsense reasoning question. Return only the option label.\n\nQuestion: Talking to the same person about the same thing over and over again is something someone can what?\nOptions:\nA) social life\nB) friendship\nC) eye contact\nD) get tired of\nE) learn lessons from",
+    "check": {
+      "type": "choice_exact",
+      "value": "D"
+    }
+  },
+  {
+    "id": "commonsenseqa_validation_0055",
+    "context": "Answer exactly with the single correct option label.",
+    "query": "Multiple-choice commonsense reasoning question. Return only the option label.\n\nQuestion: The teacher doesn't tolerate noise during a test in their what?\nOptions:\nA) movie theatre\nB) bowling alley\nC) factory\nD) store\nE) classroom",
+    "check": {
+      "type": "choice_exact",
+      "value": "E"
+    }
+  },
+  {
+    "id": "commonsenseqa_validation_0056",
+    "context": "Answer exactly with the single correct option label.",
+    "query": "Multiple-choice commonsense reasoning question. Return only the option label.\n\nQuestion: The freeway had no traffic and few buildings, where is it?\nOptions:\nA) california\nB) countryside\nC) big town\nD) florida\nE) america",
+    "check": {
+      "type": "choice_exact",
+      "value": "B"
+    }
+  },
+  {
+    "id": "commonsenseqa_validation_0057",
+    "context": "Answer exactly with the single correct option label.",
+    "query": "Multiple-choice commonsense reasoning question. Return only the option label.\n\nQuestion: Where would you go if you wanted to have fun with a few people?\nOptions:\nA) watching television\nB) good\nC) cinema\nD) friend's house\nE) fairgrounds",
+    "check": {
+      "type": "choice_exact",
+      "value": "D"
+    }
+  },
+  {
+    "id": "commonsenseqa_validation_0058",
+    "context": "Answer exactly with the single correct option label.",
+    "query": "Multiple-choice commonsense reasoning question. Return only the option label.\n\nQuestion: If there is a place that is hot and arid, what could it be?\nOptions:\nA) bland\nB) lifeless\nC) sandy\nD) neutral\nE) freezing",
+    "check": {
+      "type": "choice_exact",
+      "value": "B"
+    }
+  },
+  {
+    "id": "commonsenseqa_validation_0059",
+    "context": "Answer exactly with the single correct option label.",
+    "query": "Multiple-choice commonsense reasoning question. Return only the option label.\n\nQuestion: What is likely to satisfy someone's curiosity?\nOptions:\nA) hear news\nB) read book\nC) see favorite show\nD) comedy show\nE) go somewhere",
+    "check": {
+      "type": "choice_exact",
+      "value": "A"
+    }
+  },
+  {
+    "id": "commonsenseqa_validation_0060",
+    "context": "Answer exactly with the single correct option label.",
+    "query": "Multiple-choice commonsense reasoning question. Return only the option label.\n\nQuestion: If you are in a bar in a glove shaped state where are you?\nOptions:\nA) in my pocket\nB) michigan\nC) new york city\nD) restaurant\nE) public house",
+    "check": {
+      "type": "choice_exact",
+      "value": "B"
+    }
+  },
+  {
+    "id": "commonsenseqa_validation_0061",
+    "context": "Answer exactly with the single correct option label.",
+    "query": "Multiple-choice commonsense reasoning question. Return only the option label.\n\nQuestion: Where would a computer user be using their own computer?\nOptions:\nA) hell\nB) school\nC) indoors\nD) internet cafe\nE) house",
+    "check": {
+      "type": "choice_exact",
+      "value": "E"
+    }
+  },
+  {
+    "id": "commonsenseqa_validation_0062",
+    "context": "Answer exactly with the single correct option label.",
+    "query": "Multiple-choice commonsense reasoning question. Return only the option label.\n\nQuestion: Crabs live in what sort of environment?\nOptions:\nA) maritime\nB) bodies of water\nC) saltwater\nD) galapagos\nE) fish market",
+    "check": {
+      "type": "choice_exact",
+      "value": "C"
+    }
+  },
+  {
+    "id": "commonsenseqa_validation_0063",
+    "context": "Answer exactly with the single correct option label.",
+    "query": "Multiple-choice commonsense reasoning question. Return only the option label.\n\nQuestion: Where can you find a snake in tall grass?\nOptions:\nA) tree\nB) in a jar\nC) pet shops\nD) feild\nE) tropical forest",
+    "check": {
+      "type": "choice_exact",
+      "value": "D"
+    }
+  },
+  {
+    "id": "commonsenseqa_validation_0064",
+    "context": "Answer exactly with the single correct option label.",
+    "query": "Multiple-choice commonsense reasoning question. Return only the option label.\n\nQuestion: What is a place that has a bench nestled in trees?\nOptions:\nA) state park\nB) bus stop\nC) bus depot\nD) statue\nE) train station",
+    "check": {
+      "type": "choice_exact",
+      "value": "A"
+    }
+  },
+  {
+    "id": "commonsenseqa_validation_0065",
+    "context": "Answer exactly with the single correct option label.",
+    "query": "Multiple-choice commonsense reasoning question. Return only the option label.\n\nQuestion: Where is a human likely to go as a result of being hungry?\nOptions:\nA) eat in restaurant\nB) make bread\nC) have lunch\nD) cook dinner\nE) friends house",
+    "check": {
+      "type": "choice_exact",
+      "value": "A"
+    }
+  },
+  {
+    "id": "commonsenseqa_validation_0066",
+    "context": "Answer exactly with the single correct option label.",
+    "query": "Multiple-choice commonsense reasoning question. Return only the option label.\n\nQuestion: He was beginning to regret taking the fight when he saw how what his opponent was?\nOptions:\nA) fun\nB) joy\nC) satisfaction\nD) confident\nE) pride",
+    "check": {
+      "type": "choice_exact",
+      "value": "D"
+    }
+  },
+  {
+    "id": "commonsenseqa_validation_0067",
+    "context": "Answer exactly with the single correct option label.",
+    "query": "Multiple-choice commonsense reasoning question. Return only the option label.\n\nQuestion: Where would you find a single shower curtain being used?\nOptions:\nA) bathtub\nB) washing area\nC) hotel\nD) shower stall\nE) department store",
+    "check": {
+      "type": "choice_exact",
+      "value": "A"
+    }
+  },
+  {
+    "id": "commonsenseqa_validation_0068",
+    "context": "Answer exactly with the single correct option label.",
+    "query": "Multiple-choice commonsense reasoning question. Return only the option label.\n\nQuestion: Where is a good idea but not required to have a fire extinguisher?\nOptions:\nA) school bus\nB) boat\nC) house\nD) hospital\nE) school",
+    "check": {
+      "type": "choice_exact",
+      "value": "C"
+    }
+  },
+  {
+    "id": "commonsenseqa_validation_0069",
+    "context": "Answer exactly with the single correct option label.",
+    "query": "Multiple-choice commonsense reasoning question. Return only the option label.\n\nQuestion: What continent has the most castles?\nOptions:\nA) fairy tale\nB) edinburgh\nC) germany\nD) europe\nE) antarctica",
+    "check": {
+      "type": "choice_exact",
+      "value": "D"
+    }
+  },
+  {
+    "id": "commonsenseqa_validation_0070",
+    "context": "Answer exactly with the single correct option label.",
+    "query": "Multiple-choice commonsense reasoning question. Return only the option label.\n\nQuestion: If you have to read a book that is very dry and long you may become what?\nOptions:\nA) have time\nB) boring\nC) learn new\nD) enjoyable\nE) bored",
+    "check": {
+      "type": "choice_exact",
+      "value": "E"
+    }
+  },
+  {
+    "id": "commonsenseqa_validation_0071",
+    "context": "Answer exactly with the single correct option label.",
+    "query": "Multiple-choice commonsense reasoning question. Return only the option label.\n\nQuestion: Sally used a clipboard to hold her papers while she read off names at the beginning of the day.  Where might she work?\nOptions:\nA) desk\nB) windows 95\nC) office supply store\nD) see work\nE) school",
+    "check": {
+      "type": "choice_exact",
+      "value": "E"
+    }
+  },
+  {
+    "id": "commonsenseqa_validation_0072",
+    "context": "Answer exactly with the single correct option label.",
+    "query": "Multiple-choice commonsense reasoning question. Return only the option label.\n\nQuestion: The kids didn't clean up after they had done what?\nOptions:\nA) learn things\nB) play games\nC) disneyland\nD) play with toys\nE) talking",
+    "check": {
+      "type": "choice_exact",
+      "value": "D"
+    }
+  },
+  {
+    "id": "commonsenseqa_validation_0073",
+    "context": "Answer exactly with the single correct option label.",
+    "query": "Multiple-choice commonsense reasoning question. Return only the option label.\n\nQuestion: Despite the name a pawn can be quite versatile, all the parts are important in a what?\nOptions:\nA) chess game\nB) scheme\nC) chess set\nD) checkers\nE) north carolina",
+    "check": {
+      "type": "choice_exact",
+      "value": "A"
+    }
+  },
+  {
+    "id": "commonsenseqa_validation_0074",
+    "context": "Answer exactly with the single correct option label.",
+    "query": "Multiple-choice commonsense reasoning question. Return only the option label.\n\nQuestion: What would not be true about a basketball if it had a hole in it but it did not lose its general shape?\nOptions:\nA) punctured\nB) popular in america\nC) full of air\nD) gone\nE) round",
+    "check": {
+      "type": "choice_exact",
+      "value": "C"
+    }
+  },
+  {
+    "id": "commonsenseqa_validation_0075",
+    "context": "Answer exactly with the single correct option label.",
+    "query": "Multiple-choice commonsense reasoning question. Return only the option label.\n\nQuestion: If you are awaking multiple times throughout the night because a lot is on your mind, what is a likely cause?\nOptions:\nA) irritability\nB) depression\nC) getting out of bed\nD) happiness\nE) discomfort",
+    "check": {
+      "type": "choice_exact",
+      "value": "B"
+    }
+  },
+  {
+    "id": "commonsenseqa_validation_0076",
+    "context": "Answer exactly with the single correct option label.",
+    "query": "Multiple-choice commonsense reasoning question. Return only the option label.\n\nQuestion: Where does a wild bird usually live?\nOptions:\nA) cage\nB) sky\nC) countryside\nD) desert\nE) windowsill",
+    "check": {
+      "type": "choice_exact",
+      "value": "C"
+    }
+  },
+  {
+    "id": "commonsenseqa_validation_0077",
+    "context": "Answer exactly with the single correct option label.",
+    "query": "Multiple-choice commonsense reasoning question. Return only the option label.\n\nQuestion: Where would you expect to find white mice?\nOptions:\nA) bell cat\nB) bush\nC) attic\nD) countryside\nE) laboratory",
+    "check": {
+      "type": "choice_exact",
+      "value": "E"
+    }
+  },
+  {
+    "id": "commonsenseqa_validation_0078",
+    "context": "Answer exactly with the single correct option label.",
+    "query": "Multiple-choice commonsense reasoning question. Return only the option label.\n\nQuestion: John felt that his actions were fate.   Harry said that he could have always made a different what?\nOptions:\nA) free will\nB) choice\nC) will\nD) alcohol\nE) freedom",
+    "check": {
+      "type": "choice_exact",
+      "value": "B"
+    }
+  },
+  {
+    "id": "commonsenseqa_validation_0079",
+    "context": "Answer exactly with the single correct option label.",
+    "query": "Multiple-choice commonsense reasoning question. Return only the option label.\n\nQuestion: What could committing murder prevent someone from doing?\nOptions:\nA) go to jail\nB) cry\nC) find god\nD) guilty conscience\nE) problems",
+    "check": {
+      "type": "choice_exact",
+      "value": "C"
+    }
+  },
+  {
+    "id": "commonsenseqa_validation_0080",
+    "context": "Answer exactly with the single correct option label.",
+    "query": "Multiple-choice commonsense reasoning question. Return only the option label.\n\nQuestion: George didn't have a car, but he still had his two feet.   His socks were smelly and his soles were blistered, but that didn't matter.  He could still do what?\nOptions:\nA) michigan\nB) walk\nC) stay still\nD) stink\nE) hands",
+    "check": {
+      "type": "choice_exact",
+      "value": "B"
+    }
+  },
+  {
+    "id": "commonsenseqa_validation_0081",
+    "context": "Answer exactly with the single correct option label.",
+    "query": "Multiple-choice commonsense reasoning question. Return only the option label.\n\nQuestion: A crane uses many a steel cable when working a what?\nOptions:\nA) abaft\nB) ship\nC) winch\nD) construction site\nE) building",
+    "check": {
+      "type": "choice_exact",
+      "value": "D"
+    }
+  },
+  {
+    "id": "commonsenseqa_validation_0082",
+    "context": "Answer exactly with the single correct option label.",
+    "query": "Multiple-choice commonsense reasoning question. Return only the option label.\n\nQuestion: What is the main purpose of farmers?\nOptions:\nA) raise cattle\nB) grow corn\nC) farm land\nD) drive tractors\nE) supply food",
+    "check": {
+      "type": "choice_exact",
+      "value": "E"
+    }
+  },
+  {
+    "id": "commonsenseqa_validation_0083",
+    "context": "Answer exactly with the single correct option label.",
+    "query": "Multiple-choice commonsense reasoning question. Return only the option label.\n\nQuestion: Where can I put this penny to save for later?\nOptions:\nA) piggy bank\nB) wallet\nC) toy\nD) ground\nE) pocket",
+    "check": {
+      "type": "choice_exact",
+      "value": "A"
+    }
+  },
+  {
+    "id": "commonsenseqa_validation_0084",
+    "context": "Answer exactly with the single correct option label.",
+    "query": "Multiple-choice commonsense reasoning question. Return only the option label.\n\nQuestion: Where would you put uncooked crab meat?\nOptions:\nA) wharf\nB) red lobster\nC) tidepools\nD) boss's office\nE) stew pot",
+    "check": {
+      "type": "choice_exact",
+      "value": "E"
+    }
+  },
+  {
+    "id": "commonsenseqa_validation_0085",
+    "context": "Answer exactly with the single correct option label.",
+    "query": "Multiple-choice commonsense reasoning question. Return only the option label.\n\nQuestion: The man had a fear of illness, so he never visited friends who were a what?\nOptions:\nA) sick person\nB) hospital\nC) elderly person\nD) graveyard\nE) doctor's office",
+    "check": {
+      "type": "choice_exact",
+      "value": "A"
+    }
+  },
+  {
+    "id": "commonsenseqa_validation_0086",
+    "context": "Answer exactly with the single correct option label.",
+    "query": "Multiple-choice commonsense reasoning question. Return only the option label.\n\nQuestion: Where would you put pans if you want to bring them with you?\nOptions:\nA) cooking\nB) cook food\nC) kitchen\nD) backpack\nE) drawer",
+    "check": {
+      "type": "choice_exact",
+      "value": "D"
+    }
+  },
+  {
+    "id": "commonsenseqa_validation_0087",
+    "context": "Answer exactly with the single correct option label.",
+    "query": "Multiple-choice commonsense reasoning question. Return only the option label.\n\nQuestion: If you're remembering something, it's because of your what of it to begin with?\nOptions:\nA) knowledge\nB) knowing\nC) forgetful\nD) pleasure\nE) depression",
+    "check": {
+      "type": "choice_exact",
+      "value": "B"
+    }
+  },
+  {
+    "id": "commonsenseqa_validation_0088",
+    "context": "Answer exactly with the single correct option label.",
+    "query": "Multiple-choice commonsense reasoning question. Return only the option label.\n\nQuestion: Which large land mass is home to the most monkeys?\nOptions:\nA) amazon basin\nB) friend's house\nC) lift number 3\nD) research laboratory\nE) african continent",
+    "check": {
+      "type": "choice_exact",
+      "value": "E"
+    }
+  },
+  {
+    "id": "commonsenseqa_validation_0089",
+    "context": "Answer exactly with the single correct option label.",
+    "query": "Multiple-choice commonsense reasoning question. Return only the option label.\n\nQuestion: Friday was James's 5th Anniversary.  They planned on going to bed early so that they could spend a long time doing what?\nOptions:\nA) rest\nB) insomnia\nC) making love\nD) sleeping in\nE) texting",
+    "check": {
+      "type": "choice_exact",
+      "value": "C"
+    }
+  },
+  {
+    "id": "commonsenseqa_validation_0090",
+    "context": "Answer exactly with the single correct option label.",
+    "query": "Multiple-choice commonsense reasoning question. Return only the option label.\n\nQuestion: The teens were trying to hide that they get drink, but when they walked in the door their what gave it away?\nOptions:\nA) health\nB) fall down\nC) stagger\nD) get arrested\nE) vomit",
+    "check": {
+      "type": "choice_exact",
+      "value": "C"
+    }
+  },
+  {
+    "id": "commonsenseqa_validation_0091",
+    "context": "Answer exactly with the single correct option label.",
+    "query": "Multiple-choice commonsense reasoning question. Return only the option label.\n\nQuestion: You'll find a landing at the top of what?\nOptions:\nA) ocean\nB) apartment building\nC) stairwell\nD) airport\nE) room",
+    "check": {
+      "type": "choice_exact",
+      "value": "C"
+    }
+  },
+  {
+    "id": "commonsenseqa_validation_0092",
+    "context": "Answer exactly with the single correct option label.",
+    "query": "Multiple-choice commonsense reasoning question. Return only the option label.\n\nQuestion: Anybody could be hired in the kitchen, what was needed of them?\nOptions:\nA) forget\nB) oil squeaky hinge\nC) question authority\nD) wash dishes\nE) oik squeaky hinge",
+    "check": {
+      "type": "choice_exact",
+      "value": "D"
+    }
+  },
+  {
+    "id": "commonsenseqa_validation_0093",
+    "context": "Answer exactly with the single correct option label.",
+    "query": "Multiple-choice commonsense reasoning question. Return only the option label.\n\nQuestion: Where can you find a number of wind instruments together in public?\nOptions:\nA) music store\nB) create music\nC) zoo\nD) music room\nE) symphony",
+    "check": {
+      "type": "choice_exact",
+      "value": "E"
+    }
+  },
+  {
+    "id": "commonsenseqa_validation_0094",
+    "context": "Answer exactly with the single correct option label.",
+    "query": "Multiple-choice commonsense reasoning question. Return only the option label.\n\nQuestion: A mountie got off at a subway stop.  What city might he be in?\nOptions:\nA) urban area\nB) metropolis\nC) chicago\nD) new york city\nE) toronto",
+    "check": {
+      "type": "choice_exact",
+      "value": "E"
+    }
+  },
+  {
+    "id": "commonsenseqa_validation_0095",
+    "context": "Answer exactly with the single correct option label.",
+    "query": "Multiple-choice commonsense reasoning question. Return only the option label.\n\nQuestion: What do you want someone to do when you illustrate point?\nOptions:\nA) did not understand\nB) accepting\nC) make clear\nD) understood\nE) understanding",
+    "check": {
+      "type": "choice_exact",
+      "value": "E"
+    }
+  },
+  {
+    "id": "commonsenseqa_validation_0096",
+    "context": "Answer exactly with the single correct option label.",
+    "query": "Multiple-choice commonsense reasoning question. Return only the option label.\n\nQuestion: Billy set aside a block of time for having fun after work. Why might he do this?\nOptions:\nA) happiness\nB) stress relief\nC) pleasure\nD) ocean\nE) may laugh",
+    "check": {
+      "type": "choice_exact",
+      "value": "B"
+    }
+  },
+  {
+    "id": "commonsenseqa_validation_0097",
+    "context": "Answer exactly with the single correct option label.",
+    "query": "Multiple-choice commonsense reasoning question. Return only the option label.\n\nQuestion: The man in the white suit was very lazy.  He did nothing useful.  Meanwhile, the ban in the blue had put in effort and was very what?\nOptions:\nA) restless\nB) active\nC) lazybutt\nD) productive\nE) hard work",
+    "check": {
+      "type": "choice_exact",
+      "value": "D"
+    }
+  },
+  {
+    "id": "commonsenseqa_validation_0098",
+    "context": "Answer exactly with the single correct option label.",
+    "query": "Multiple-choice commonsense reasoning question. Return only the option label.\n\nQuestion: What would you be unable to do if you have too much greed?\nOptions:\nA) keep things\nB) make friends\nC) play poker\nD) conquer opponent\nE) lie",
+    "check": {
+      "type": "choice_exact",
+      "value": "B"
+    }
+  },
+  {
+    "id": "commonsenseqa_validation_0099",
+    "context": "Answer exactly with the single correct option label.",
+    "query": "Multiple-choice commonsense reasoning question. Return only the option label.\n\nQuestion: It was a long trip from the farm, so he stayed in a hotel when he arrived at the what?\nOptions:\nA) bed away from home\nB) wwii bunker\nC) resort\nD) las vegas\nE) city",
+    "check": {
+      "type": "choice_exact",
+      "value": "E"
+    }
+  }
+]

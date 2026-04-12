@@ -1,0 +1,902 @@
+[
+  {
+    "id": "boolq_validation_0000",
+    "context": "All biomass goes through at least some of these steps: it needs to be grown, collected, dried, fermented, distilled, and burned. All of these steps require resources and an infrastructure. The total amount of energy input into the process compared to the energy released by burning the resulting ethanol fuel is known as the energy balance (or ``energy returned on energy invested''). Figures compiled in a 2007 report by National Geographic Magazine point to modest results for corn ethanol produced in the US: one unit of fossil-fuel energy is required to create 1.3 energy units from the resulting ethanol. The energy balance for sugarcane ethanol produced in Brazil is more favorable, with one unit of fossil-fuel energy required to create 8 from the ethanol. Energy balance estimates are not easily produced, thus numerous such reports have been generated that are contradictory. For instance, a separate survey reports that production of ethanol from sugarcane, which requires a tropical climate to grow productively, returns from 8 to 9 units of energy for each unit expended, as compared to corn, which only returns about 1.34 units of fuel energy for each unit of energy expended. A 2006 University of California Berkeley study, after analyzing six separate studies, concluded that producing ethanol from corn uses much less petroleum than producing gasoline.",
+    "query": "Question: does ethanol take more energy make that produces?\nReturn only yes or no.",
+    "check": {
+      "type": "yesno_exact",
+      "value": "no"
+    }
+  },
+  {
+    "id": "boolq_validation_0001",
+    "context": "Property tax or 'house tax' is a local tax on buildings, along with appurtenant land. It is and imposed on the Possessor (not the custodian of property as per 1978, 44th amendment of constitution). It resembles the US-type wealth tax and differs from the excise-type UK rate. The tax power is vested in the states and is delegated to local bodies, specifying the valuation method, rate band, and collection procedures. The tax base is the annual rental value (ARV) or area-based rating. Owner-occupied and other properties not producing rent are assessed on cost and then converted into ARV by applying a percentage of cost, usually four percent. Vacant land is generally exempt. Central government properties are exempt. Instead a 'service charge' is permissible under executive order. Properties of foreign missions also enjoy tax exemption without requiring reciprocity. The tax is usually accompanied by service taxes, e.g., water tax, drainage tax, conservancy (sanitation) tax, lighting tax, all using the same tax base. The rate structure is flat on rural (panchayat) properties, but in the urban (municipal) areas it is mildly progressive with about 80% of assessments falling in the first two brackets.",
+    "query": "Question: is house tax and property tax are same?\nReturn only yes or no.",
+    "check": {
+      "type": "yesno_exact",
+      "value": "yes"
+    }
+  },
+  {
+    "id": "boolq_validation_0002",
+    "context": "Phantom pain sensations are described as perceptions that an individual experiences relating to a limb or an organ that is not physically part of the body. Limb loss is a result of either removal by amputation or congenital limb deficiency. However, phantom limb sensations can also occur following nerve avulsion or spinal cord injury.",
+    "query": "Question: is pain experienced in a missing body part or paralyzed area?\nReturn only yes or no.",
+    "check": {
+      "type": "yesno_exact",
+      "value": "yes"
+    }
+  },
+  {
+    "id": "boolq_validation_0003",
+    "context": "Harry Potter and the Escape from Gringotts is an indoor steel roller coaster at Universal Studios Florida, a theme park located within the Universal Orlando Resort. Similar to dark rides, the roller coaster utilizes special effects in a controlled-lighting environment and also employs motion-based 3-D projection of both animation and live-action sequences to enhance the experience. The ride, which is themed to the Gringotts Wizarding Bank, became the flagship attraction for the expanded Wizarding World of Harry Potter when it opened on July 8, 2014.",
+    "query": "Question: is harry potter and the escape from gringotts a roller coaster ride?\nReturn only yes or no.",
+    "check": {
+      "type": "yesno_exact",
+      "value": "yes"
+    }
+  },
+  {
+    "id": "boolq_validation_0004",
+    "context": "Hydroxyzine preparations require a doctor's prescription. The drug is available in two formulations, the pamoate and the dihydrochloride or hydrochloride salts. Vistaril, Equipose, Masmoran, and Paxistil are preparations of the pamoate salt, while Atarax, Alamon, Aterax, Durrax, Tran-Q, Orgatrax, Quiess, and Tranquizine are of the hydrochloride salt.",
+    "query": "Question: is there a difference between hydroxyzine hcl and hydroxyzine pam?\nReturn only yes or no.",
+    "check": {
+      "type": "yesno_exact",
+      "value": "yes"
+    }
+  },
+  {
+    "id": "boolq_validation_0005",
+    "context": "Barq's /\u02c8b\u0251\u02d0rks/ is an American soft drink. Its brand of root beer is notable for having caffeine. Barq's, created by Edward Barq and bottled since the turn of the 20th century, is owned by the Barq family but bottled by the Coca-Cola Company. It was known as Barq's Famous Olde Tyme Root Beer until 2012.",
+    "query": "Question: is barq's root beer a pepsi product?\nReturn only yes or no.",
+    "check": {
+      "type": "yesno_exact",
+      "value": "no"
+    }
+  },
+  {
+    "id": "boolq_validation_0006",
+    "context": "In mathematics, parity is the property of an integer's inclusion in one of two categories: even or odd. An integer is even if it is evenly divisible by two and odd if it is not even. For example, 6 is even because there is no remainder when dividing it by 2. By contrast, 3, 5, 7, 21 leave a remainder of 1 when divided by 2. Examples of even numbers include \u22124, 0, 82 and 178. In particular, zero is an even number. Some examples of odd numbers are \u22125, 3, 29, and 73.",
+    "query": "Question: can an odd number be divided by an even number?\nReturn only yes or no.",
+    "check": {
+      "type": "yesno_exact",
+      "value": "yes"
+    }
+  },
+  {
+    "id": "boolq_validation_0007",
+    "context": "Of the 71 words in this list, 67 are nouns, and most would generally be considered loanwords; the only modern-English words that contain Q not followed by U and are not borrowed from another language are qiana, qwerty, and tranq. However, all of the loanwords on this list are considered to be naturalised in English according to at least one major dictionary (see References), often because they refer to concepts or societal roles that do not have an accurate equivalent in English. For words to appear here, they must appear in their own entry in a dictionary; words which occur only as part of a longer phrase are not included.",
+    "query": "Question: is there a word with q without u?\nReturn only yes or no.",
+    "check": {
+      "type": "yesno_exact",
+      "value": "yes"
+    }
+  },
+  {
+    "id": "boolq_validation_0008",
+    "context": "Persons driving into Canada must have their vehicle's registration document and proof of insurance.",
+    "query": "Question: can u drive in canada with us license?\nReturn only yes or no.",
+    "check": {
+      "type": "yesno_exact",
+      "value": "yes"
+    }
+  },
+  {
+    "id": "boolq_validation_0009",
+    "context": "The knockout stage of the 2018 FIFA World Cup was the second and final stage of the competition, following the group stage. It began on 30 June with the round of 16 and ended on 15 July with the final match, held at the Luzhniki Stadium in Moscow. The top two teams from each group (16 in total) advanced to the knockout stage to compete in a single-elimination style tournament. A third place play-off was also played between the two losing teams of the semi-finals.",
+    "query": "Question: is there a play off for third place in the world cup?\nReturn only yes or no.",
+    "check": {
+      "type": "yesno_exact",
+      "value": "yes"
+    }
+  },
+  {
+    "id": "boolq_validation_0010",
+    "context": "In response to the National Minimum Drinking Age Act in 1984, which reduced by up to 10% the federal highway funding of any state which did not have a minimum purchasing age of 21, the New York Legislature raised the drinking age from 19 to 21, effective December 1, 1985. (The drinking age had been 18 for many years before the first raise on December 4th, 1982, to 19.) Persons under 21 are prohibited from purchasing alcohol or possessing alcohol with the intent to consume, unless the alcohol was given to that person by their parent or legal guardian. There is no law prohibiting where people under 21 may possess or consume alcohol that was given to them by their parents. Persons under 21 are prohibited from having a blood alcohol level of 0.02% or higher while driving.",
+    "query": "Question: can minors drink with parents in new york?\nReturn only yes or no.",
+    "check": {
+      "type": "yesno_exact",
+      "value": "yes"
+    }
+  },
+  {
+    "id": "boolq_validation_0011",
+    "context": "Bloodline was announced in October 2014 as part of a partnership between Netflix and Sony Pictures Television, representing Netflix's first major deal with a major film studio for a television series. The series was created and executive produced by Todd A. Kessler, Glenn Kessler, and Daniel Zelman, who previously created the FX series Damages. According to its official synopsis released by Netflix, Bloodline ``centers on a close-knit family of four adult siblings whose secrets and scars are revealed when their black sheep brother returns home.''",
+    "query": "Question: is the show bloodline based on a true story?\nReturn only yes or no.",
+    "check": {
+      "type": "yesno_exact",
+      "value": "no"
+    }
+  },
+  {
+    "id": "boolq_validation_0012",
+    "context": "Shower gels for men may contain the ingredient menthol, which gives a cooling and stimulating sensation on the skin, and some men's shower gels are also designed specifically for use on hair and body. Shower gels contain milder surfactant bases than shampoos, and some also contain gentle conditioning agents in the formula. This means that shower gels can also double as an effective and perfectly acceptable substitute to shampoo, even if they are not labelled as a hair and body wash. Washing hair with shower gel should give approximately the same result as using a moisturising shampoo.",
+    "query": "Question: is it bad to wash your hair with shower gel?\nReturn only yes or no.",
+    "check": {
+      "type": "yesno_exact",
+      "value": "yes"
+    }
+  },
+  {
+    "id": "boolq_validation_0013",
+    "context": "The liver detoxifies and breaks down chemicals, poisons and other toxins that enter the body. For example, the liver transforms ammonia (which is poisonous) into urea in fish, amphibians and mammals, and into uric acid in birds and reptiles. Urea is filtered by the kidney into urine or through the gills in fish and tadpoles. Uric acid is paste-like and expelled as a semi-solid waste (the ``white'' in bird excrements). The liver also produces bile, and the body uses bile to break down fats into usable fats and unusable waste.",
+    "query": "Question: is the liver part of the excretory system?\nReturn only yes or no.",
+    "check": {
+      "type": "yesno_exact",
+      "value": "yes"
+    }
+  },
+  {
+    "id": "boolq_validation_0014",
+    "context": "Fantastic Beasts and Where to Find Them is a 2016 fantasy film directed by David Yates. A joint British and American production, it is a spin-off and prequel to the Harry Potter film series, and it was produced and written by J.K. Rowling in her screenwriting debut, and inspired by her 2001 book of the same name. The film stars Eddie Redmayne as Newt Scamander, with Katherine Waterston, Dan Fogler, Alison Sudol, Ezra Miller, Samantha Morton, Jon Voight, Carmen Ejogo, Ron Perlman, Colin Farrell and Johnny Depp in supporting roles. It is the first installment in the Fantastic Beasts film series, and ninth overall in the Wizarding World franchise, that began with the Harry Potter films.",
+    "query": "Question: is fantastic beasts and where to find them a prequel?\nReturn only yes or no.",
+    "check": {
+      "type": "yesno_exact",
+      "value": "yes"
+    }
+  },
+  {
+    "id": "boolq_validation_0015",
+    "context": "The Vampire Diaries, an American supernatural drama, was renewed for an eighth season by The CW on March 11, 2016. On July 23, 2016, the CW announced that the upcoming season would be the series' last and would consist of 16 episodes. The season premiered on October 21, 2016 and concluded on March 10, 2017.",
+    "query": "Question: will there be a season 8 of vampire diaries?\nReturn only yes or no.",
+    "check": {
+      "type": "yesno_exact",
+      "value": "yes"
+    }
+  },
+  {
+    "id": "boolq_validation_0016",
+    "context": "The Strangers is a 2008 American slasher film written and directed by Bryan Bertino. Kristen (Liv Tyler) and James (Scott Speedman) are expecting a relaxing weekend at a family vacation home, but their stay turns out to be anything but peaceful as three masked torturers leave Kristen and James struggling for survival. Writer-director Bertino was inspired by real-life events: the Manson family Tate murders, a multiple homicide; the Keddie Cabin Murders, that occurred in California in 1981; and a series of break-ins that occurred in his own neighborhood as a child. Made on a budget of $9 million, the film was shot on location in rural South Carolina in the fall of 2006.",
+    "query": "Question: was the movie strangers based on a true story?\nReturn only yes or no.",
+    "check": {
+      "type": "yesno_exact",
+      "value": "yes"
+    }
+  },
+  {
+    "id": "boolq_validation_0017",
+    "context": "In March 2012 it was announced that four universities -- Durham, Exeter, Queen Mary University of London; and York -- would become members of the Russell Group in August of the same year. All of the new members had previously been members of the 1994 Group of British universities.",
+    "query": "Question: is durham university part of the russell group?\nReturn only yes or no.",
+    "check": {
+      "type": "yesno_exact",
+      "value": "yes"
+    }
+  },
+  {
+    "id": "boolq_validation_0018",
+    "context": "The Resident is an American medical drama television series aired by Fox Broadcasting Company that premiered on January 21, 2018, as a mid-season replacement entry in the 2017--18 television season. The fictional series focuses on the lives and duties of staff members at Chastain Park Memorial Hospital, while delving into the bureaucratic practices of the hospital industry. Formerly called The City, the show was purchased by Fox from Showtime in 2017. It was created by created by Amy Holden Jones, Hayley Schore, and Roshan Sethi. On May 10, 2017, Fox ordered a full 14-episode season and renewed the series for a second season on May 7, 2018. The first season officially concluded on May 14, 2018.",
+    "query": "Question: is the tv show the resident over for the season?\nReturn only yes or no.",
+    "check": {
+      "type": "yesno_exact",
+      "value": "yes"
+    }
+  },
+  {
+    "id": "boolq_validation_0019",
+    "context": "Magnesium citrate is a magnesium preparation in salt form with citric acid in a 1:1 ratio (1 magnesium atom per citrate molecule). The name ``magnesium citrate'' is ambiguous and sometimes may refer to other salts such as trimagnesium citrate which has a magnesium:citrate ratio of 3:2.",
+    "query": "Question: does magnesium citrate have citric acid in it?\nReturn only yes or no.",
+    "check": {
+      "type": "yesno_exact",
+      "value": "yes"
+    }
+  },
+  {
+    "id": "boolq_validation_0020",
+    "context": "Street Addressing will have the same street address of the post office, plus a ``unit number'' that matches the P.O. Box number. As an example, in El Centro, California, the post office is located at 1598 Main Street. Therefore, for P.O. Box 9975 (fictitious), the Street Addressing would be: 1598 Main Street Unit 9975, El Centro, CA. Nationally, the first five digits of the zip code may or may not be the same as the P.O. Box address, and the last four digits (Zip + 4) are virtually always different. Except for a few of the largest post offices in the U.S., the 'Street Addressing' (not the P.O. Box address) nine digit Zip + 4 is the same for all boxes at a given location.",
+    "query": "Question: does p o box come before street address?\nReturn only yes or no.",
+    "check": {
+      "type": "yesno_exact",
+      "value": "no"
+    }
+  },
+  {
+    "id": "boolq_validation_0021",
+    "context": "A spark plug (sometimes, in British English, a sparking plug, and, colloquially, a plug) is a device for delivering electric current from an ignition system to the combustion chamber of a spark-ignition engine to ignite the compressed fuel/air mixture by an electric spark, while containing combustion pressure within the engine. A spark plug has a metal threaded shell, electrically isolated from a central electrode by a porcelain insulator. The central electrode, which may contain a resistor, is connected by a heavily insulated wire to the output terminal of an ignition coil or magneto. The spark plug's metal shell is screwed into the engine's cylinder head and thus electrically grounded. The central electrode protrudes through the porcelain insulator into the combustion chamber, forming one or more spark gaps between the inner end of the central electrode and usually one or more protuberances or structures attached to the inner end of the threaded shell and designated the side, earth, or ground electrode(s).",
+    "query": "Question: does a spark plug keep an engine running?\nReturn only yes or no.",
+    "check": {
+      "type": "yesno_exact",
+      "value": "yes"
+    }
+  },
+  {
+    "id": "boolq_validation_0022",
+    "context": "Ladies may wear a long (over the shoulders or to ankles) cloak usually called a cape, or a full-length cloak. Gentlemen wear an ankle-length or full-length cloak. Formal cloaks often have expensive, colored linings and trimmings such as silk, satin, velvet and fur.",
+    "query": "Question: is a cape and a cloak the same?\nReturn only yes or no.",
+    "check": {
+      "type": "yesno_exact",
+      "value": "yes"
+    }
+  },
+  {
+    "id": "boolq_validation_0023",
+    "context": "Renunciation of U.S. citizenship was free until July 2010, at which time a fee of $450 was established. An increase to $2,350, effective September 12, 2014, was justified as ``reflective of the true cost'' of processing. This followed a fee increase of approximately 220% in 2013. The increase took effect in January 2015.",
+    "query": "Question: does it cost money to renounce us citizenship?\nReturn only yes or no.",
+    "check": {
+      "type": "yesno_exact",
+      "value": "yes"
+    }
+  },
+  {
+    "id": "boolq_validation_0024",
+    "context": "The Fire Tablet, formerly called the Kindle Fire, is a tablet computer developed by Amazon.com. Built with Quanta Computer, the Kindle Fire was first released in November 2011, featuring a color 7-inch multi-touch display with IPS technology and running a custom version of Google's Android operating system called Fire OS. The Kindle Fire HD followed in September 2012, and the Kindle Fire HDX in September 2013. In September 2014, when the fourth generation was introduced, the name ``Kindle'' was dropped. In September 2015, the fifth generation Fire 7 was released, followed by the sixth generation Fire HD 8, in September 2016. The seventh generation Fire 7 was released in June 2017.",
+    "query": "Question: is a fire 7 the same as a kindle?\nReturn only yes or no.",
+    "check": {
+      "type": "yesno_exact",
+      "value": "yes"
+    }
+  },
+  {
+    "id": "boolq_validation_0025",
+    "context": "The drinking age in Wisconsin is 21. Those under the legal drinking age may be served, possess, or consume alcohol if they are with a parent, legal guardian, or spouse who is of legal drinking age. Those age 18-20 may also be served, possess or consumer alcohol if they are with a parent, legal guardian, or spouse who is of legal drinking age. Those age 18 to 20 may also possess (but not consume) alcohol as part of their employment.",
+    "query": "Question: can you drink alcohol with your parents in wisconsin?\nReturn only yes or no.",
+    "check": {
+      "type": "yesno_exact",
+      "value": "yes"
+    }
+  },
+  {
+    "id": "boolq_validation_0026",
+    "context": "Contour feathers are not uniformly distributed on the skin of the bird except in some groups such as the penguins, ratites and screamers. In most birds the feathers grow from specific tracts of skin called pterylae; between the pterylae there are regions which are free of feathers called apterylae (or apteria). Filoplumes and down may arise from the apterylae. The arrangement of these feather tracts, pterylosis or pterylography, varies across bird families and has been used in the past as a means for determining the evolutionary relationships of bird families.",
+    "query": "Question: do penguins have feathers arising from the epidermis?\nReturn only yes or no.",
+    "check": {
+      "type": "yesno_exact",
+      "value": "yes"
+    }
+  },
+  {
+    "id": "boolq_validation_0027",
+    "context": "A new engine is broken in by following specific driving guidelines during the first few hours of its use. The focus of breaking in an engine is on the contact between the piston rings of the engine and the cylinder wall. There is no universal preparation or set of instructions for breaking in an engine. Most importantly, experts disagree on whether it is better to start engines on high or low power to break them in. While there are still consequences to an unsuccessful break-in, they are harder to quantify on modern engines than on older models. In general, people no longer break in the engines of their own vehicles after purchasing a car or motorcycle, because the process is done in production. It is still common, even today, to find that an owner's manual recommends gentle use at first (often specified as the first 500 or 1000 kilometres or miles). But it is usually only normal use without excessive demands that is specified, as opposed to light/limited use. For example, the manual will specify that the car be driven normally, but not in excess of the highway speed limit.",
+    "query": "Question: do you need to break in a car?\nReturn only yes or no.",
+    "check": {
+      "type": "yesno_exact",
+      "value": "no"
+    }
+  },
+  {
+    "id": "boolq_validation_0028",
+    "context": "The Enchanted Forest is an amusement park located in Turner in the U.S. state of Oregon, next to Interstate 5 just south of Salem. Creator Roger Tofte opened the park in 1971 after seven years of construction. Today, the Tofte family still owns and operates the 20-acre (8.1 ha) park.",
+    "query": "Question: is the enchanted forest in oregon still open?\nReturn only yes or no.",
+    "check": {
+      "type": "yesno_exact",
+      "value": "yes"
+    }
+  },
+  {
+    "id": "boolq_validation_0029",
+    "context": "On the grounds of the speedway is the Indianapolis Motor Speedway Museum, which opened in 1956, and houses the Auto Racing Hall of Fame. The museum moved into its current building located in the infield in 1976. Also on the grounds is the Brickyard Crossing Golf Resort, which originally opened as the Speedway Golf Course in 1929. The golf course has 14 holes outside the track, along the backstretch, and four holes in the infield. The speedway also served as the venue for the opening ceremonies for the 1987 Pan American Games.",
+    "query": "Question: is there a golf course at the indy 500?\nReturn only yes or no.",
+    "check": {
+      "type": "yesno_exact",
+      "value": "yes"
+    }
+  },
+  {
+    "id": "boolq_validation_0030",
+    "context": "As part of Marvel's Marvel NOW! initiative a new Deadpool ongoing series was launched, written by Brian Posehn and Gerry Duggan and illustrated by Tony Moore. He is also a member of the Thunderbolts. In the 27th issue of his new series, as part of ``All-New Marvel NOW!'', Deadpool was married for the third time. Initially a secret, his bride was revealed in the webcomic Deadpool: The Gauntlet to be Shiklah, Queen of the Undead. Deadpool also discovers that he has a daughter by the name of Eleanor from a former flame of Deadpool named Carmelita.",
+    "query": "Question: does deadpool have a kid in the comics?\nReturn only yes or no.",
+    "check": {
+      "type": "yesno_exact",
+      "value": "yes"
+    }
+  },
+  {
+    "id": "boolq_validation_0031",
+    "context": "Benson & Hedges is a British brand of cigarettes owned by either Philip Morris International, British American Tobacco, or Japan Tobacco, depending on the region. In the UK, they are registered in Old Bond Street in London, and are manufactured in Lisnafillan, Ballymena, Northern Ireland.",
+    "query": "Question: do they still make benson & hedges cigarettes?\nReturn only yes or no.",
+    "check": {
+      "type": "yesno_exact",
+      "value": "yes"
+    }
+  },
+  {
+    "id": "boolq_validation_0032",
+    "context": "The Commonwealth government has its own tax laws and Puerto Ricans are also required to pay some US federal taxes, although most residents do not have to pay the federal personal income tax. In 2009, Puerto Rico paid $3.742 billion into the US Treasury. Residents of Puerto Rico pay into Social Security, and are thus eligible for Social Security benefits upon retirement. However, they are excluded from the Supplemental Security Income.",
+    "query": "Question: is federal income tax the same as social security?\nReturn only yes or no.",
+    "check": {
+      "type": "yesno_exact",
+      "value": "no"
+    }
+  },
+  {
+    "id": "boolq_validation_0033",
+    "context": "The crank sensor can be used in combination with a similar camshaft position sensor to monitor the relationship between the pistons and valves in the engine, which is particularly important in engines with variable valve timing. This method is also used to ``synchronise'' a four stroke engine upon starting, allowing the management system to know when to inject the fuel. It is also commonly used as the primary source for the measurement of engine speed in revolutions per minute.",
+    "query": "Question: is an engine speed sensor the same as a crankshaft sensor?\nReturn only yes or no.",
+    "check": {
+      "type": "yesno_exact",
+      "value": "yes"
+    }
+  },
+  {
+    "id": "boolq_validation_0034",
+    "context": "Indiana Jones and the Temple of Doom is a 1984 American action-adventure film directed by Steven Spielberg. It is the second installment in the Indiana Jones franchise and a prequel to the 1981 film Raiders of the Lost Ark, featuring Harrison Ford reprising his role as the title character. After arriving in North India, Indiana Jones is asked by desperate villagers to find a mystical stone and rescue their children from a Thuggee cult practicing child slavery, black magic and ritual human sacrifice in honor of the goddess Kali.",
+    "query": "Question: is indiana jones temple of doom a prequel?\nReturn only yes or no.",
+    "check": {
+      "type": "yesno_exact",
+      "value": "yes"
+    }
+  },
+  {
+    "id": "boolq_validation_0035",
+    "context": "The untitled Avengers film, colloquially referred to as Avengers 4, is an upcoming American superhero film based on the Marvel Comics superhero team the Avengers, produced by Marvel Studios and distributed by Walt Disney Studios Motion Pictures. It is intended to be the direct sequel to 2018's Avengers: Infinity War, as well as the sequel to 2012's Marvel's The Avengers and 2015's Avengers: Age of Ultron and the twenty-second film in the Marvel Cinematic Universe (MCU). The film is directed by Anthony and Joe Russo, with a screenplay by the writing team of Christopher Markus and Stephen McFeely, and features an ensemble cast with many actors from previous MCU films.",
+    "query": "Question: is there any next part of avengers infinity war?\nReturn only yes or no.",
+    "check": {
+      "type": "yesno_exact",
+      "value": "yes"
+    }
+  },
+  {
+    "id": "boolq_validation_0036",
+    "context": "Announced in April 2000 at the New York Auto Show and arriving in late 2000 in Japan and January 2001 in North America, the Highlander became one of the first car-based mid-size SUV or mid-size crossovers. The Highlander is the crossover counterpart to the more rugged, truck-based midsize 4Runner and became Toyota's best-selling SUV before being surpassed by the smaller RAV4 in 2006. In Japan, the Kluger is exclusive to dealership network called Toyota NETZ as a larger alternative to the RAV4.",
+    "query": "Question: is the toyota highlander on a truck frame?\nReturn only yes or no.",
+    "check": {
+      "type": "yesno_exact",
+      "value": "no"
+    }
+  },
+  {
+    "id": "boolq_validation_0037",
+    "context": "Since the Copyright Act of 1909, United States musicians have had the right to record a version of someone else's previously recorded and released tune, whether it is music alone or music with lyrics. A license can be negotiated between representatives of the interpreting artist and the copyright holder, or recording published tunes can fall under a mechanical license whereby the recording artist pays a standard royalty to the original author/copyright holder through an organization such as the Harry Fox Agency, and is safe under copyright law even if they do not have any permission from the original author. A similar service was provided by Limelight by RightsFlow, until January 2015, when they announced they will be closing their service. The U.S. Congress introduced the mechanical license to head off an attempt by the Aeolian Company to monopolize the piano roll market.",
+    "query": "Question: is it legal to do a cover of a song?\nReturn only yes or no.",
+    "check": {
+      "type": "yesno_exact",
+      "value": "yes"
+    }
+  },
+  {
+    "id": "boolq_validation_0038",
+    "context": "The carbon-hydrogen bond (C--H bond) is a bond between carbon and hydrogen atoms that can be found in many organic compounds. This bond is a covalent bond meaning that carbon shares its outer valence electrons with up to four hydrogens. This completes both of their outer shells making them stable. Carbon--hydrogen bonds have a bond length of about 1.09 \u00c5 (1.09 \u00d7 10 m) and a bond energy of about 413 kJ/mol (see table below). Using Pauling's scale--C (2.55) and H (2.2)--the electronegativity difference between these two atoms is 0.35. Because of this small difference in electronegativities, the C\u2212H bond is generally regarded as being non-polar. In structural formulas of molecules, the hydrogen atoms are often omitted. Compound classes consisting solely of C--H bonds and C--C bonds are alkanes, alkenes, alkynes, and aromatic hydrocarbons. Collectively they are known as hydrocarbons.",
+    "query": "Question: can carbon form polar covalent bonds with hydrogen?\nReturn only yes or no.",
+    "check": {
+      "type": "yesno_exact",
+      "value": "no"
+    }
+  },
+  {
+    "id": "boolq_validation_0039",
+    "context": "In 2011, Philip Pullman remarked at the British Humanist Association annual conference that due to the first film's disappointing sales in the United States, there would not be any sequels made.",
+    "query": "Question: is there a sequel to the movie the golden compass?\nReturn only yes or no.",
+    "check": {
+      "type": "yesno_exact",
+      "value": "no"
+    }
+  },
+  {
+    "id": "boolq_validation_0040",
+    "context": "Columbus Day is a national holiday in many countries of the Americas and elsewhere which officially celebrates the anniversary of Christopher Columbus's arrival in the Americas on October 12, 1492. The landing is celebrated as ``Columbus Day'' in the United States, as ``D\u00eda de la Raza'' (``Day of the Race'') in some countries in Latin America, as ``D\u00eda de la Hispanidad'' and ``Fiesta Nacional'' in Spain, where it is also the religious festivity of la Virgen del Pilar, as D\u00eda de las Am\u00e9ricas (Day of the Americas) in Belize and Uruguay, as D\u00eda del Respeto a la Diversidad Cultural (Day of Respect for Cultural Diversity) in Argentina, and as Giornata Nazionale di Cristoforo Colombo or Festa Nazionale di Cristoforo Colombo in Italy as well as in Little Italys around the world. As the day of remembrance of Our Lady of the Pillar, 12 October had been declared a religious feast day throughout the Spanish Empire in 1730; the secular Fiesta de la Raza Espa\u00f1ola was first proposed by Faustino Rodr\u00edguez-San Pedro y D\u00edaz-Arg\u00fcelles in 1913. In recent years, celebration of the holiday has faced some opposition from various organizations.",
+    "query": "Question: is columbus day a national holiday in the united states?\nReturn only yes or no.",
+    "check": {
+      "type": "yesno_exact",
+      "value": "yes"
+    }
+  },
+  {
+    "id": "boolq_validation_0041",
+    "context": "New Balance maintains a manufacturing presence in the United States, as well as in the United Kingdom for the European market, where they produce some of their most popular models such as the 990 model--in contrast to its competitors, which often manufacture exclusively outside the USA and Europe. As a result, New Balance shoes tend to be more expensive than those of many other manufacturers. To offset this pricing difference, New Balance claims to differentiate their products with technical features, such as blended gel inserts, heel counters and a greater selection of sizes, particularly for very narrow and/or very wide widths. The company has made total profits of approximately $69 billion since 1992. They are the second most-renown American sporting company, after Nike.",
+    "query": "Question: are new balance and nike the same company?\nReturn only yes or no.",
+    "check": {
+      "type": "yesno_exact",
+      "value": "no"
+    }
+  },
+  {
+    "id": "boolq_validation_0042",
+    "context": "U.S. Highway 20 (US 20) is an east--west United States highway that stretches from the Pacific Northwest all the way to New England. The ``0'' in its route number indicates that US 20 is a coast-to-coast route. Spanning 3,365 miles (5,415 km), it is the longest road in the United States, and particularly from Idaho to Massachusetts, the route roughly parallels that of Interstate 90 (I-90), which is in turn the longest Interstate Highway in the U.S. There is a discontinuity in the official designation of US 20 through Yellowstone National Park, with unnumbered roads used to traverse the park.",
+    "query": "Question: is there an interstate that goes coast to coast?\nReturn only yes or no.",
+    "check": {
+      "type": "yesno_exact",
+      "value": "yes"
+    }
+  },
+  {
+    "id": "boolq_validation_0043",
+    "context": "Tomato pur\u00e9e is a thick liquid made by cooking and straining tomatoes. The difference between tomato paste, tomato pur\u00e9e, and tomato sauce is consistency; tomato puree has a thicker consistency and a deeper flavour than sauce.",
+    "query": "Question: is pureed tomatoes the same as tomato sauce?\nReturn only yes or no.",
+    "check": {
+      "type": "yesno_exact",
+      "value": "no"
+    }
+  },
+  {
+    "id": "boolq_validation_0044",
+    "context": "English orthography typically represents vowel sounds with the five conventional vowel letters \u27e8a, e, i, o, u\u27e9, as well as \u27e8y\u27e9, which may also be a consonant depending on context. However, outside of abbreviations, there are a handful of words in English that do not have vowels, either because the vowel sounds are not written with vowel letters or because the words themselves are pronounced without vowel sounds.",
+    "query": "Question: can there be a word without a vowel?\nReturn only yes or no.",
+    "check": {
+      "type": "yesno_exact",
+      "value": "yes"
+    }
+  },
+  {
+    "id": "boolq_validation_0045",
+    "context": "Tipping Point is a British television game show which began airing on ITV on 2 July 2012, and is presented by Ben Shephard. Four contestants answer general knowledge questions to win counters which they use on a large coin pusher arcade-style machine. Only the winner at the end has a chance to take home any money; the others leave with nothing except any non-cash prizes they may have won during the game.",
+    "query": "Question: does only the winner get money on tipping point?\nReturn only yes or no.",
+    "check": {
+      "type": "yesno_exact",
+      "value": "yes"
+    }
+  },
+  {
+    "id": "boolq_validation_0046",
+    "context": "The turkey vulture (Cathartes aura), also known in some North American regions as the turkey buzzard (or just buzzard), and in some areas of the Caribbean as the John crow or carrion crow, is the most widespread of the New World vultures. One of three species in the genus Cathartes of the family Cathartidae, the turkey vulture ranges from southern Canada to the southernmost tip of South America. It inhabits a variety of open and semi-open areas, including subtropical forests, shrublands, pastures, and deserts.",
+    "query": "Question: is there such a thing as a turkey vulture?\nReturn only yes or no.",
+    "check": {
+      "type": "yesno_exact",
+      "value": "yes"
+    }
+  },
+  {
+    "id": "boolq_validation_0047",
+    "context": "As of October 2008, a condor (four under par) hole-in-one on a par 5 hole had been recorded on four occasions, aided by thin air at high altitude, or by cutting the corner on a doglegged or horseshoe-shaped hole. A horseshoe-shaped par 5 hole once enabled a condor hole in one to be achieved with a 3-iron club. The longest recorded straight drive hole-in-one is believed to be 517 yards or 473 metres, on the par 5 No. 9 hole at Green Valley Ranch Golf Club in Denver in 2002, aided by the thin air due to the high altitude. None of these four par 5 holes-in-one were achieved during a professional tournament. A condor is also known as a double albatross, or a triple eagle.",
+    "query": "Question: has anyone hit a hole in one on a par 5?\nReturn only yes or no.",
+    "check": {
+      "type": "yesno_exact",
+      "value": "yes"
+    }
+  },
+  {
+    "id": "boolq_validation_0048",
+    "context": "MetLife Stadium is an American sports stadium located in East Rutherford, New Jersey, 8 miles outside of New York City. It is part of the Meadowlands Sports Complex and serves as the home stadium for two National Football League (NFL) franchises: the New York Giants and the New York Jets. The stadium is owned by the MetLife Stadium Company, a joint venture of the Giants and Jets, who jointly built the stadium using private funds on land owned by the New Jersey Sports and Exposition Authority. The stadium opened as New Meadowlands Stadium in 2010. In 2011, MetLife, an insurance company based in New York City, acquired the naming rights to the stadium. At a construction cost of approximately $1.6 billion, it was the most expensive stadium ever built, at the time it opened, and is the second-largest stadium in the NFL in terms of seating capacity.",
+    "query": "Question: do the jets and giants share a stadium?\nReturn only yes or no.",
+    "check": {
+      "type": "yesno_exact",
+      "value": "yes"
+    }
+  },
+  {
+    "id": "boolq_validation_0049",
+    "context": "After the defeat in the 2016 Olympics, the USWNT underwent a year of experimentation which saw them losing 3 home games. If not for a comeback win against Brazil, the USWNT was on the brink of losing 4 home games in one year, a low never before seen by the USWNT. 2017 saw the USWNT play 12 games against teams ranked in the top-15 in the world. The USWNT heads into World Cup Qualifying in fall of 2018.",
+    "query": "Question: is the us womens soccer team in the world cup?\nReturn only yes or no.",
+    "check": {
+      "type": "yesno_exact",
+      "value": "yes"
+    }
+  },
+  {
+    "id": "boolq_validation_0050",
+    "context": "Association football is the most popular sport in nearly every African country, and 13 members of the Confederation of African Football (CAF) have competed at the sport's biggest event -- the men's FIFA World Cup.",
+    "query": "Question: can an african team win the world cup?\nReturn only yes or no.",
+    "check": {
+      "type": "yesno_exact",
+      "value": "yes"
+    }
+  },
+  {
+    "id": "boolq_validation_0051",
+    "context": "Many martial arts employ the use of common objects as weapons; Filipino martial arts such as Eskrima include practice with machetes, canes, bamboo spears, and knives as a result of the 333 year Spanish colonization that took place in the Philippines which prohibited the ownership and use of standard swords and bladed weapons; Chinese martial arts and some Korean martial arts commonly feature the use of improvised weapons such as fans, hammers and staves. There are even some western martial arts that are based on improvised weapons such as British quarterstaff fighting and Irish stick fighting.",
+    "query": "Question: can a hammer be used as a weapon?\nReturn only yes or no.",
+    "check": {
+      "type": "yesno_exact",
+      "value": "yes"
+    }
+  },
+  {
+    "id": "boolq_validation_0052",
+    "context": "Fox hunting with hounds, as a formalised activity, originated in England in the sixteenth century, in a form very similar to that practised until February 2005, when a law banning the activity in England and Wales came into force. A ban on hunting in Scotland had been passed in 2002, but it continues to be within the law in Northern Ireland and several other countries, including Australia, Canada, France, Ireland and the United States. In Australia, the term also refers to the hunting of foxes with firearms, similar to deer hunting. In much of the world, hunting in general is understood to relate to any game animals or weapons (e.g., deer hunting with bow and arrow); in Britain and Ireland, ``hunting'' without qualification implies fox hunting (or other forms of hunting with hounds--beagling, drag hunting, hunting the clean boot, mink hunting, or stag hunting), as described here.",
+    "query": "Question: do they still have fox hunts in england?\nReturn only yes or no.",
+    "check": {
+      "type": "yesno_exact",
+      "value": "no"
+    }
+  },
+  {
+    "id": "boolq_validation_0053",
+    "context": "The ASU includes a midnight blue coat and low waist trousers for male soldiers; and a midnight blue coat, slacks and skirt for female soldiers. The fabric for the ASU is heavier and more wrinkle resistant than previously manufactured uniforms and will consist of 55% wool and 45% polyester material. The ASU coat has a tailored, athletic cut to improve uniform fit and appearance. The ASU includes an improved heavier and wrinkle resistant short and long-sleeved white shirt with permanent military creases and shoulder loops. The JROTC version replaces the white shirt with the prototype grey shirt and gold braid is not worn on the blue trousers or on the sleeves of the class A coat. Compared to the Army's previous uniforms, the ASU does not include a garrison cap; soldiers will continue to wear the Army's berets.",
+    "query": "Question: can you wear short sleeve shirt with asu jacket?\nReturn only yes or no.",
+    "check": {
+      "type": "yesno_exact",
+      "value": "yes"
+    }
+  },
+  {
+    "id": "boolq_validation_0054",
+    "context": "This is the list of U.S. states that have participated in the Little League World Series. As of the 2018 LLWS, eight states had never reached the LLWS: Alaska, Colorado, Kansas, North Dakota, Utah, Vermont, Wisconsin, and Wyoming; additionally, the District of Columbia has never reached the LLWS.",
+    "query": "Question: has wisconsin ever been in the little league world series?\nReturn only yes or no.",
+    "check": {
+      "type": "yesno_exact",
+      "value": "no"
+    }
+  },
+  {
+    "id": "boolq_validation_0055",
+    "context": "In the third season, Damon helps Elena in bringing his brother, Stefan, back to Mystic Falls after Stefan becomes Klaus' henchman. The arrangement transpired after a bargain for his blood that would cure Damon of the werewolf bite he had received from Tyler. At first, he is reluctant to involve Elena in the rescue attempts, employing Alaric Saltzman, Elena's guardian, instead as Klaus does not know that Elena is alive after the sacrifice which frees Klaus' hybrid side. However, Elena involves herself, desperate to find Stefan. Damon, though hesitant at first, is unable to refuse her because of his love for her. He also points out to her that she once turned back from finding Stefan since she knew Damon would be in danger, clearly showing that she also has feelings for him. He tells her that ``when (he) drag(s) (his) brother from the edge to deliver him back to (her), (he) wants her to remember the things (she) felt while he was gone.'' When Stefan finally returns to Mystic Falls, his attitude is different from that of the first and second seasons. This causes a rift between Elena and Stefan whereas the relationship between Damon and Elena becomes closer and more intimate. A still loyal Elena, however, refuses to admit her feelings for Damon. In 'Dangerous Liaisons', Elena, frustrated with her feelings for him, tells Damon that his love for her may be a problem, and that this could be causing all their troubles. This incenses Damon, causing him to revert to the uncaring and reckless Damon seen in the previous seasons. The rocky relationship between the two continues until the sexual tension hits the fan and in a moment of heated passion, Elena -- for the first time in the three seasons -- kisses Damon of her own accord. This kiss finally causes Elena to admit that she loves both brothers and realize that she must ultimately make her choice as her own ancestress, Katherine Pierce, who turned the brothers, once did. In assessment of her feelings for Damon, she states this: ``Damon just sort of snuck up on me. He got under my skin and no matter what I do, I can't shake him.'' In the season finale, a trip designed to get her to safety forces Elena to make her choice: to go to Damon and possibly see him one last time; or to go to Stefan and her friends and see them one last time. She chooses the latter when she calls Damon to tell him her decision. Damon, who is trying to stop Alaric, accepts what she says and she tells him that maybe if she had met Damon before she had met Stefan, her choice may have been different. This statement causes Damon to remember the first night he did meet Elena which was, in fact, the night her parents died - before she had met Stefan. Not wanting anyone to know he was in town and after giving her some advice about life and love, Damon compels her to forget. He remembers this as he fights Alaric and seems accepting of his death when Alaric, whose life line is tied to Elena's, suddenly collapses in his arms. Damon is grief-stricken, knowing that this means that Elena has also died and yells, ``No! You are not dead!'' A heartbroken Damon then goes to the hospital demanding to see Elena when the doctor, Meredith Fell, tells him that she gave Elena vampire blood. The last shot of the season finale episode shows Elena in transition.",
+    "query": "Question: does damon and elena get together in season 3?\nReturn only yes or no.",
+    "check": {
+      "type": "yesno_exact",
+      "value": "no"
+    }
+  },
+  {
+    "id": "boolq_validation_0056",
+    "context": "Shaquem Alphonso Griffin /\u0283\u0259\u02c8ki\u02d0m/ (born July 20, 1995) is an American football linebacker for the Seattle Seahawks of the National Football League (NFL). He is the twin brother of Seahawks cornerback Shaquill Griffin, and both brothers played college football for the University of Central Florida Knights. As an amputee with one hand, Shaquem Griffin received extensive media coverage as a prospective 2018 NFL Draft pick. He was selected as a fifth round pick (141st overall) by the Seahawks on April 28, 2018, reuniting him with Shaquill.",
+    "query": "Question: is there a player in the nfl missing a hand?\nReturn only yes or no.",
+    "check": {
+      "type": "yesno_exact",
+      "value": "yes"
+    }
+  },
+  {
+    "id": "boolq_validation_0057",
+    "context": "The novel was followed by a sequel called The Queen's Fool, set during the reign of Henry's daughter, Queen Mary. The Queen's Fool was followed by The Virgin's Lover, set during the early days of Queen Elizabeth I's reign.",
+    "query": "Question: is the other boleyn girl part of a series?\nReturn only yes or no.",
+    "check": {
+      "type": "yesno_exact",
+      "value": "yes"
+    }
+  },
+  {
+    "id": "boolq_validation_0058",
+    "context": "To promote the film prior to its release, Townsend, along with the other actors who portrayed the fictional musical quartet The Five Heartbeats (Leon Robinson, Michael Wright, Harry J. Lennix, and Tico Wells) performed in a concert with real-life Soul/R&B vocal group The Dells, one of many groups that inspired the film. The Dells sang and recorded the vocals as the actors lip synced.",
+    "query": "Question: is there a group called the five heartbeats?\nReturn only yes or no.",
+    "check": {
+      "type": "yesno_exact",
+      "value": "no"
+    }
+  },
+  {
+    "id": "boolq_validation_0059",
+    "context": "The Himalayan range has many of the Earth's highest peaks, including the highest, Mount Everest. The Himalayas include over fifty mountains exceeding 7,200 metres (23,600 ft) in elevation, including ten of the fourteen 8,000-metre peaks. By contrast, the highest peak outside Asia (Aconcagua, in the Andes) is 6,961 metres (22,838 ft) tall.",
+    "query": "Question: is mount everest a part of the himalayas?\nReturn only yes or no.",
+    "check": {
+      "type": "yesno_exact",
+      "value": "yes"
+    }
+  },
+  {
+    "id": "boolq_validation_0060",
+    "context": "EMT-I/85 is a level of EMT-I training formulated by the National Registry of Emergency Medical Technicians in 1985. This training level includes more invasive procedures than are covered at the EMT-Basic level, including IV therapy, the use of advanced airway devices, and provides for advanced assessment skills. The EMT-I/85 typically administered the same medications as an EMT-B (oxygen, oral glucose, activated charcoal, epinephrine auto-injectors (EpiPens), nitroglycerin, and metered-dose inhalers such as albuterol). However, in some states they were also allowed to administer naloxone, D50, and glucagon. Like all other EMT levels, their scope of practice was governed by the state and/or their Medical Director.",
+    "query": "Question: can an emt-basic start an iv?\nReturn only yes or no.",
+    "check": {
+      "type": "yesno_exact",
+      "value": "no"
+    }
+  },
+  {
+    "id": "boolq_validation_0061",
+    "context": "In April 2013, the All England Club confirmed its intention to build a retractable roof over No.1 Court. The roof is expected to be in place for the 2019 Championships.",
+    "query": "Question: has no 1 court at wimbledon got a roof?\nReturn only yes or no.",
+    "check": {
+      "type": "yesno_exact",
+      "value": "no"
+    }
+  },
+  {
+    "id": "boolq_validation_0062",
+    "context": "The following is the list of teams to overcome 3--1 series deficits by winning three straight games to win a best-of-seven playoff series. In the history of major North American pro sports, teams that were down 3--1 in the series came back and won the series 52 times, more than half of them were accomplished by National Hockey League (NHL) teams. Teams overcame 3--1 deficit in the final championship round eight times, six were accomplished by Major League Baseball (MLB) teams in the World Series. Teams overcoming 3--0 deficit by winning four straight games were accomplished five times, four times in the NHL and once in MLB.",
+    "query": "Question: has anyone come back from 3-0 in the nba finals?\nReturn only yes or no.",
+    "check": {
+      "type": "yesno_exact",
+      "value": "no"
+    }
+  },
+  {
+    "id": "boolq_validation_0063",
+    "context": "Radio waves are a type of electromagnetic radiation with wavelengths in the electromagnetic spectrum longer than infrared light. Radio waves have frequencies as high as 300 gigahertz (GHz) to as low as 30 hertz (Hz). At 300 GHz, the corresponding wavelength is 1 mm, and at 30 Hz is 10,000 km. Like all other electromagnetic waves, radio waves travel at the speed of light. They are generated by electric charges undergoing acceleration, such as time varying electric currents. Naturally occurring radio waves are emitted by lightning and astronomical objects.",
+    "query": "Question: do radio waves travel at the speed of light?\nReturn only yes or no.",
+    "check": {
+      "type": "yesno_exact",
+      "value": "yes"
+    }
+  },
+  {
+    "id": "boolq_validation_0064",
+    "context": "Of the 20 players on Team USA, 13 eventually played in the NHL. Five of them went on to play over 500 NHL games, and three would play over 1,000 NHL games.",
+    "query": "Question: did anyone from the 1980 us hockey team play in the nhl?\nReturn only yes or no.",
+    "check": {
+      "type": "yesno_exact",
+      "value": "yes"
+    }
+  },
+  {
+    "id": "boolq_validation_0065",
+    "context": "An acute triangle is a triangle with all three angles acute (less than 90\u00b0). An obtuse triangle is one with one obtuse angle (greater than 90\u00b0) and two acute angles. Since a triangle's angles must sum to 180\u00b0, no triangle can have more than one obtuse angle.",
+    "query": "Question: do all triangles have at least two acute angles?\nReturn only yes or no.",
+    "check": {
+      "type": "yesno_exact",
+      "value": "yes"
+    }
+  },
+  {
+    "id": "boolq_validation_0066",
+    "context": "The University of Mary Hardin--Baylor (UMHB) is a Christian co-educational institution of higher learning located in Belton, Texas, United States. UMHB was chartered by the Republic of Texas in 1845 as Baylor Female College, the female department of what is now Baylor University. It has since become its own institution and grown to 3,914 students and awards degrees at the baccalaureate, master's, and doctoral levels. It is affiliated with the Baptist General Convention of Texas.",
+    "query": "Question: is baylor and mary hardin baylor the same school?\nReturn only yes or no.",
+    "check": {
+      "type": "yesno_exact",
+      "value": "yes"
+    }
+  },
+  {
+    "id": "boolq_validation_0067",
+    "context": "Capital punishment for juveniles in the United States existed until March 1, 2005, when the U.S. Supreme Court banned it in Roper v. Simmons.",
+    "query": "Question: can you get the death penalty as a minor?\nReturn only yes or no.",
+    "check": {
+      "type": "yesno_exact",
+      "value": "no"
+    }
+  },
+  {
+    "id": "boolq_validation_0068",
+    "context": "India has never participated in the FIFA World Cup, although the team did qualify by default for the 1950 World Cup after all the other nations in their qualification group withdrew. However, India withdrew prior to the beginning of the tournament. The team has also appeared three times in the Asia's top football competition, the AFC Asian Cup. Their best result in the competition occurred in 1964 when the team finished as runners-up. India also participate in the SAFF Championship, the top regional football competition in South Asia. They have won the tournament six times since it began in 1993.",
+    "query": "Question: did indian football team qualified for fifa 2018?\nReturn only yes or no.",
+    "check": {
+      "type": "yesno_exact",
+      "value": "no"
+    }
+  },
+  {
+    "id": "boolq_validation_0069",
+    "context": "Tyrannosaurus is a genus of coelurosaurian theropod dinosaur. The species Tyrannosaurus rex (rex meaning ``king'' in Latin), often colloquially called simply T. rex or T-Rex, is one of the most well-represented of the large theropods. Tyrannosaurus lived throughout what is now western North America, on what was then an island continent known as Laramidia. Tyrannosaurus had a much wider range than other tyrannosaurids. Fossils are found in a variety of rock formations dating to the Maastrichtian age of the upper Cretaceous Period, 68 to 66 million years ago. It was the last known member of the tyrannosaurids, and among the last non-avian dinosaurs to exist before the Cretaceous--Paleogene extinction event.",
+    "query": "Question: are t rex and tyrannosaurus rex the same?\nReturn only yes or no.",
+    "check": {
+      "type": "yesno_exact",
+      "value": "yes"
+    }
+  },
+  {
+    "id": "boolq_validation_0070",
+    "context": "The new locks opened for commercial traffic on 26 June 2016, and the first ship to cross the canal using the third set of locks was a modern New Panamax vessel, the Chinese-owned container ship Cosco Shipping Panama. The original locks, now over 100 years old, allow engineers greater access for maintenance, and are projected to continue operating indefinitely.",
+    "query": "Question: is the old panama canal still in use?\nReturn only yes or no.",
+    "check": {
+      "type": "yesno_exact",
+      "value": "yes"
+    }
+  },
+  {
+    "id": "boolq_validation_0071",
+    "context": "A possession and acquisition licence is a licence that allows individuals in Canada to possess and acquire firearms as well as ammunition. Licences are typically valid for five years and must be renewed prior to expiry to maintain all classes. If an individual possessing a PAL is convicted of certain offences, a PAL can be revoked. If an individual does not renew their PAL prior to its expiration date or if they have their PAL revoked, they must legally dispose of any firearms in their possession. A licence for prohibited firearms can be issued to qualifying businesses, and very rarely to individuals (firearms they own, as the gun laws changed over time.) Previous convictions for serious violent, drug or weapons offences almost invariably result in the denial of the application.",
+    "query": "Question: do you need a pal to possess ammunition?\nReturn only yes or no.",
+    "check": {
+      "type": "yesno_exact",
+      "value": "yes"
+    }
+  },
+  {
+    "id": "boolq_validation_0072",
+    "context": "Typically, once spun, cotton candy is only marketed by color. Absent a clear name other than 'blue', the distinctive taste of the blue raspberry flavor mix has gone on to become a compound flavor that some other foods (gum, ice cream, rock candy, fluoride toothpaste) occasionally borrow (``cotton-candy flavored ice cream'') to invoke the nostalgia of cotton candy that people typically only get to experience on vacation or holidays. Pink bubble gum went through a similar transition from specific branded product to a generic flavor that transcended the original confection, and 'bubble gum flavor' often shows up in the same product categories as 'cotton candy flavor'.",
+    "query": "Question: do blue and pink cotton candy taste the same?\nReturn only yes or no.",
+    "check": {
+      "type": "yesno_exact",
+      "value": "no"
+    }
+  },
+  {
+    "id": "boolq_validation_0073",
+    "context": "The film received overwhelmingly positive reviews from critics and was a box-office success, earning more than six times its budget. The film won three Academy Awards, including Best Actor for Peck, and was nominated for eight, including Best Picture.",
+    "query": "Question: did to kill a mockingbird win an academy award?\nReturn only yes or no.",
+    "check": {
+      "type": "yesno_exact",
+      "value": "yes"
+    }
+  },
+  {
+    "id": "boolq_validation_0074",
+    "context": "A floating island is a mass of floating aquatic plants, mud, and peat ranging in thickness from several centimetres to a few metres. Floating islands are a common natural phenomenon that are found in many parts of the world. They exist less commonly as a man-made phenomenon. Floating islands are generally found on marshlands, lakes, and similar wetland locations, and can be many hectares in size.",
+    "query": "Question: is there such a thing as a floating island?\nReturn only yes or no.",
+    "check": {
+      "type": "yesno_exact",
+      "value": "yes"
+    }
+  },
+  {
+    "id": "boolq_validation_0075",
+    "context": "Males, if not neutered, are extremely musky. It is considered preferable to delay neutering until sexual maturity has been reached, at approximately six to eight months old, after the full descent of the testicles. Neutering the male will reduce the smell to almost nothing. The same applies for females, but spaying them is also important for their own health. Unless they are going to be used for breeding purposes, female ferrets will go into extended heat. A female that does not mate can die of aplastic anemia without medical intervention. It is possible to use a vasectomised male to take a female out of heat.",
+    "query": "Question: do female ferrets die if they don't mate?\nReturn only yes or no.",
+    "check": {
+      "type": "yesno_exact",
+      "value": "yes"
+    }
+  },
+  {
+    "id": "boolq_validation_0076",
+    "context": "The Xbox One gaming console has received updates from Microsoft since its launch in 2013 that enable it to play select games from its two predecessor consoles, Xbox and Xbox 360. On June 15, 2015, backward compatibility with supported Xbox 360 games became available to eligible Xbox Preview program users with a beta update to the Xbox One system software. The dashboard update containing backward compatibility was released publicly on November 12, 2015. On October 24, 2017, another such update added games from the original Xbox library. The following is a list of all backward compatible games on Xbox One under this functionality.",
+    "query": "Question: will all xbox 360 games work on xbox one?\nReturn only yes or no.",
+    "check": {
+      "type": "yesno_exact",
+      "value": "no"
+    }
+  },
+  {
+    "id": "boolq_validation_0077",
+    "context": "There is no brachiocephalic artery for the left side of the body. The left common carotid, and the left subclavian artery, come directly off the aortic arch. However, there are two brachiocephalic veins.",
+    "query": "Question: is there a right and left brachiocephalic artery?\nReturn only yes or no.",
+    "check": {
+      "type": "yesno_exact",
+      "value": "no"
+    }
+  },
+  {
+    "id": "boolq_validation_0078",
+    "context": "The Sole Survivor receives a cash prize of $1,000,000 prior to taxes and sometimes also receives a car provided by the show's sponsor. Every player receives a prize for participating on Survivor depending on how long he or she lasts in the game. In most seasons, the runner-up receives $100,000, and third place wins $85,000. All other players receive money on a sliding scale, though specific amounts have rarely been made public. Sonja Christopher, the first player voted off of Survivor: Borneo, received $2,500. In Survivor: Fiji, the first season with tied runners-up, the two runners-up received US$100,000 each, and Yau-Man Chan received US$60,000 for his fourth-place finish. All players also receive an additional $10,000 for their appearance on the reunion show.",
+    "query": "Question: do the runners up on survivor win money?\nReturn only yes or no.",
+    "check": {
+      "type": "yesno_exact",
+      "value": "yes"
+    }
+  },
+  {
+    "id": "boolq_validation_0079",
+    "context": "Love Finds a Home is a Christian drama film, the eighth and final installment based on a series of books by Janette Oke. It aired on Hallmark Channel on September 5, 2009. The film is based on the book Love Finds a Home by Janette Oke. Sarah Jones, Haylie Duff, and Jordan Bridges reprise their roles from Love Takes Wing.",
+    "query": "Question: is there a sequel to love finds a home?\nReturn only yes or no.",
+    "check": {
+      "type": "yesno_exact",
+      "value": "no"
+    }
+  },
+  {
+    "id": "boolq_validation_0080",
+    "context": "When asked about developing a sequel series, King stated ``I'd love to revisit Jake and Sadie, and also revisit the rabbit hole that dumps people into the past, but sometimes it's best not to go back for a second helping.''.",
+    "query": "Question: will there be a second season of 11.22.63?\nReturn only yes or no.",
+    "check": {
+      "type": "yesno_exact",
+      "value": "no"
+    }
+  },
+  {
+    "id": "boolq_validation_0081",
+    "context": "Nuclear power in the United States is provided by 99 commercial reactors with a net capacity of 100,350 megawatts (MW), 65 pressurized water reactors and 34 boiling water reactors. In 2016 they produced a total of 805.3 terawatt-hours of electricity, which accounted for 19.7% of the nation's total electric energy generation. In 2016, nuclear energy comprised nearly 60 percent of U.S. emission-free generation.",
+    "query": "Question: are there nuclear power plants in the us?\nReturn only yes or no.",
+    "check": {
+      "type": "yesno_exact",
+      "value": "yes"
+    }
+  },
+  {
+    "id": "boolq_validation_0082",
+    "context": "The tiebreak is sometimes not employed for the final set of a match and an advantage set is used instead. Therefore, the deciding set must be played until one player or team has won two more games than the opponent. This is true in three of the four major tennis championships, all except the US Open where a tiebreak is played even in the deciding set (fifth set for the men, third set for the women) at 6--6. A tiebreak is not played in the deciding set in the other three majors -- the Australian Open, the French Open, and Wimbledon. (When the tiebreak was first introduced at Wimbledon in 1971, it was invoked at 8--8 rather than 6--6.) The US Open holds ``Super Saturday'' where the two men's semi-finals are played along with the women's final on the second Saturday of the event; therefore a tie-break is more prudent where player rest and scheduling is more important.",
+    "query": "Question: is there a tiebreaker in final set at wimbledon?\nReturn only yes or no.",
+    "check": {
+      "type": "yesno_exact",
+      "value": "no"
+    }
+  },
+  {
+    "id": "boolq_validation_0083",
+    "context": "The original World Trade Center was a large complex of seven buildings in Lower Manhattan, New York City, United States. It featured the landmark Twin Towers, which opened on April 4, 1973 and were destroyed in 2001 during the September 11 attacks. At the time of their completion, the Twin Towers -- the original 1 World Trade Center, at 1,368 feet (417 m); and 2 World Trade Center, at 1,362 feet (415.1 m) -- were the tallest buildings in the world. Other buildings in the complex included the Marriott World Trade Center (3 WTC), 4 WTC, 5 WTC, 6 WTC, and 7 WTC. The complex was located in New York City's Financial District and contained 13,400,000 square feet (1,240,000 m) of office space.",
+    "query": "Question: were the twin towers the world trade center?\nReturn only yes or no.",
+    "check": {
+      "type": "yesno_exact",
+      "value": "yes"
+    }
+  },
+  {
+    "id": "boolq_validation_0084",
+    "context": "Sanders played football primarily at cornerback, but also as a kick returner, punt returner, and occasionally wide receiver. He played in the National Football League (NFL) for the Atlanta Falcons, the San Francisco 49ers, the Dallas Cowboys, the Washington Redskins and the Baltimore Ravens, winning the Super Bowl with both the 49ers and the Cowboys. An outfielder in baseball, he played professionally for the New York Yankees, the Atlanta Braves, the Cincinnati Reds and the San Francisco Giants, and participated in the 1992 World Series with the Braves. He attended Florida State University, where he was recognized as a two-time All-American in football, and also played baseball and ran track.",
+    "query": "Question: did deion sanders ever win a world series?\nReturn only yes or no.",
+    "check": {
+      "type": "yesno_exact",
+      "value": "no"
+    }
+  },
+  {
+    "id": "boolq_validation_0085",
+    "context": "The German Shepherd (German: Deutscher Sch\u00e4ferhund, German pronunciation: (\u02c8\u0283\u025b\u02d0f\u0250\u02cch\u028ant)) is a breed of medium to large-sized working dog that originated in Germany. The breed's officially recognized name is German Shepherd Dog in the English language (sometimes abbreviated as GSD). The breed is known as the Alsatian in Britain and Ireland. The German Shepherd is a relatively new breed of dog, with their origin dating to 1899. As part of the Herding Group, German Shepherds are working dogs developed originally for herding sheep. Since that time however, because of their strength, intelligence, trainability, and obedience, German Shepherds around the world are often the preferred breed for many types of work, including disability assistance, search-and-rescue, police and military roles, and even acting. The German Shepherd is the second-most registered breed by the American Kennel Club and seventh-most registered breed by The Kennel Club in the United Kingdom.",
+    "query": "Question: is a german shepard the same as an alsatian?\nReturn only yes or no.",
+    "check": {
+      "type": "yesno_exact",
+      "value": "yes"
+    }
+  },
+  {
+    "id": "boolq_validation_0086",
+    "context": "While some 19th-century experiments suggested that the underlying premise is true if the heating is sufficiently gradual, according to contemporary biologists the premise is false: a frog that is gradually heated will jump out. Indeed, thermoregulation by changing location is a fundamentally necessary survival strategy for frogs and other ectotherms.",
+    "query": "Question: does a frog jump out of boiling water?\nReturn only yes or no.",
+    "check": {
+      "type": "yesno_exact",
+      "value": "yes"
+    }
+  },
+  {
+    "id": "boolq_validation_0087",
+    "context": "In high-energy particle colliders, matter creation events have yielded a wide variety of exotic heavy particles precipitating out of colliding photon jets (see two-photon physics). Currently, two-photon physics studies creation of various fermion pairs both theoretically and experimentally (using particle accelerators, air showers, radioactive isotopes, etc.).",
+    "query": "Question: is it possible to create mass from energy?\nReturn only yes or no.",
+    "check": {
+      "type": "yesno_exact",
+      "value": "yes"
+    }
+  },
+  {
+    "id": "boolq_validation_0088",
+    "context": "On the film review aggregation website Rotten Tomatoes, films that all surveyed critics consider bad have a 0% rating. Some of these are often considered some of the worst films ever made.",
+    "query": "Question: is there a movie with 0 on rotten tomatoes?\nReturn only yes or no.",
+    "check": {
+      "type": "yesno_exact",
+      "value": "yes"
+    }
+  },
+  {
+    "id": "boolq_validation_0089",
+    "context": "From model years 1999 to 2002, the rear-wheel-drive S-Type was equipped with either a five-speed manual (Getrag 221) or a five-speed J-Gate Ford 5R55N transmission . From 2003, the S-Type was produced with either a 5-speed manual transmission or a six-speed J-Gate transmission that allows automatic gear selection or clutchless manual gear selection. The 2004 diesel saw the introduction of a 6-speed manual transmission; it was also available with the six-speed J-Gate automatic transmission.",
+    "query": "Question: is the jaguar s type rear wheel drive?\nReturn only yes or no.",
+    "check": {
+      "type": "yesno_exact",
+      "value": "yes"
+    }
+  },
+  {
+    "id": "boolq_validation_0090",
+    "context": "As a unit of culinary measure, a level dessertspoon (dstspn.) equals two teaspoons, or 10 milliliters, whereas a U.S. tablespoon is three teaspoons (15ml or half a fluid ounce) in the U.S., and two dessertspoons, i.e. four teaspoons (20ml or two thirds of a fluid ounce) in Britain and Australia, which is the old British standard. For dry ingredients, a rounded or heaped teaspoonful is often specified instead.",
+    "query": "Question: is a tablespoon bigger than a dessert spoon?\nReturn only yes or no.",
+    "check": {
+      "type": "yesno_exact",
+      "value": "yes"
+    }
+  },
+  {
+    "id": "boolq_validation_0091",
+    "context": "The series was renewed for a third season by Disney Channel on August 31, 2017. On June 1, 2018, it was announced that Peyton List, Karan Brar, Skai Jackson, and Miranda May would be returning for the third season and that Raphael Alejandro, Will Buie Jr., and Mallory Mahoney would be joining the cast. The third season premiered on Disney Channel on June 18, 2018. In March 2018, actress Skai Jackson stated in an interview that she was leaving Disney and that Bunk'd would end with the third season.",
+    "query": "Question: is this the last season of bunk'd?\nReturn only yes or no.",
+    "check": {
+      "type": "yesno_exact",
+      "value": "yes"
+    }
+  },
+  {
+    "id": "boolq_validation_0092",
+    "context": "The White House is the official residence and workplace of the President of the United States. It is located at 1600 Pennsylvania Avenue NW in Washington, D.C. and has been the residence of every U.S. President since John Adams in 1800. The term is often used as a metonym for the president and his advisers.",
+    "query": "Question: does the president live in the white house?\nReturn only yes or no.",
+    "check": {
+      "type": "yesno_exact",
+      "value": "yes"
+    }
+  },
+  {
+    "id": "boolq_validation_0093",
+    "context": "A dorsal root ganglion (or spinal ganglion) (also known as a posterior root ganglion), is a cluster of neurons (a ganglion) in a dorsal root of a spinal nerve. The cell bodies of sensory neurons known as first-order neurons are located in the dorsal root ganglia.",
+    "query": "Question: does the dorsal root ganglion carry sensory input?\nReturn only yes or no.",
+    "check": {
+      "type": "yesno_exact",
+      "value": "yes"
+    }
+  },
+  {
+    "id": "boolq_validation_0094",
+    "context": "The series is filmed partially in Prince Edward Island as well as locations in Southern Ontario (including Millbrook and Caledon).",
+    "query": "Question: is anne with an e filmed on pei?\nReturn only yes or no.",
+    "check": {
+      "type": "yesno_exact",
+      "value": "yes"
+    }
+  },
+  {
+    "id": "boolq_validation_0095",
+    "context": "Angular frequency (or angular speed) is the magnitude of the vector quantity angular velocity. The term angular frequency vector \u03c9 \u2192 (\\displaystyle (\\vec (\\omega ))) is sometimes used as a synonym for the vector quantity angular velocity.",
+    "query": "Question: is angular frequency and angular velocity the same?\nReturn only yes or no.",
+    "check": {
+      "type": "yesno_exact",
+      "value": "no"
+    }
+  },
+  {
+    "id": "boolq_validation_0096",
+    "context": "Bullets fired into the air usually fall back with terminal velocities much lower than their muzzle velocity when they leave the barrel of a firearm. Nevertheless, people can be injured, sometimes fatally, when bullets discharged into the air fall back down to the ground. Bullets fired at angles less than vertical are more dangerous as the bullet maintains its angular ballistic trajectory and is far less likely to engage in tumbling motion; it therefore travels at speeds much higher than a bullet in free fall.",
+    "query": "Question: can someone die from a bullet shot in the air?\nReturn only yes or no.",
+    "check": {
+      "type": "yesno_exact",
+      "value": "yes"
+    }
+  },
+  {
+    "id": "boolq_validation_0097",
+    "context": "Salt Lake City (often shortened to Salt Lake and abbreviated as SLC) is the capital and the most populous municipality of the U.S. state of Utah. With an estimated population of 190,884 in 2014, the city is the core of the Salt Lake City metropolitan area, which has a population of 1,153,340 (2014 estimate). Salt Lake City is further situated within a larger metropolis known as the Salt Lake City--Ogden--Provo Combined Statistical Area. This region is a corridor of contiguous urban and suburban development stretched along an approximately 120-mile (190 km) segment of the Wasatch Front, comprising a population of 2,423,912 as of 2014. It is one of only two major urban areas in the Great Basin (the other is Reno, Nevada).",
+    "query": "Question: is salt lake city the biggest city in utah?\nReturn only yes or no.",
+    "check": {
+      "type": "yesno_exact",
+      "value": "yes"
+    }
+  },
+  {
+    "id": "boolq_validation_0098",
+    "context": "``Chasing Cars'' is a song by Northern Irish alternative rock band Snow Patrol. It was released as the second single from their fourth studio album, Eyes Open (2006). It was recorded in 2005 and released on 6 June 2006 in the United States and 24 July 2006 in the United Kingdom. The song gained significant popularity in the US after being featured in the second season finale of the popular medical drama Grey's Anatomy, which aired on 15 May 2006.",
+    "query": "Question: was chasing cars written for grey's anatomy?\nReturn only yes or no.",
+    "check": {
+      "type": "yesno_exact",
+      "value": "no"
+    }
+  },
+  {
+    "id": "boolq_validation_0099",
+    "context": "On Isla Sorna, an island off the Pacific coast of Costa Rica, a young girl named Cathy Bowman wanders around during a family vacation, and survives an attack by a swarm of Compsognathus. Her parents file a lawsuit against the genetics company InGen, now headed by John Hammond's nephew, Peter Ludlow, who plans to use Isla Sorna to alleviate the financial losses imposed by the incident that occurred at Jurassic Park four years earlier. Mathematician Dr. Ian Malcolm meets Hammond at his mansion. Hammond explains that Isla Sorna, abandoned years earlier during a hurricane, is where InGen created their dinosaurs before moving them to Jurassic Park on Isla Nublar. Hammond hopes to stop InGen by sending a team to Isla Sorna to document the dinosaurs, thus causing public support against human interference on the island. Ian, who survived the Jurassic Park disaster, is reluctant. After learning that his girlfriend, paleontologist Dr. Sarah Harding, is part of the team and is already on Isla Sorna, Ian agrees to go to the island, but only to retrieve her.",
+    "query": "Question: did the girl in the lost world die?\nReturn only yes or no.",
+    "check": {
+      "type": "yesno_exact",
+      "value": "no"
+    }
+  }
+]

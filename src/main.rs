@@ -7,6 +7,7 @@ use genai::resolver::{AuthData, Endpoint, ServiceTargetResolver};
 use genai::{Client, ModelIden, ServiceTarget};
 
 use axon::mcp::McpServer;
+use axon::policy::{DepthEnforcementMode, PolicyCatalog, RuntimePolicy};
 use axon::rlm::{Rlm, RlmConfig};
 use axon::store::ContextStore;
 
@@ -28,7 +29,7 @@ struct Cli {
     #[arg(
         long,
         env = "AXON_BASE_URL",
-        default_value = "https://api.synthetic.new/openai/v1"
+        default_value = "https://api.synthetic.new/openai/v1/"
     )]
     base_url: Option<String>,
 
@@ -41,7 +42,7 @@ struct Cli {
     max_iterations: usize,
 
     /// Max recursion depth for sub-RLM calls (0 = direct LLM, no sandbox)
-    #[arg(long, default_value_t = 2)]
+    #[arg(long, default_value_t = 1)]
     max_depth: usize,
 
     /// Data directory for persistent context
@@ -55,6 +56,30 @@ struct Cli {
     /// Trace sandbox execution steps (code blocks, external calls, vars) to stderr
     #[arg(long)]
     trace_sandbox: bool,
+
+    /// Prompt policy profile name
+    #[arg(long, default_value = "baseline")]
+    policy_profile: String,
+
+    /// Prompt policy config path
+    #[arg(long, default_value = "config/prompt_policies.json")]
+    policy_config: PathBuf,
+
+    /// Prepend active policy text into context as an option
+    #[arg(long)]
+    inject_policy_into_context: bool,
+
+    /// Depth-enforcement mode
+    #[arg(long, value_enum, default_value_t = DepthEnforcementMode::Off)]
+    depth_enforcement: DepthEnforcementMode,
+
+    /// Strict mode minimum depth threshold (absolute depth)
+    #[arg(long)]
+    require_min_depth: Option<usize>,
+
+    /// Strict mode minimum recursive llm_query call count
+    #[arg(long)]
+    require_min_recursive_calls: Option<usize>,
 
     #[command(subcommand)]
     command: Commands,
@@ -133,6 +158,14 @@ async fn main() -> Result<()> {
 
     let client = build_client(cli.base_url.as_deref(), cli.api_key.as_deref());
     let store = ContextStore::new(&cli.data_dir);
+    let policy_catalog = PolicyCatalog::load(&cli.policy_config);
+    let default_runtime_policy = policy_catalog.build_runtime_policy(
+        Some(&cli.policy_profile),
+        Some(cli.inject_policy_into_context),
+        Some(cli.depth_enforcement),
+        cli.require_min_depth,
+        cli.require_min_recursive_calls,
+    );
 
     match cli.command {
         Commands::Query {
@@ -146,7 +179,7 @@ async fn main() -> Result<()> {
                 (None, None) => bail!("Provide --context <file> or --thread <id>"),
             };
 
-            let rlm = make_rlm(&client, &cli, 0);
+            let rlm = make_rlm(&client, &cli, 0, default_runtime_policy.clone());
             let answer = rlm.completion(query, &ctx).await?;
             println!("{}", answer);
         }
@@ -170,7 +203,7 @@ async fn main() -> Result<()> {
                 }
 
                 let ctx = store.read_context(thread);
-                let rlm = make_rlm(&client, &cli, 0);
+                let rlm = make_rlm(&client, &cli, 0, default_runtime_policy.clone());
 
                 eprintln!("Thinking...");
                 match rlm.completion(query, &ctx).await {
@@ -216,6 +249,8 @@ async fn main() -> Result<()> {
                 store,
                 cli.verbose,
                 cli.trace_sandbox,
+                policy_catalog,
+                default_runtime_policy,
             );
             server.run().await?;
         }
@@ -224,7 +259,7 @@ async fn main() -> Result<()> {
     Ok(())
 }
 
-fn make_rlm(client: &Client, cli: &Cli, depth: usize) -> Rlm {
+fn make_rlm(client: &Client, cli: &Cli, depth: usize, runtime_policy: RuntimePolicy) -> Rlm {
     Rlm::new(RlmConfig {
         client: client.clone(),
         model: cli.model.clone(),
@@ -234,5 +269,6 @@ fn make_rlm(client: &Client, cli: &Cli, depth: usize) -> Rlm {
         max_depth: cli.max_depth,
         verbose: cli.verbose,
         trace_sandbox: cli.trace_sandbox,
+        runtime_policy,
     })
 }

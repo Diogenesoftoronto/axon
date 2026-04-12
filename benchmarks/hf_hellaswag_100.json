@@ -1,0 +1,902 @@
+[
+  {
+    "id": "hellaswag_validation_0000",
+    "context": "Commonsense completion benchmark task.",
+    "query": "Choose the most plausible continuation. Return only the option index.\n\nContext: A man is sitting on a roof. he\nOptions:\n0) is using wrap to wrap a pair of skis.\n1) is ripping level tiles off.\n2) is holding a rubik's cube.\n3) starts pulling up roofing on a roof.",
+    "check": {
+      "type": "choice_exact",
+      "value": "3"
+    }
+  },
+  {
+    "id": "hellaswag_validation_0001",
+    "context": "Commonsense completion benchmark task.",
+    "query": "Choose the most plausible continuation. Return only the option index.\n\nContext: A lady walks to a barbell. She bends down and grabs the pole. the lady\nOptions:\n0) swings and lands in her arms.\n1) pulls the barbell forward.\n2) pulls a rope attached to the barbell.\n3) stands and lifts the weight over her head.",
+    "check": {
+      "type": "choice_exact",
+      "value": "3"
+    }
+  },
+  {
+    "id": "hellaswag_validation_0002",
+    "context": "Commonsense completion benchmark task.",
+    "query": "Choose the most plausible continuation. Return only the option index.\n\nContext: Two women in a child are shown in a canoe while a man pulls the canoe while standing in the water, with other individuals visible in the background. the child and a different man\nOptions:\n0) are then shown paddling down a river in a boat while a woman talks.\n1) are driving the canoe, they go down the river flowing side to side.\n2) sit in a canoe while the man paddles.\n3) walking go down the rapids, while the man in his helicopter almost falls and goes out of canoehood.",
+    "check": {
+      "type": "choice_exact",
+      "value": "2"
+    }
+  },
+  {
+    "id": "hellaswag_validation_0003",
+    "context": "Commonsense completion benchmark task.",
+    "query": "Choose the most plausible continuation. Return only the option index.\n\nContext: A boy is running down a track. the boy\nOptions:\n0) runs into a car.\n1) gets in a mat.\n2) lifts his body above the height of a pole.\n3) stands on his hands and springs.",
+    "check": {
+      "type": "choice_exact",
+      "value": "2"
+    }
+  },
+  {
+    "id": "hellaswag_validation_0004",
+    "context": "Commonsense completion benchmark task.",
+    "query": "Choose the most plausible continuation. Return only the option index.\n\nContext: The boy lifts his body above the height of a pole. The boy lands on his back on to a red mat. the boy\nOptions:\n0) turns his body around on the mat.\n1) gets up from the mat.\n2) continues to lift his body over the pole.\n3) wiggles out of the mat.",
+    "check": {
+      "type": "choice_exact",
+      "value": "1"
+    }
+  },
+  {
+    "id": "hellaswag_validation_0005",
+    "context": "Commonsense completion benchmark task.",
+    "query": "Choose the most plausible continuation. Return only the option index.\n\nContext: The boy lands on his back on to a red mat. The boy gets up from the mat. the boy\nOptions:\n0) starts doing spins.\n1) celebrates by clapping and flexing both arms.\n2) is dancing on the mat.\n3) does jump jacks on his stick.",
+    "check": {
+      "type": "choice_exact",
+      "value": "1"
+    }
+  },
+  {
+    "id": "hellaswag_validation_0006",
+    "context": "Commonsense completion benchmark task.",
+    "query": "Choose the most plausible continuation. Return only the option index.\n\nContext: A man is standing in front of a camera. He starts playing a harmonica for the camera. he\nOptions:\n0) begins to play the harmonica with his body while looking at the camera.\n1) seems to be singing while playing the harmonica.\n2) rocks back and forth to the music as he goes.\n3) painted a fence in front of the camera.",
+    "check": {
+      "type": "choice_exact",
+      "value": "2"
+    }
+  },
+  {
+    "id": "hellaswag_validation_0007",
+    "context": "Commonsense completion benchmark task.",
+    "query": "Choose the most plausible continuation. Return only the option index.\n\nContext: A cartoon animation video is shown with people wandering around and rockets being shot. two men\nOptions:\n0) fight robots of evil and ends with a to be continued.\n1) are then shown in closeups shooting a shot put.\n2) push a child in a speedboat in the water.\n3) look in the cameraman's eye and smile.",
+    "check": {
+      "type": "choice_exact",
+      "value": "0"
+    }
+  },
+  {
+    "id": "hellaswag_validation_0008",
+    "context": "Commonsense completion benchmark task.",
+    "query": "Choose the most plausible continuation. Return only the option index.\n\nContext: A man is holding a pocket knife while sitting on some rocks in the wilderness. then he\nOptions:\n0) opens a can of oil put oil on the knife, and puts oil on a knife and press it through a can filled with oil then cuts several pieces from the sandwiches.\n1) takes a small stone from the flowing river and smashes it on another stone.\n2) uses the knife to shave his leg.\n3) sand the rocks and tops them by using strong pressure.",
+    "check": {
+      "type": "choice_exact",
+      "value": "1"
+    }
+  },
+  {
+    "id": "hellaswag_validation_0009",
+    "context": "Commonsense completion benchmark task.",
+    "query": "Choose the most plausible continuation. Return only the option index.\n\nContext: Then he takes a small stone from the flowing river and smashes it on another stone. He starts to crush the small stone to smaller pieces. he\nOptions:\n0) cuts the center stone in half and blow it on to make it bigger.\n1) grind it hard to make the pieces smaller.\n2) eventually brings it back into view and adds it to the smaller ones to make a small triangular shaped piece.\n3) starts to party with them and throw the pieces by hand while they celebrate.",
+    "check": {
+      "type": "choice_exact",
+      "value": "1"
+    }
+  },
+  {
+    "id": "hellaswag_validation_0010",
+    "context": "Commonsense completion benchmark task.",
+    "query": "Choose the most plausible continuation. Return only the option index.\n\nContext: Then he takes a piece of bark and rubs the powered stone pieces onto it. The stone particles stick to the wet piece of wood. he\nOptions:\n0) uses a small brush to polish one of the stone pieces.\n1) then uses a strip of sealing tape to seal the board and then smooths the bottom of the board.\n2) walks towards the camera.\n3) then takes the knife and sharpens it against the wood piece.",
+    "check": {
+      "type": "choice_exact",
+      "value": "3"
+    }
+  },
+  {
+    "id": "hellaswag_validation_0011",
+    "context": "Commonsense completion benchmark task.",
+    "query": "Choose the most plausible continuation. Return only the option index.\n\nContext: The stone particles stick to the wet piece of wood. He then takes the knife and sharpens it against the wood piece. he\nOptions:\n0) then cuts off the excess hair of the wood.\n1) scrapes the wood with a broom in the cutting tool used in sharpening the instrument.\n2) writes on the board again.\n3) then notices a little black and green poisonous frog sitting next to him.",
+    "check": {
+      "type": "choice_exact",
+      "value": "3"
+    }
+  },
+  {
+    "id": "hellaswag_validation_0012",
+    "context": "Commonsense completion benchmark task.",
+    "query": "Choose the most plausible continuation. Return only the option index.\n\nContext: He then takes the knife and sharpens it against the wood piece. He then notices a little black and green poisonous frog sitting next to him. the frog\nOptions:\n0) eventually gets to get up and marches out of the room waving its body about.\n1) then starts to get up from the chair and begins walking towards the camera.\n2) then escapes and jumps away.\n3) is acting crazy and attacking him while he is cooking.",
+    "check": {
+      "type": "choice_exact",
+      "value": "2"
+    }
+  },
+  {
+    "id": "hellaswag_validation_0013",
+    "context": "Commonsense completion benchmark task.",
+    "query": "Choose the most plausible continuation. Return only the option index.\n\nContext: He then notices a little black and green poisonous frog sitting next to him. The frog then escapes and jumps away. he\nOptions:\n0) sits and hugs another man and also adjusts his camera.\n1) then sits there staring at his text machine as if he has actually been given a gift from god.\n2) explains how the frog secretes a poisonous fluid that can be extremely harmful.\n3) takes the frog on his hand and tickles the back of it.",
+    "check": {
+      "type": "choice_exact",
+      "value": "2"
+    }
+  },
+  {
+    "id": "hellaswag_validation_0014",
+    "context": "Commonsense completion benchmark task.",
+    "query": "Choose the most plausible continuation. Return only the option index.\n\nContext: A person is playing bagpipes out in a park. A man and two boys watching from a far. the camera\nOptions:\n0) shoots areas all around the park while the bagpipes play.\n1) is covered to the boy that is playing there.\n2) then goes black and we see a black opening scene.\n3) watching the boy and boy as they play a game of drums.",
+    "check": {
+      "type": "choice_exact",
+      "value": "0"
+    }
+  },
+  {
+    "id": "hellaswag_validation_0015",
+    "context": "Commonsense completion benchmark task.",
+    "query": "Choose the most plausible continuation. Return only the option index.\n\nContext: Two people are seen passing a ball back and fourth in a pool and leads into one speaking to the camera. the man\nOptions:\n0) dips the ball and walks back with the boy and pours detergent into a cup again.\n1) then throws the ball into the pool and begins running around with a sail in his hand while a group of men watch.\n2) then takes a drink having a conversation with another man and another man leads into him throwing balls in the water and laughing to the camera.\n3) demonstrates how to properly throw the ball with his hands while still speaking to the camera.",
+    "check": {
+      "type": "choice_exact",
+      "value": "3"
+    }
+  },
+  {
+    "id": "hellaswag_validation_0016",
+    "context": "Commonsense completion benchmark task.",
+    "query": "Choose the most plausible continuation. Return only the option index.\n\nContext: A woman is sitting at a table in a fast food restaurant while eating. She continually speaks to nobody as she eats. she\nOptions:\n0) is then seen sitting alone as she eats a cold brown ice cream.\n1) pauses in the process of eating to enjoy her food.\n2) stands up and grabs her purse, continuing to talk and laugh as she leaves.\n3) picks up another chocolate bar and chews it as she talks.",
+    "check": {
+      "type": "choice_exact",
+      "value": "2"
+    }
+  },
+  {
+    "id": "hellaswag_validation_0017",
+    "context": "Commonsense completion benchmark task.",
+    "query": "Choose the most plausible continuation. Return only the option index.\n\nContext: A group of cheerleaders run onto a stage before a cheering audience. they\nOptions:\n0) get into formation, then begin dancing and flipping as male cheerleaders join them.\n1) perform a cheer routine before the girls, along with makeup artists, spread out and pose.\n2) take turns jumping on each other like they are performing karate.\n3) are then shown performing the type of cheerleading dance, using batons and pole vaults.",
+    "check": {
+      "type": "choice_exact",
+      "value": "0"
+    }
+  },
+  {
+    "id": "hellaswag_validation_0018",
+    "context": "Commonsense completion benchmark task.",
+    "query": "Choose the most plausible continuation. Return only the option index.\n\nContext: A group of cheerleaders run onto a stage before a cheering audience. They get into formation, then begin dancing and flipping as male cheerleaders join them. they all\nOptions:\n0) dance and flip on stage while hanging their hats on the sides.\n1) continue dancing and flipping, doing hand springs.\n2) dance together with flip up their sleeves.\n3) perform their routines as the studio rashes to a halt with cheerleaders in the audience.",
+    "check": {
+      "type": "choice_exact",
+      "value": "1"
+    }
+  },
+  {
+    "id": "hellaswag_validation_0019",
+    "context": "Commonsense completion benchmark task.",
+    "query": "Choose the most plausible continuation. Return only the option index.\n\nContext: They get into formation, then begin dancing and flipping as male cheerleaders join them. They all continue dancing and flipping, doing hand springs. when they\nOptions:\n0) are done, they shake hands and walk away, but cheers are heard all around as they're finished.\n1) are finished, they jump up and down happily and walk off the stage, exhausted.\n2) are done, a male cheerleader is crowned and an instant replay is shown.\n3) come down from their workout, they all stop to bow and applaud, then they continue dancing.",
+    "check": {
+      "type": "choice_exact",
+      "value": "1"
+    }
+  },
+  {
+    "id": "hellaswag_validation_0020",
+    "context": "Commonsense completion benchmark task.",
+    "query": "Choose the most plausible continuation. Return only the option index.\n\nContext: A woman is reading a newspaper nearby while he speaks to her and shows her something in his hand. The man sharpens his knives using an electric tool. he\nOptions:\n0) sharpens and cuts something on a knife board using an electric tool.\n1) then continues cutting his onion.\n2) travels with his knife under the table and uses it also in his shoe.\n3) then shows her a spare knife that he has also used on a knife sharpener and drills into a side of the table.",
+    "check": {
+      "type": "choice_exact",
+      "value": "1"
+    }
+  },
+  {
+    "id": "hellaswag_validation_0021",
+    "context": "Commonsense completion benchmark task.",
+    "query": "Choose the most plausible continuation. Return only the option index.\n\nContext: A man is outside of a building. He is using commercial lawn mowing equipment. he\nOptions:\n0) walks back and forth as he mows the grass.\n1) is animated as he does the task.\n2) relaxes, making sure his lawn is pristine.\n3) runs from one side of the building to the other.",
+    "check": {
+      "type": "choice_exact",
+      "value": "0"
+    }
+  },
+  {
+    "id": "hellaswag_validation_0022",
+    "context": "Commonsense completion benchmark task.",
+    "query": "Choose the most plausible continuation. Return only the option index.\n\nContext: Children bring desert out for their family member. the family\nOptions:\n0) floats in a river.\n1) member stands looking into a hut and then handing people photographs.\n2) member cuts a piece of sunscreen.\n3) enjoys eating the desert together.",
+    "check": {
+      "type": "choice_exact",
+      "value": "3"
+    }
+  },
+  {
+    "id": "hellaswag_validation_0023",
+    "context": "Commonsense completion benchmark task.",
+    "query": "Choose the most plausible continuation. Return only the option index.\n\nContext: The family enjoys eating the desert together. The people in the restaurant laugh at the man and he wonders what they are doing. the man\nOptions:\n0) goes to the bathroom and isn't able to get very far.\n1) puts the glass aside and a fourth person walks in and walks away.\n2) plays the bagpipe and smiles and laughs as he enjoys the hospitality.\n3) gets up and walks away to the other room.",
+    "check": {
+      "type": "choice_exact",
+      "value": "3"
+    }
+  },
+  {
+    "id": "hellaswag_validation_0024",
+    "context": "Commonsense completion benchmark task.",
+    "query": "Choose the most plausible continuation. Return only the option index.\n\nContext: A black female is shown in a room with a black scarf around her head. black spots on her faced\nOptions:\n0) are then zoomed in on and she begins to apply something on it.\n1) are shown and she misses a little bit of her swing.\n2) are shown and one finger is seen poking through.\n3) are shown as she continues to dance around on the hardwood and every move makes a lash on her face.",
+    "check": {
+      "type": "choice_exact",
+      "value": "0"
+    }
+  },
+  {
+    "id": "hellaswag_validation_0025",
+    "context": "Commonsense completion benchmark task.",
+    "query": "Choose the most plausible continuation. Return only the option index.\n\nContext: A black female is shown in a room with a black scarf around her head. Black spots on her faced are then zoomed in on and she begins to apply something on it. next\nOptions:\n0) , she begins to brush her lips and make painted lips look just like a lipstick to the camera and ends with her closing gift and instruction showing her off at the end.\n1) she is shown in various different locations and gets extremely close to a wall.\n2) , she is shown making multiple moans and sprays some kind of liquid down her face before hanging up.\n3) , she takes some spray and it makes her skin extremely oily and she continues to talk until the video is over.",
+    "check": {
+      "type": "choice_exact",
+      "value": "3"
+    }
+  },
+  {
+    "id": "hellaswag_validation_0026",
+    "context": "Commonsense completion benchmark task.",
+    "query": "Choose the most plausible continuation. Return only the option index.\n\nContext: A helicopter flies in some people who then start playing paintball. they\nOptions:\n0) run around obstacles and have a great time.\n1) lose their shirt during the fight and run back the others.\n2) shoot at each other while the helicopter drone who am looking on.\n3) chase a bird in the sky while others walk around.",
+    "check": {
+      "type": "choice_exact",
+      "value": "0"
+    }
+  },
+  {
+    "id": "hellaswag_validation_0027",
+    "context": "Commonsense completion benchmark task.",
+    "query": "Choose the most plausible continuation. Return only the option index.\n\nContext: A young boy and girl are standing over a sink with their mother talking. the mother\nOptions:\n0) is now putting lipstick on the boy's mouth and he tries to stop her but only gets a little bit stuck.\n1) washes the boy while the child grabs shampoo.\n2) shows some shaving cream on the boy who is scrubbing her brushes.\n3) instructs them on how to brush their teeth while laughing.",
+    "check": {
+      "type": "choice_exact",
+      "value": "3"
+    }
+  },
+  {
+    "id": "hellaswag_validation_0028",
+    "context": "Commonsense completion benchmark task.",
+    "query": "Choose the most plausible continuation. Return only the option index.\n\nContext: A young boy and girl are standing over a sink with their mother talking. The mother instructs them on how to brush their teeth while laughing. the boy\nOptions:\n0) puts a shirt on and rubs his mouth.\n1) helps his younger sister brush his teeth.\n2) walks with an empty mouthwash cup on a sink floor.\n3) and girl then begin working out.",
+    "check": {
+      "type": "choice_exact",
+      "value": "1"
+    }
+  },
+  {
+    "id": "hellaswag_validation_0029",
+    "context": "Commonsense completion benchmark task.",
+    "query": "Choose the most plausible continuation. Return only the option index.\n\nContext: The mother instructs them on how to brush their teeth while laughing. The boy helps his younger sister brush his teeth. she\nOptions:\n0) shows how to hit the mom and then kiss his dad as well.\n1) brushes past the camera, looking better soon after.\n2) glows from the center of the camera as a reaction.\n3) gets them some water to gargle in their mouths.",
+    "check": {
+      "type": "choice_exact",
+      "value": "3"
+    }
+  },
+  {
+    "id": "hellaswag_validation_0030",
+    "context": "Commonsense completion benchmark task.",
+    "query": "Choose the most plausible continuation. Return only the option index.\n\nContext: She gets them some water to gargle in their mouths. The boy and girl begin playing in the sink. the woman\nOptions:\n0) shakes her head in disbelief and waves at her.\n1) laughs at the children dribbling water.\n2) comes back and talks to the boys.\n3) gets some food out of the fridge and they continue playing together.",
+    "check": {
+      "type": "choice_exact",
+      "value": "1"
+    }
+  },
+  {
+    "id": "hellaswag_validation_0031",
+    "context": "Commonsense completion benchmark task.",
+    "query": "Choose the most plausible continuation. Return only the option index.\n\nContext: A cat is sitting in a cat bed. It is licking its paw. it\nOptions:\n0) then wipes its paw on its ear.\n1) crawls to the door.\n2) 's laying down about six inches away from the camera.\n3) crawls on one foot to get closer to the camera.",
+    "check": {
+      "type": "choice_exact",
+      "value": "0"
+    }
+  },
+  {
+    "id": "hellaswag_validation_0032",
+    "context": "Commonsense completion benchmark task.",
+    "query": "Choose the most plausible continuation. Return only the option index.\n\nContext: A man in brown jacket is pulling out an arrow from the target board, then he was talking to the camera, then he pull out his bow and started to use it with his bow to hit the target board, he fired his bows several times. the man\nOptions:\n0) played paper if and shoot the arrows to hit the target, then he hang from the board with his bow and arrow.\n1) went to the target board and talked to the camera.\n2) eventually throw the arrow, but it flew into the gravel is near the targets.\n3) have his bow as he talk to the camera, he pulled it out to show how to put with its flex, tighten, and notch that was attached to his bow.",
+    "check": {
+      "type": "choice_exact",
+      "value": "1"
+    }
+  },
+  {
+    "id": "hellaswag_validation_0033",
+    "context": "Commonsense completion benchmark task.",
+    "query": "Choose the most plausible continuation. Return only the option index.\n\nContext: A man walks outside plugs his lawn mower in and gets ready to mow. he\nOptions:\n0) drives through the grass while drinking from a large cup of water and carrying his lawn mower.\n1) walks off the porch and goes back inside.\n2) starts mowing his lawn casually going over all the grass.\n3) does this multiple times until a pale orange moon appears overhead.",
+    "check": {
+      "type": "choice_exact",
+      "value": "2"
+    }
+  },
+  {
+    "id": "hellaswag_validation_0034",
+    "context": "Commonsense completion benchmark task.",
+    "query": "Choose the most plausible continuation. Return only the option index.\n\nContext: A man walks outside plugs his lawn mower in and gets ready to mow. He starts mowing his lawn casually going over all the grass. his dog\nOptions:\n0) comes outside and starts to follow him a little while he's closer to the house.\n1) comes outside and takes a closer look at the man mowing, after he picks up the mower.\n2) runs loose and feeds on his movements.\n3) is having a seizure and starts to hop all over the lawn as he walks around.",
+    "check": {
+      "type": "choice_exact",
+      "value": "0"
+    }
+  },
+  {
+    "id": "hellaswag_validation_0035",
+    "context": "Commonsense completion benchmark task.",
+    "query": "Choose the most plausible continuation. Return only the option index.\n\nContext: He starts mowing his lawn casually going over all the grass. His dog comes outside and starts to follow him a little while he's closer to the house. the yard\nOptions:\n0) is slowly starting to look really really nice, once he is completely finished the yard looks great, nice and smooth.\n1) is very neat and clean and very active under the circumstances.\n2) gets mowed quicker by the dog.\n3) eventually looks happy on the outside and appears to be going pretty happily.",
+    "check": {
+      "type": "choice_exact",
+      "value": "0"
+    }
+  },
+  {
+    "id": "hellaswag_validation_0036",
+    "context": "Commonsense completion benchmark task.",
+    "query": "Choose the most plausible continuation. Return only the option index.\n\nContext: A sea is shown with a green forest on seashore. Blond man is standing in seashore and talking to the camera and surfing big waves on the sea. man\nOptions:\n0) is on ocean and swimming in white water snapping his head.\n1) is snowboarding up in the sea.\n2) is doing flips in the waters and on the rocks and he be water surfing.\n3) is walking on seashore through a lot of people and talking to the camera and holding an award and talking about surfing the seashore.",
+    "check": {
+      "type": "choice_exact",
+      "value": "3"
+    }
+  },
+  {
+    "id": "hellaswag_validation_0037",
+    "context": "Commonsense completion benchmark task.",
+    "query": "Choose the most plausible continuation. Return only the option index.\n\nContext: We see a bottle of face wash. we\nOptions:\n0) see a newspaper story.\n1) see four cookies in a pan.\n2) see a person holding face wash then putting it on their face.\n3) see a tool on a table.",
+    "check": {
+      "type": "choice_exact",
+      "value": "2"
+    }
+  },
+  {
+    "id": "hellaswag_validation_0038",
+    "context": "Commonsense completion benchmark task.",
+    "query": "Choose the most plausible continuation. Return only the option index.\n\nContext: We see a person holding face wash then putting it on their face. They rinse the face and add the face wash with a brush. we\nOptions:\n0) see a closing title screen.\n1) see a black screen with the credits.\n2) see an illustration on how to add the wash using a brush.\n3) then see a replay then the person putting the face wash on.",
+    "check": {
+      "type": "choice_exact",
+      "value": "2"
+    }
+  },
+  {
+    "id": "hellaswag_validation_0039",
+    "context": "Commonsense completion benchmark task.",
+    "query": "Choose the most plausible continuation. Return only the option index.\n\nContext: A person is seen throwing plaster onto a wall while the camera follows the person close behind. the person\nOptions:\n0) continues throwing ingredients down and leads into a person kicking a dirty toilet.\n1) gradually throws more and more onto the wall and the camera pans over the finished product.\n2) then uses paper to spread it all over the wall followed by others putting paper through with the plaster.\n3) is now seen putting wax all along the wall while still looking back to the camera.",
+    "check": {
+      "type": "choice_exact",
+      "value": "1"
+    }
+  },
+  {
+    "id": "hellaswag_validation_0040",
+    "context": "Commonsense completion benchmark task.",
+    "query": "Choose the most plausible continuation. Return only the option index.\n\nContext: More and more people begin talking and each of them has a bottle of sun screen and starts to squirt it on their arms in effort to protect their skin. a small blue bottle of the sun screen\nOptions:\n0) appears and then different people carry it to a table where they mix the liquid with a straw with a straw and take turns squirting the liquid into their skin.\n1) appears near each of their hair as they continue to talk but no bottle at all appear.\n2) is then shown and several more people begin talking about the product.\n3) zooms in on sheers that they have on the floor.",
+    "check": {
+      "type": "choice_exact",
+      "value": "2"
+    }
+  },
+  {
+    "id": "hellaswag_validation_0041",
+    "context": "Commonsense completion benchmark task.",
+    "query": "Choose the most plausible continuation. Return only the option index.\n\nContext: A group of boys are standing in a room with many clear cups of beer on a table they are all standing around. the boys\nOptions:\n0) take a flute together and then begin to play the harmonica using it to play the tune.\n1) begin to wrap red bow around the plastic cups, put bows on the bottoms _start_various objects on the foam covers and belongings to the floor.\n2) talk, laugh and tease each other before beginning a game of beer pong across a long table using a triangle shaped array of clear cups.\n3) all grab one and chug their contents of the cans.",
+    "check": {
+      "type": "choice_exact",
+      "value": "2"
+    }
+  },
+  {
+    "id": "hellaswag_validation_0042",
+    "context": "Commonsense completion benchmark task.",
+    "query": "Choose the most plausible continuation. Return only the option index.\n\nContext: The boys talk, laugh and tease each other before beginning a game of beer pong across a long table using a triangle shaped array of clear cups. one of the ping pongs\nOptions:\n0) is knocked upside down, which causes the other teens to give each other high fives.\n1) tries to rise but dikes instead.\n2) rush walks up in front of the boys, removes a small piece of paper from the bottom of the table, puts a hand on the machine and wrestles with buttons, turns the machine off and pushes a button inside to turn the game back on.\n3) lands in the cup and one of the boys begins to drink the beer.",
+    "check": {
+      "type": "choice_exact",
+      "value": "3"
+    }
+  },
+  {
+    "id": "hellaswag_validation_0043",
+    "context": "Commonsense completion benchmark task.",
+    "query": "Choose the most plausible continuation. Return only the option index.\n\nContext: One of the ping pongs lands in the cup and one of the boys begins to drink the beer. the group\nOptions:\n0) of teens is sailing down the river with others sailing in the background.\n1) gets up together and poses with their vests to celebrate.\n2) continue to play beer pong when one final player is able to throw and land a ping pong ball while standing with his back to the cups at which point the boys celebrate, and laugh.\n3) does a trick and the liquid is poured on a second table.",
+    "check": {
+      "type": "choice_exact",
+      "value": "2"
+    }
+  },
+  {
+    "id": "hellaswag_validation_0044",
+    "context": "Commonsense completion benchmark task.",
+    "query": "Choose the most plausible continuation. Return only the option index.\n\nContext: There's a nbc news reporter wearing a red sweater and white shirt talking about dog grooming by scissor wizard a grooming company. the representative from the company\nOptions:\n0) is talking about the services they offer and how those dogs participate in dog shows.\n1) speaks to a woman sitting on a colorful conference room chair next to a brown dog kennel in front of them.\n2) tells viewers about a dog grooming company, itv with a website.\n3) in grey sweater and black pants talks about the procedures on grooming dogs in life and techniques.",
+    "check": {
+      "type": "choice_exact",
+      "value": "0"
+    }
+  },
+  {
+    "id": "hellaswag_validation_0045",
+    "context": "Commonsense completion benchmark task.",
+    "query": "Choose the most plausible continuation. Return only the option index.\n\nContext: The representative from the company is talking about the services they offer and how those dogs participate in dog shows. a groomer\nOptions:\n0) is seen using shears to creatively trim the dog's hair and even dye it in colorful shades of red, green, yellow and blue.\n1) is presenting cookies to the room with a loaf of bread.\n2) shows crowd opinion for use as their garden service representative.\n3) speaks to an older man about snow cleaning dogs and showing how it is flectious.",
+    "check": {
+      "type": "choice_exact",
+      "value": "0"
+    }
+  },
+  {
+    "id": "hellaswag_validation_0046",
+    "context": "Commonsense completion benchmark task.",
+    "query": "Choose the most plausible continuation. Return only the option index.\n\nContext: A woman tries to eat ice cream to a child, but the child refuses to eat the ice cream, then the woman eats the ice cream in the spoon. after\nOptions:\n0) , the woman gives ice cream to the child, and then the woman cleans the child's mouth.\n1) , the child takes out the fork the other child takes out the spoon and eats the ice cream.\n2) , the child and the woman tries to eat food without ice cream, then they sit and talk with adults in the room.\n3) , two people wearing red shirts pass through the store's door and inside the market and besides a man and a chimpanzee wearing silver uniforms are watching the woman and child.",
+    "check": {
+      "type": "choice_exact",
+      "value": "0"
+    }
+  },
+  {
+    "id": "hellaswag_validation_0047",
+    "context": "Commonsense completion benchmark task.",
+    "query": "Choose the most plausible continuation. Return only the option index.\n\nContext: After, the woman gives ice cream to the child, and then the woman cleans the child's mouth. an old woman\nOptions:\n0) feeds a boy ice cream.\n1) hold the child and eats the ice cream, after the woman is giving baby ice cream to the child.\n2) tries to stop the mother pray while giving a baby something else.\n3) is standing using a white blower to blow snow.",
+    "check": {
+      "type": "choice_exact",
+      "value": "0"
+    }
+  },
+  {
+    "id": "hellaswag_validation_0048",
+    "context": "Commonsense completion benchmark task.",
+    "query": "Choose the most plausible continuation. Return only the option index.\n\nContext: Men are lifting heavy weights over their head several times. A man in a blue shirt is watching one of the men. a man in a gray shirt\nOptions:\n0) is watching the men on the ground.\n1) hits a big weight in slow motion.\n2) is talking to one of the men in the middle of the gym.\n3) is mimicking the person lifting the weight.",
+    "check": {
+      "type": "choice_exact",
+      "value": "3"
+    }
+  },
+  {
+    "id": "hellaswag_validation_0049",
+    "context": "Commonsense completion benchmark task.",
+    "query": "Choose the most plausible continuation. Return only the option index.\n\nContext: In home pet groomers demonstrate how to groom a pet. the person\nOptions:\n0) puts a setting engage on the pets tongue and leash.\n1) starts at their butt rise, combing out the hair with a brush from a red.\n2) is demonstrating how the dog's hair is trimmed with electric shears at their grooming salon.\n3) installs and interacts with a sleeping pet before moving away.",
+    "check": {
+      "type": "choice_exact",
+      "value": "2"
+    }
+  },
+  {
+    "id": "hellaswag_validation_0050",
+    "context": "Commonsense completion benchmark task.",
+    "query": "Choose the most plausible continuation. Return only the option index.\n\nContext: A person polish a shoe with a wrapped finger. then\nOptions:\n0) , the person remove the wrapping paper to expose a shoe.\n1) , the person removes the heel heel from the shoe and polish.\n2) , the person grabs polish paste and water to polish the shoe.\n3) , a person polish the fingers, then the person puts a black polish.",
+    "check": {
+      "type": "choice_exact",
+      "value": "2"
+    }
+  },
+  {
+    "id": "hellaswag_validation_0051",
+    "context": "Commonsense completion benchmark task.",
+    "query": "Choose the most plausible continuation. Return only the option index.\n\nContext: Eight people are standing at the studio, one woman walked at the back of the group. the group\nOptions:\n0) then begins marching down a fitness track, demonstrating steps, going forward and backward, in between takes several breaks to lift their feet.\n1) is gathered around a long table into a dance routine.\n2) started dancing, swirling, shaking their hips, rotating, their arms and hands are moving from side to side, in front.\n3) continue to discuss the topic of volleyball.",
+    "check": {
+      "type": "choice_exact",
+      "value": "2"
+    }
+  },
+  {
+    "id": "hellaswag_validation_0052",
+    "context": "Commonsense completion benchmark task.",
+    "query": "Choose the most plausible continuation. Return only the option index.\n\nContext: A man is seen talking to the camera and presents his knife and sharpener. He then glides the knife down the sharpener and shows how other knives work with different sharpeners. he\nOptions:\n0) then repeats his advice and using more wax.\n1) shows the using the sharpener on a piece of wood.\n2) presents the knife one last time while still speaking to the camera.\n3) uses scissors to cut the blade as well as metal and talk to the camera at the end.",
+    "check": {
+      "type": "choice_exact",
+      "value": "2"
+    }
+  },
+  {
+    "id": "hellaswag_validation_0053",
+    "context": "Commonsense completion benchmark task.",
+    "query": "Choose the most plausible continuation. Return only the option index.\n\nContext: A man walks onto the stage to join a band. a man\nOptions:\n0) plays harp and flute while two other people play instruments next to him.\n1) and woman dance around together on the stage.\n2) dance on the ropes attached to the stage.\n3) plays up front of a band with a harmonica.",
+    "check": {
+      "type": "choice_exact",
+      "value": "3"
+    }
+  },
+  {
+    "id": "hellaswag_validation_0054",
+    "context": "Commonsense completion benchmark task.",
+    "query": "Choose the most plausible continuation. Return only the option index.\n\nContext: A man walks onto the stage to join a band. A man plays up front of a band with a harmonica. the keyboardist\nOptions:\n0) plays the hip hop and dance moves with the band.\n1) plays a spirited solo during the song.\n2) plays his guitar while moving his body around in front of the band.\n3) sings with the band, twirling his violin as he walks.",
+    "check": {
+      "type": "choice_exact",
+      "value": "1"
+    }
+  },
+  {
+    "id": "hellaswag_validation_0055",
+    "context": "Commonsense completion benchmark task.",
+    "query": "Choose the most plausible continuation. Return only the option index.\n\nContext: A camera pans away from a road and shows a person's feet moving around. several shots\nOptions:\n0) are shown of people riding up a mountain on skis while being pulled down by a rope.\n1) are shown of people tying their shoes, hitting a button, and checking a watch.\n2) are shown of people wake boarding.\n3) are then shown of people riding on snowboards over mountains.",
+    "check": {
+      "type": "choice_exact",
+      "value": "1"
+    }
+  },
+  {
+    "id": "hellaswag_validation_0056",
+    "context": "Commonsense completion benchmark task.",
+    "query": "Choose the most plausible continuation. Return only the option index.\n\nContext: A camera pans away from a road and shows a person's feet moving around. Several shots are shown of people tying their shoes, hitting a button, and checking a watch. people\nOptions:\n0) march around a room wearing funny hats, hats, and shoes.\n1) then are shown washing a car.\n2) are then seen running down the road one at a time followed by many more following.\n3) walk along a road, using bicycles and bagpipes.",
+    "check": {
+      "type": "choice_exact",
+      "value": "2"
+    }
+  },
+  {
+    "id": "hellaswag_validation_0057",
+    "context": "Commonsense completion benchmark task.",
+    "query": "Choose the most plausible continuation. Return only the option index.\n\nContext: A gymnast put power chalk power on his hands and stands near the pommel horse. then\nOptions:\n0) , the gymnast put strength and power item on his body and falls.\n1) , the gymnast approach the pommel horse to spin around many times.\n2) , the gymnast blade the board and stands in position facing the pommel horse doing blade moves.\n3) , the gymnast moves around and flips the chalk power to full weight and continues gymnastics for the next competition, after he turns and stands near the pommel horse.",
+    "check": {
+      "type": "choice_exact",
+      "value": "1"
+    }
+  },
+  {
+    "id": "hellaswag_validation_0058",
+    "context": "Commonsense completion benchmark task.",
+    "query": "Choose the most plausible continuation. Return only the option index.\n\nContext: A gymnast put power chalk power on his hands and stands near the pommel horse. Then, the gymnast approach the pommel horse to spin around many times. then\nOptions:\n0) , the gymnast stand on his hand and jumps to land on the floor, while people applaud.\n1) , the gymnast put the star light on his hands and jumps high using strength.\n2) , the gymnast puts fluid on the pommel horse and sit on it to rise the body while position it.\n3) , the gymnast cross the pommel horse with the long rope while performing handsprings.",
+    "check": {
+      "type": "choice_exact",
+      "value": "0"
+    }
+  },
+  {
+    "id": "hellaswag_validation_0059",
+    "context": "Commonsense completion benchmark task.",
+    "query": "Choose the most plausible continuation. Return only the option index.\n\nContext: A logo shows that this video is presented by expert village. a man in a small blue boat\nOptions:\n0) is pushing a kress of water in a lake while instructing his boarder.\n1) discusses the topic of hand surfing in a hole and gives hints on how to perform this activity.\n2) , in the middle of a lake, is skiing.\n3) is in the water pushing a boat with a sail.",
+    "check": {
+      "type": "choice_exact",
+      "value": "1"
+    }
+  },
+  {
+    "id": "hellaswag_validation_0060",
+    "context": "Commonsense completion benchmark task.",
+    "query": "Choose the most plausible continuation. Return only the option index.\n\nContext: A man in a small blue boat discusses the topic of hand surfing in a hole and gives hints on how to perform this activity. the man\nOptions:\n0) demonstrates how to properly back up a hand surf by requiring an anchor.\n1) demonstrates tricks that can be done while performing this activity.\n2) in the small blue boat holds a fish in his hands and then holds the fish while talking about the technique needed to perform this activity.\n3) is omic on the water as he's riding the speedo on the aerobic machine still pointing down at the water.",
+    "check": {
+      "type": "choice_exact",
+      "value": "1"
+    }
+  },
+  {
+    "id": "hellaswag_validation_0061",
+    "context": "Commonsense completion benchmark task.",
+    "query": "Choose the most plausible continuation. Return only the option index.\n\nContext: The camera pans to show a man playing a harmonica while sitting on a log beside a river. A woman walks near the train tracks while a train drives by. the woman\nOptions:\n0) continues just playing with the tunes she made.\n1) sees the harmonica playing man in the distance.\n2) taps a horn intermittently as the camera pans right.\n3) plays a song on her harmonica while walking away from the train.",
+    "check": {
+      "type": "choice_exact",
+      "value": "1"
+    }
+  },
+  {
+    "id": "hellaswag_validation_0062",
+    "context": "Commonsense completion benchmark task.",
+    "query": "Choose the most plausible continuation. Return only the option index.\n\nContext: A woman walks near the train tracks while a train drives by. The woman sees the harmonica playing man in the distance. she\nOptions:\n0) comes back to the train and continues walking on the subway.\n1) walks around the rail of the tracks and watches the scenery and the crowds of people.\n2) watches him and listens to him playing.\n3) begins playing with the harmonica and stops.",
+    "check": {
+      "type": "choice_exact",
+      "value": "2"
+    }
+  },
+  {
+    "id": "hellaswag_validation_0063",
+    "context": "Commonsense completion benchmark task.",
+    "query": "Choose the most plausible continuation. Return only the option index.\n\nContext: The woman sees the harmonica playing man in the distance. She watches him and listens to him playing. She walks away leaving the man. the man\nOptions:\n0) takes out a wall show from his guitar.\n1) finishes playing and remains seated.\n2) jumps over a barrier and lands on the sandy beach.\n3) plays in a house while the woman looks on.",
+    "check": {
+      "type": "choice_exact",
+      "value": "1"
+    }
+  },
+  {
+    "id": "hellaswag_validation_0064",
+    "context": "Commonsense completion benchmark task.",
+    "query": "Choose the most plausible continuation. Return only the option index.\n\nContext: A person is shown looking around a city and begins washing windows with his tools. he\nOptions:\n0) then brushes right through the window and cleans it off.\n1) uses a large block cutter to remove smaller blocks until he has the whole of the window covered.\n2) puts water on a hose and begins cleaning the windows.\n3) goes up and down the windows at a rapid pace and continues filming himself through the glass.",
+    "check": {
+      "type": "choice_exact",
+      "value": "3"
+    }
+  },
+  {
+    "id": "hellaswag_validation_0065",
+    "context": "Commonsense completion benchmark task.",
+    "query": "Choose the most plausible continuation. Return only the option index.\n\nContext: A person is shown looking around a city and begins washing windows with his tools. He goes up and down the windows at a rapid pace and continues filming himself through the glass. he\nOptions:\n0) continues to work by scrubbing the windows and then by pouring water out.\n1) takes his clothes off and hangs them up before throwing his plaid shirt into the laundry.\n2) finishes the glass in record time and turns off the camera.\n3) spins around to show the different angles of the board and shows pictures of the house in the end.",
+    "check": {
+      "type": "choice_exact",
+      "value": "2"
+    }
+  },
+  {
+    "id": "hellaswag_validation_0066",
+    "context": "Commonsense completion benchmark task.",
+    "query": "Choose the most plausible continuation. Return only the option index.\n\nContext: A man dressed in yellow and black winter clothes ice fishes on a a frozen lake. the man\nOptions:\n0) is reeling in a fish for a long time.\n1) spins with his fishing pole in the air.\n2) does a trick on his dirty ice fishing line.\n3) does numerous tricks as he goes through these beauty course courses of ice covered lakes.",
+    "check": {
+      "type": "choice_exact",
+      "value": "0"
+    }
+  },
+  {
+    "id": "hellaswag_validation_0067",
+    "context": "Commonsense completion benchmark task.",
+    "query": "Choose the most plausible continuation. Return only the option index.\n\nContext: A man dressed in yellow and black winter clothes ice fishes on a a frozen lake. The man is reeling in a fish for a long time. the mans catch\nOptions:\n0) more fish and throws them to the side.\n1) finally reaches the surface.\n2) a fish for dinner by making a wish with his mouth.\n3) one and puts it on a fishing pole in the lake.",
+    "check": {
+      "type": "choice_exact",
+      "value": "1"
+    }
+  },
+  {
+    "id": "hellaswag_validation_0068",
+    "context": "Commonsense completion benchmark task.",
+    "query": "Choose the most plausible continuation. Return only the option index.\n\nContext: Two children are seen sitting in a tub rubbing their faces and another person's hands interacting. the boy\nOptions:\n0) continues to rub water all over his face as well as play with toys and smile at the cameraman.\n1) walks out of the bathroom laughing to the camera and the girl stands up to rinse her face off.\n2) then begins washing the other child and ends by copulating with him.\n3) is now seen pointing down by himself and leads into him holding a comb and blow dryer and speaking to others.",
+    "check": {
+      "type": "choice_exact",
+      "value": "0"
+    }
+  },
+  {
+    "id": "hellaswag_validation_0069",
+    "context": "Commonsense completion benchmark task.",
+    "query": "Choose the most plausible continuation. Return only the option index.\n\nContext: A woman hands a young boy a stick with a little girl grabbing for her attention. the pinata\nOptions:\n0) is lifted and the boy begins swinging at the object.\n1) pops, and a child in white attempts to hit the pinata, but fails.\n2) pops out of the playground.\n3) is hit one after the other, and the girl lets go her hold.",
+    "check": {
+      "type": "choice_exact",
+      "value": "0"
+    }
+  },
+  {
+    "id": "hellaswag_validation_0070",
+    "context": "Commonsense completion benchmark task.",
+    "query": "Choose the most plausible continuation. Return only the option index.\n\nContext: A woman hands a young boy a stick with a little girl grabbing for her attention. The pinata is lifted and the boy begins swinging at the object. the camera\nOptions:\n0) zooms in on the pinata and then the girl.\n1) is upside down so everyone else can't see the object.\n2) pans around people watching while he hits the pinata and a little boy is seen clapping behind him.\n3) zooms in on the boy's head and he looks at the pinata person in the background.",
+    "check": {
+      "type": "choice_exact",
+      "value": "2"
+    }
+  },
+  {
+    "id": "hellaswag_validation_0071",
+    "context": "Commonsense completion benchmark task.",
+    "query": "Choose the most plausible continuation. Return only the option index.\n\nContext: A woman is playing a violin on the street while various people walk around here and behind her. she\nOptions:\n0) continues to play violin while people pass by her.\n1) continues playing the violin and beginning to intermittently move the sticks up and down.\n2) smiles into the camera while playing and continues playing the song while several people bend down to tip her and walk around her.\n3) finishes and walks off, leaving the violin lying on the ground.",
+    "check": {
+      "type": "choice_exact",
+      "value": "2"
+    }
+  },
+  {
+    "id": "hellaswag_validation_0072",
+    "context": "Commonsense completion benchmark task.",
+    "query": "Choose the most plausible continuation. Return only the option index.\n\nContext: Various pictures of food are shown followed by a person cutting up vegetables and mixing various ingredients into a pot. he\nOptions:\n0) shows how the vegetables are chopped for seasoning and then sprinkled into broth and shown with the water boiling.\n1) cooks up a meal and each are shown eating inside the pot.\n2) boils food into a bowl and then adds some part of a salad into the bowl.\n3) then cuts up a piece of bread, scoops out the insides, and fries up some meat.",
+    "check": {
+      "type": "choice_exact",
+      "value": "3"
+    }
+  },
+  {
+    "id": "hellaswag_validation_0073",
+    "context": "Commonsense completion benchmark task.",
+    "query": "Choose the most plausible continuation. Return only the option index.\n\nContext: Ingredients are sitting on a wooden block. a person\nOptions:\n0) adds flour to a baking pan.\n1) starts mixing the ingredients together.\n2) puts salt, lemon juice in a pot, then adds eggs, cheese, ham, and some other hoagies.\n3) is mixing the ingredients in an iron.",
+    "check": {
+      "type": "choice_exact",
+      "value": "1"
+    }
+  },
+  {
+    "id": "hellaswag_validation_0074",
+    "context": "Commonsense completion benchmark task.",
+    "query": "Choose the most plausible continuation. Return only the option index.\n\nContext: A man is seen walking closer to a pinata while a large group of people stand around him. the man\nOptions:\n0) shows off various tapers while swinging at the pinata and throwing them out to the crowd.\n1) then throws the pin while others watch on the sides.\n2) spins around several times and throws the stick.\n3) misses the pinata and hits a person behind him, shown again in slow motion.",
+    "check": {
+      "type": "choice_exact",
+      "value": "3"
+    }
+  },
+  {
+    "id": "hellaswag_validation_0075",
+    "context": "Commonsense completion benchmark task.",
+    "query": "Choose the most plausible continuation. Return only the option index.\n\nContext: A pair of female hands uses an iron on a piece of baby clothing. the woman\nOptions:\n0) wets the garment and scrubs it with a cloth.\n1) peels the old clothing off the piece and replaces it with dry material.\n2) sets the iron aside and flips the clothing.\n3) wraps the garment on top of the blouse, then irons it.",
+    "check": {
+      "type": "choice_exact",
+      "value": "2"
+    }
+  },
+  {
+    "id": "hellaswag_validation_0076",
+    "context": "Commonsense completion benchmark task.",
+    "query": "Choose the most plausible continuation. Return only the option index.\n\nContext: A pair of female hands uses an iron on a piece of baby clothing. The woman sets the iron aside and flips the clothing. the woman\nOptions:\n0) then undresses and irons the shirt.\n1) places a pair of pants into a bucket.\n2) shows how to iron a sock correctly.\n3) uses the iron on the other side of the clothing.",
+    "check": {
+      "type": "choice_exact",
+      "value": "3"
+    }
+  },
+  {
+    "id": "hellaswag_validation_0077",
+    "context": "Commonsense completion benchmark task.",
+    "query": "Choose the most plausible continuation. Return only the option index.\n\nContext: The woman sets the iron aside and flips the clothing. The woman uses the iron on the other side of the clothing. the woman\nOptions:\n0) scrubs the clothing with her hands.\n1) quickly picks up and irons, flames dancing over the clothing.\n2) sets the iron aside.\n3) crosses her arms in front of her and it's gone.",
+    "check": {
+      "type": "choice_exact",
+      "value": "2"
+    }
+  },
+  {
+    "id": "hellaswag_validation_0078",
+    "context": "Commonsense completion benchmark task.",
+    "query": "Choose the most plausible continuation. Return only the option index.\n\nContext: We see a chair with a pillow on it. a man holding a cat\nOptions:\n0) does curling.\n1) starts hitting objects on an item.\n2) sits down on the chair.\n3) is wrapping a box.",
+    "check": {
+      "type": "choice_exact",
+      "value": "2"
+    }
+  },
+  {
+    "id": "hellaswag_validation_0079",
+    "context": "Commonsense completion benchmark task.",
+    "query": "Choose the most plausible continuation. Return only the option index.\n\nContext: We see a chair with a pillow on it. A man holding a cat sits down on the chair. The man clips the cats fingernails. the man\nOptions:\n0) strokes the cat's head.\n1) then clips the cat nails.\n2) puts the cat down and boxes it with paper.\n3) gives the cats ears.",
+    "check": {
+      "type": "choice_exact",
+      "value": "0"
+    }
+  },
+  {
+    "id": "hellaswag_validation_0080",
+    "context": "Commonsense completion benchmark task.",
+    "query": "Choose the most plausible continuation. Return only the option index.\n\nContext: A man holding a cat sits down on the chair. The man clips the cats fingernails. The man strokes the cat's head. the man\nOptions:\n0) sits back down on the chair.\n1) takes the cat to the other room.\n2) stands up and walks down the sidewalk.\n3) plays with the cat rocking it back and forth.",
+    "check": {
+      "type": "choice_exact",
+      "value": "3"
+    }
+  },
+  {
+    "id": "hellaswag_validation_0081",
+    "context": "Commonsense completion benchmark task.",
+    "query": "Choose the most plausible continuation. Return only the option index.\n\nContext: A young girl in a green leotard begins twirling a baton and doing tricks. the girl\nOptions:\n0) does this in the beginning while using her foot and one hand to move around her body.\n1) begins to do some of her routine and does a few hip spins.\n2) puts their hands together, and twirl together like a ballet dancer.\n3) begins to incorporate her arms and does a flip and continues to flip the baton over her hands and arms.",
+    "check": {
+      "type": "choice_exact",
+      "value": "3"
+    }
+  },
+  {
+    "id": "hellaswag_validation_0082",
+    "context": "Commonsense completion benchmark task.",
+    "query": "Choose the most plausible continuation. Return only the option index.\n\nContext: The girl begins to incorporate her arms and does a flip and continues to flip the baton over her hands and arms. as the young lady\nOptions:\n0) continues her performance, she twirls the baton between her legs and over her head, catches it and does a gallop.\n1) is still serving the baton, she places the extension on her left hand and does a full 180 degree spin in one flip.\n2) becomes more involved in the ballet, she does a final dismount to bring her elbows down and her upper body straight.\n3) is zapping her arms and is practicing her baton twirling technique, she grabs the baton from the ground and shows herself victorious while her coach claps.",
+    "check": {
+      "type": "choice_exact",
+      "value": "0"
+    }
+  },
+  {
+    "id": "hellaswag_validation_0083",
+    "context": "Commonsense completion benchmark task.",
+    "query": "Choose the most plausible continuation. Return only the option index.\n\nContext: As the young lady continues her performance, she twirls the baton between her legs and over her head, catches it and does a gallop. the rest of the young girl's performance\nOptions:\n0) is replayed in slow motion.\n1) is a set of twirls and twist and then she runs off the floor to finish her performance.\n2) is shown several times and ends by showcasing her back to the both the camera and a final focus of her performance.\n3) is replayed, ending with the young lady clapping her hands joyfully.",
+    "check": {
+      "type": "choice_exact",
+      "value": "1"
+    }
+  },
+  {
+    "id": "hellaswag_validation_0084",
+    "context": "Commonsense completion benchmark task.",
+    "query": "Choose the most plausible continuation. Return only the option index.\n\nContext: We see a man in a driveway cleaning snow from his car. the man\nOptions:\n0) cleans the snow under his windshield wipers.\n1) wet his car and wipes it down.\n2) moves the snow out of the front bumper of his car and pours gasoline on it.\n3) removes the pieces of the line off his windshield.",
+    "check": {
+      "type": "choice_exact",
+      "value": "0"
+    }
+  },
+  {
+    "id": "hellaswag_validation_0085",
+    "context": "Commonsense completion benchmark task.",
+    "query": "Choose the most plausible continuation. Return only the option index.\n\nContext: We see a man in a driveway cleaning snow from his car. The man cleans the snow under his windshield wipers. we\nOptions:\n0) see the old man's garage and what looks like a boat in the water.\n1) see the building behind the car.\n2) zoom in on the cabin.\n3) see the mans silver car gliding by in the background.",
+    "check": {
+      "type": "choice_exact",
+      "value": "1"
+    }
+  },
+  {
+    "id": "hellaswag_validation_0086",
+    "context": "Commonsense completion benchmark task.",
+    "query": "Choose the most plausible continuation. Return only the option index.\n\nContext: The man cleans the snow under his windshield wipers. We see the building behind the car. We do a 360 spin to see the parking lot. the man\nOptions:\n0) finishes and turns off the wipers.\n1) opens the doors on his car and gets in.\n2) finishes and slides out of the car.\n3) puts up the camera.",
+    "check": {
+      "type": "choice_exact",
+      "value": "1"
+    }
+  },
+  {
+    "id": "hellaswag_validation_0087",
+    "context": "Commonsense completion benchmark task.",
+    "query": "Choose the most plausible continuation. Return only the option index.\n\nContext: A man in a blue shirt and shorts lifts a large weight over his head. Another man is filming it. The same man comes back and lifts the weight over his head again. he\nOptions:\n0) drops it on the ground and walks away.\n1) again lifts the weight over his head.\n2) drops it and runs towards the camera.\n3) drops it onto the floor where it gets stuck.",
+    "check": {
+      "type": "choice_exact",
+      "value": "0"
+    }
+  },
+  {
+    "id": "hellaswag_validation_0088",
+    "context": "Commonsense completion benchmark task.",
+    "query": "Choose the most plausible continuation. Return only the option index.\n\nContext: A man is seen throwing a dart onto a board and leads into a woman speaking. the man\nOptions:\n0) tosses darts into the water while people measure the distance and run after them.\n1) gives her several tips and she continues creating darts.\n2) throws several more darts while taking the time to speak to the woman.\n3) holds behind him and the woman continues speaking.",
+    "check": {
+      "type": "choice_exact",
+      "value": "2"
+    }
+  },
+  {
+    "id": "hellaswag_validation_0089",
+    "context": "Commonsense completion benchmark task.",
+    "query": "Choose the most plausible continuation. Return only the option index.\n\nContext: A group of people are standing in the middle of a forest with a trail of pebbles separating them from a beautiful crystal clear body of water. the camera\nOptions:\n0) then goes right side up and shows a lot of scenery on the left side.\n1) follows the couple kayaking behind the group on the trail moving back and fourth on the murky water in the forest.\n2) moves across the water and several people on boats and jet-skis are moving in the water near a large wave.\n3) zooms in on the foamy waters as well as the nearby cliffs and forest surrounding it.",
+    "check": {
+      "type": "choice_exact",
+      "value": "2"
+    }
+  },
+  {
+    "id": "hellaswag_validation_0090",
+    "context": "Commonsense completion benchmark task.",
+    "query": "Choose the most plausible continuation. Return only the option index.\n\nContext: The camera moves across the water and several people on boats and jet-skis are moving in the water near a large wave. More large waves begin to surface and a man begins surfing the waves. the forest\nOptions:\n0) is then shown clearly under a large wide wave.\n1) is then shown and surf boards appear that are washed up against the banks of the water.\n2) starts to get darker and darker as the large wave picks up and men continue to sail around it.\n3) of trees quickly moves over the trailing wave and they follow suit as well.",
+    "check": {
+      "type": "choice_exact",
+      "value": "1"
+    }
+  },
+  {
+    "id": "hellaswag_validation_0091",
+    "context": "Commonsense completion benchmark task.",
+    "query": "Choose the most plausible continuation. Return only the option index.\n\nContext: A large patch of grass is shown. a man\nOptions:\n0) belly flops on some grass before a newscaster announces the story.\n1) stretches in front of it.\n2) is shown inside while a machine is working.\n3) is mowing the yard next to the bushes.",
+    "check": {
+      "type": "choice_exact",
+      "value": "3"
+    }
+  },
+  {
+    "id": "hellaswag_validation_0092",
+    "context": "Commonsense completion benchmark task.",
+    "query": "Choose the most plausible continuation. Return only the option index.\n\nContext: A pilates instructor on skates explains how to strap your risk protectors tight and shows that you need knee pads to protect your knees. the lady\nOptions:\n0) starts with two small straps and it puts her into a squatting position with feet fully placed over her knee and her hands suspended and ready.\n1) then explains the skates movement and how to use the breaks that is in the back of the skates.\n2) then puts lotion in both of her hands and rubs them along your knees while the instructor washes them.\n3) shows how to harness and strap your weight on properly and she moves away from the mounting as she reaches for her left knee.",
+    "check": {
+      "type": "choice_exact",
+      "value": "1"
+    }
+  },
+  {
+    "id": "hellaswag_validation_0093",
+    "context": "Commonsense completion benchmark task.",
+    "query": "Choose the most plausible continuation. Return only the option index.\n\nContext: A woman wearing a tan apron is holding a knife and talking. She then shows an appliance on the table and tilts it upwards. she\nOptions:\n0) turns a dial on the appliance and sets it back down.\n1) continues sliding the blade over the appliance.\n2) takes a quarter of an inch of the device and holds it against a piece of cake.\n3) removes a lemon from a jar and places it into a pot.",
+    "check": {
+      "type": "choice_exact",
+      "value": "0"
+    }
+  },
+  {
+    "id": "hellaswag_validation_0094",
+    "context": "Commonsense completion benchmark task.",
+    "query": "Choose the most plausible continuation. Return only the option index.\n\nContext: She then shows an appliance on the table and tilts it upwards. She turns a dial on the appliance and sets it back down. she\nOptions:\n0) shows several shots of the chair in the end.\n1) picks the knife back up and places it on the appliance.\n2) pokes the vacuum nozzle in the top seam of the vacuum cleaner and adds fuel to it while still keeping the vacuum nozzle up.\n3) also shows how to use tubing no a string is attached to it and she explaining the use of the tubing.",
+    "check": {
+      "type": "choice_exact",
+      "value": "1"
+    }
+  },
+  {
+    "id": "hellaswag_validation_0095",
+    "context": "Commonsense completion benchmark task.",
+    "query": "Choose the most plausible continuation. Return only the option index.\n\nContext: She turns a dial on the appliance and sets it back down. She picks the knife back up and places it on the appliance. she\nOptions:\n0) gets up and starts brushing the blade.\n1) uses a tool to pinch the wax off of the knife.\n2) turns the dial again on the appliance.\n3) jumps up and throws something into a container shaped like a snowboard.",
+    "check": {
+      "type": "choice_exact",
+      "value": "2"
+    }
+  },
+  {
+    "id": "hellaswag_validation_0096",
+    "context": "Commonsense completion benchmark task.",
+    "query": "Choose the most plausible continuation. Return only the option index.\n\nContext: She picks the knife back up and places it in the appliance and slowly draws it back several times. she\nOptions:\n0) slices a tomato on a wood block with the knife.\n1) removes the rubber band off of the knife and gets it across the blade.\n2) continues using the appliance to put the fancy knife on the box.\n3) stands up from the chair and walks towards the stairs before finally leaving the room.",
+    "check": {
+      "type": "choice_exact",
+      "value": "0"
+    }
+  },
+  {
+    "id": "hellaswag_validation_0097",
+    "context": "Commonsense completion benchmark task.",
+    "query": "Choose the most plausible continuation. Return only the option index.\n\nContext: She picks the knife back up and places it in the appliance and slowly draws it back several times. She slices a tomato on a wood block with the knife. she\nOptions:\n0) decorates the knife with green and red maracas.\n1) positions the knife front and back and finishes by pushing it straight across the square board.\n2) then demonstrates how to sharpen the knife and finishes by putting a metal rod in front of the plate of spaghetti that she just sharpened.\n3) grabs a second knife and puts it in the appliance.",
+    "check": {
+      "type": "choice_exact",
+      "value": "3"
+    }
+  },
+  {
+    "id": "hellaswag_validation_0098",
+    "context": "Commonsense completion benchmark task.",
+    "query": "Choose the most plausible continuation. Return only the option index.\n\nContext: A man wearing a black clothes is sharpening the knife on a stone. The man beside him on blue long sleeves drawing something on the table with his finger. the man\nOptions:\n0) continues sharpening the knife and standing on the middle of the stone.\n1) turn the knife to sharpen the other side and then wipe it with paper towel.\n2) stops sharpening the knife and draws on the stone again.\n3) down retracts from the knife and starts sharpening the knife back up again.",
+    "check": {
+      "type": "choice_exact",
+      "value": "1"
+    }
+  },
+  {
+    "id": "hellaswag_validation_0099",
+    "context": "Commonsense completion benchmark task.",
+    "query": "Choose the most plausible continuation. Return only the option index.\n\nContext: A man is seen speaking to the camera while a shot of a person playing basketball shows behind. the man\nOptions:\n0) continues going around the basket while the camera is sitting in the back.\n1) continues to speak and leads into more clips of him playing tennis.\n2) pulls the ball up on the court while still speaking to the camera.\n3) continues speaking as more shots are shown of the boy playing basketball.",
+    "check": {
+      "type": "choice_exact",
+      "value": "3"
+    }
+  }
+]

@@ -1,0 +1,6 @@
+dataset,tasks,avg_context_chars,avg_query_chars
+hf_arc_challenge_100.json,100,52.0,398.24
+hf_boolq_100.json,100,554.92,77.04
+hf_gsm8k_100.json,100,64.0,231.3
+hf_hellaswag_100.json,100,38.0,475.27
+hf_mbpp_calls_100.json,100,59.0,311.4

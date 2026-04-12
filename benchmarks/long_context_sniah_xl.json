@@ -1,0 +1,101 @@
+[
+  {
+    "id": "sniah_start_250k",
+    "context_gen": {
+      "type": "log_haystack_v1",
+      "size_chars": 250000,
+      "filler": "LOG INFO alpha beta gamma delta epsilon zeta\\n",
+      "insertions": [
+        {
+          "pos": "start",
+          "text": "CRITICAL_REF=ALPHA-9f1b2c3d\\n"
+        }
+      ]
+    },
+    "query": "Find the CRITICAL_REF token in context. Return only the token after '='.",
+    "check": {
+      "type": "regex",
+      "value": "\\bALPHA-9f1b2c3d\\b"
+    }
+  },
+  {
+    "id": "sniah_middle_500k",
+    "context_gen": {
+      "type": "log_haystack_v1",
+      "size_chars": 500000,
+      "filler": "LOG WARN theta iota kappa lambda mu nu\\n",
+      "insertions": [
+        {
+          "pos": "middle",
+          "text": "CRITICAL_REF=BRAVO-a81d7e4c\\n"
+        }
+      ]
+    },
+    "query": "Find the CRITICAL_REF token in context. Return only the token after '='.",
+    "check": {
+      "type": "regex",
+      "value": "\\bBRAVO-a81d7e4c\\b"
+    }
+  },
+  {
+    "id": "sniah_end_1m",
+    "context_gen": {
+      "type": "log_haystack_v1",
+      "size_chars": 1000000,
+      "filler": "LOG DEBUG omicron pi rho sigma tau upsilon\\n",
+      "insertions": [
+        {
+          "pos": "end",
+          "text": "CRITICAL_REF=CHARLIE-c2e90a1b\\n"
+        }
+      ]
+    },
+    "query": "Find the CRITICAL_REF token in context. Return only the token after '='.",
+    "check": {
+      "type": "regex",
+      "value": "\\bCHARLIE-c2e90a1b\\b"
+    }
+  },
+  {
+    "id": "sniah_multi_concat_750k",
+    "context_gen": {
+      "type": "log_haystack_v1",
+      "size_chars": 750000,
+      "filler": "TRACE line payload random letters and numbers 0123456789\\n",
+      "insertions": [
+        {
+          "at": 120000,
+          "text": "Alpha=R1\\n"
+        },
+        {
+          "at": 360000,
+          "text": "Beta=R2\\n"
+        },
+        {
+          "at": 610000,
+          "text": "Gamma=R3\\n"
+        }
+      ]
+    },
+    "query": "Read Alpha, Beta, Gamma values and return exactly in this format: R1:R2:R3",
+    "check": {
+      "type": "regex",
+      "value": "\\bR1:R2:R3\\b"
+    }
+  },
+  {
+    "id": "sniah_count_marker_900k",
+    "context_gen": {
+      "type": "log_haystack_v1",
+      "size_chars": 900000,
+      "filler": "OBSERVE stable text block qwertyuiop asdfghjkl zxcvbnm\\n",
+      "marker": "ERROR_timeout",
+      "marker_count": 42
+    },
+    "query": "How many times does the exact marker ERROR_timeout appear? Return only the integer.",
+    "check": {
+      "type": "regex",
+      "value": "\\b42\\b"
+    }
+  }
+]

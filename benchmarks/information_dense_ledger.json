@@ -1,0 +1,80 @@
+[
+  {
+    "id": "ledger_total_sum_n600_s17",
+    "context_gen": {
+      "type": "ledger_v1",
+      "n_rows": 600,
+      "seed": 17
+    },
+    "query": "Sum AMT over all rows and return only the number with exactly 2 decimals.",
+    "check": {
+      "type": "exact",
+      "value": "28047.00"
+    }
+  },
+  {
+    "id": "ledger_debit_sum_n600_s17",
+    "context_gen": {
+      "type": "ledger_v1",
+      "n_rows": 600,
+      "seed": 17
+    },
+    "query": "Sum AMT only where TYPE=Debit. Return only the number with exactly 2 decimals.",
+    "check": {
+      "type": "exact",
+      "value": "14067.00"
+    }
+  },
+  {
+    "id": "ledger_max_id_n600_s17",
+    "context_gen": {
+      "type": "ledger_v1",
+      "n_rows": 600,
+      "seed": 17
+    },
+    "query": "Find the row with the maximum AMT and return only its ID.",
+    "check": {
+      "type": "exact",
+      "value": "100529"
+    }
+  },
+  {
+    "id": "ledger_eu_count_n900_s41",
+    "context_gen": {
+      "type": "ledger_v1",
+      "n_rows": 900,
+      "seed": 41
+    },
+    "query": "Count rows where REGION=EU. Return only the integer.",
+    "check": {
+      "type": "exact",
+      "value": "225"
+    }
+  },
+  {
+    "id": "ledger_day20plus_sum_n900_s41",
+    "context_gen": {
+      "type": "ledger_v1",
+      "n_rows": 900,
+      "seed": 41
+    },
+    "query": "Sum AMT for rows with date day >= 20 (2025-01-20..2025-01-28). Return only number with exactly 2 decimals.",
+    "check": {
+      "type": "exact",
+      "value": "14096.52"
+    }
+  },
+  {
+    "id": "ledger_combo_n1200_s5",
+    "context_gen": {
+      "type": "ledger_v1",
+      "n_rows": 1200,
+      "seed": 5
+    },
+    "query": "Return exactly this format: <total>|<debit>|<eu_count>. Each total must have 2 decimals.",
+    "check": {
+      "type": "exact",
+      "value": "57336.00|28656.00|300"
+    }
+  }
+]

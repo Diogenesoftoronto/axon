@@ -1,0 +1,14 @@
+[hf:MiniMaxAI/MiniMax-M2.5][current-default] critical_path_release_plan run=1 -> FAIL (16.42s)
+[hf:MiniMaxAI/MiniMax-M2.5][current-no-recursion-best-of-3] critical_path_release_plan run=1 -> PASS (23.17s)
+[hf:MiniMaxAI/MiniMax-M2.5][current-depth6-single-pass] critical_path_release_plan run=1 -> FAIL (14.61s)
+[hf:MiniMaxAI/MiniMax-M2.5][current-depth1-iter3] critical_path_release_plan run=1 -> PASS (45.44s)
+
+Benchmark summary
+model	sub_model	mode	pass_rate	ok_rate	halluc_rate	avg_cost_usd	composite	readiness
+hf:MiniMaxAI/MiniMax-M2.5	hf:MiniMaxAI/MiniMax-M2.5	current-default	0.0%	100.0%	0.0%	0.00096	60.84	NotProductionReady
+hf:MiniMaxAI/MiniMax-M2.5	hf:MiniMaxAI/MiniMax-M2.5	current-depth1-iter3	100.0%	100.0%	0.0%	0.009574	83.54	Promising
+hf:MiniMaxAI/MiniMax-M2.5	hf:MiniMaxAI/MiniMax-M2.5	current-depth6-single-pass	0.0%	100.0%	0.0%	0.000963	61.47	NotProductionReady
+hf:MiniMaxAI/MiniMax-M2.5	hf:MiniMaxAI/MiniMax-M2.5	current-no-recursion-best-of-3	100.0%	100.0%	0.0%	0.006719	85.99	Production Candidate
+
+Wrote report: benchmarks/overall-smoke-parallel/results-rlm_hard_coding_planning.json
+Wrote markdown summary: benchmarks/overall-smoke-parallel/summary-rlm_hard_coding_planning.md

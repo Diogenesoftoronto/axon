@@ -1,0 +1,9 @@
+# Core Pareto models - diverse cost/capability spread
+hf:MiniMaxAI/MiniMax-M2.5
+hf:Qwen/Qwen3.5-397B-A17B
+hf:deepseek-ai/DeepSeek-V3-0324
+hf:deepseek-ai/DeepSeek-R1-0528
+hf:meta-llama/Llama-3.3-70B-Instruct
+hf:openai/gpt-oss-120b
+hf:deepseek-ai/DeepSeek-V3.2
+hf:nvidia/Kimi-K2.5-NVFP4

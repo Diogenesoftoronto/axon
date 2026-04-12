@@ -5,27 +5,25 @@ app = marimo.App(width="full")
 
 
 @app.cell
-def __(mo):
-    mo.md(
-        r"""
-        # Axon Benchmark Analysis (Marimo Workflow)
+def _(mo):
+    mo.md(r"""
+    # Axon Benchmark Analysis (Marimo Workflow)
 
-        This notebook loads benchmark result artifacts, keeps the analysis dataframe-first,
-        and generates publication-ready tables/plots with explicit filtering for evidence,
-        scoring policy, runtime policy, and mode profiles.
+    This notebook loads benchmark result artifacts, keeps the analysis dataframe-first,
+    and generates publication-ready tables/plots with explicit filtering for evidence,
+    scoring policy, runtime policy, and mode profiles.
 
-        Run with:
+    Run with:
 
-        ```bash
-        uv run --python .venv/bin/python marimo edit notebooks/benchmark_results_analysis.py
-        ```
-        """
-    )
+    ```bash
+    uv run --python .venv/bin/python marimo edit notebooks/benchmark_results_analysis.py
+    ```
+    """)
     return
 
 
 @app.cell
-def __():
+def _():
     import json
     import time
     from datetime import datetime
@@ -35,11 +33,11 @@ def __():
     import matplotlib.pyplot as plt
     import pandas as pd
 
-    return Path, datetime, json, mo, pd, plt, time
+    return Path, datetime, json, mo, pd, plt
 
 
 @app.cell
-def __():
+def _():
     BENCHMARK_CATALOG = {
         "rlm_challenges.json": {
             "name": "Core RLM Challenges",
@@ -114,7 +112,7 @@ def __():
 
 
 @app.cell
-def __(BENCHMARK_CATALOG, Path, MODE_LABELS, json, pd):
+def _(BENCHMARK_CATALOG, MODE_LABELS, Path, json, pd):
     def dataset_label(name: str) -> str:
         key = Path(name or "").name
         meta = BENCHMARK_CATALOG.get(key)
@@ -318,12 +316,15 @@ def __(BENCHMARK_CATALOG, Path, MODE_LABELS, json, pd):
             )
         return pd.concat(frames, ignore_index=True)
 
-    return dataset_family, dataset_label, discover_reports, load_reports, load_task_profile, mode_label
+    return discover_reports, load_reports, load_task_profile
 
 
 @app.cell
-def __(mo):
-    results_glob = mo.ui.text(value="benchmarks/**/results-*.json", label="Result report glob")
+def _(mo):
+    results_glob = mo.ui.text(
+        value="benchmarks/results/results-mode-profile-multimodel-smoke-20260226.json",
+        label="Result report glob",
+    )
     task_files = mo.ui.text_area(
         value="\n".join(
             [
@@ -345,26 +346,32 @@ def __(mo):
 
 
 @app.cell
-def __(mo, results_glob, task_files):
-    mo.vstack([results_glob, task_files])
+def _(mo, results_glob, task_files):
+    mo.output.replace(mo.vstack([results_glob, task_files]))
     return
 
 
 @app.cell
-def __(BENCHMARK_CATALOG, mo):
-    lines = ["## Benchmark Catalog", ""]
+def _(BENCHMARK_CATALOG, mo):
+    catalog_lines = ["## Benchmark Catalog", ""]
     for key, meta in BENCHMARK_CATALOG.items():
-        lines.append(f"### {meta['name']}")
-        lines.append(f"- File: `benchmarks/{key}`")
-        lines.append(f"- What it tests: {meta['what_it_tests']}")
-        lines.append(f"- Work profile: {meta['work_profile']}")
-        lines.append("")
-    mo.md("\n".join(lines))
+        catalog_lines.append(f"### {meta['name']}")
+        catalog_lines.append(f"- File: `benchmarks/{key}`")
+        catalog_lines.append(f"- What it tests: {meta['what_it_tests']}")
+        catalog_lines.append(f"- Work profile: {meta['work_profile']}")
+        catalog_lines.append("")
+    mo.output.replace(mo.md("\n".join(catalog_lines)))
     return
 
 
 @app.cell
-def __(discover_reports, load_reports, load_task_profile, results_glob, task_files):
+def _(
+    discover_reports,
+    load_reports,
+    load_task_profile,
+    results_glob,
+    task_files,
+):
     report_paths = discover_reports(results_glob.value)
     df_summary_raw, df_runs_raw = load_reports(report_paths)
     task_file_list = [line.strip() for line in task_files.value.splitlines() if line.strip()]
@@ -373,7 +380,7 @@ def __(discover_reports, load_reports, load_task_profile, results_glob, task_fil
 
 
 @app.cell
-def __(df_summary_raw, mo):
+def _(df_summary_raw, mo):
     dataset_options = sorted(df_summary_raw["dataset_label"].dropna().unique().tolist()) if not df_summary_raw.empty else []
     mode_options = sorted(df_summary_raw["mode_label"].dropna().unique().tolist()) if not df_summary_raw.empty else []
     family_options = sorted(df_summary_raw["dataset_family"].dropna().unique().tolist()) if not df_summary_raw.empty else []
@@ -406,14 +413,13 @@ def __(df_summary_raw, mo):
 
 
 @app.cell
-def __(filter_controls, mo):
-    mo.md("## Analysis Filters")
-    filter_controls
+def _(filter_controls, mo):
+    mo.output.replace(mo.vstack([mo.md("## Analysis Filters"), filter_controls]))
     return
 
 
 @app.cell
-def __(
+def _(
     dataset_filter,
     df_runs_raw,
     df_summary_raw,
@@ -453,38 +459,92 @@ def __(
             df_runs = df_runs[df_runs["runtime_policy"].isin(runtime_filter.value)]
         if tier_filter.value:
             df_runs = df_runs[df_runs["evidence_tier"].isin(tier_filter.value)]
-
     return df_runs, df_summary
 
 
 @app.cell
-def __(df_summary, mo, report_paths):
-    _ = mo.md(f"Loaded reports: **{len(report_paths)}**")
+def _(df_summary, mo, report_paths):
+    _status_lines = [mo.md(f"Loaded reports: **{len(report_paths)}**")]
     if df_summary.empty:
-        _ = mo.md("No matching benchmark summaries found for current filters.")
+        _status_lines.append(mo.md("No matching benchmark summaries found for current filters."))
     else:
-        _ = mo.md(f"Filtered summary rows: **{len(df_summary)}**")
+        _status_lines.append(mo.md(f"Filtered summary rows: **{len(df_summary)}**"))
+    mo.output.replace(mo.vstack(_status_lines))
     return
 
 
 @app.cell
-def __(df_summary, mo):
+def _(df_summary, mo):
     if not df_summary.empty:
-        _ = mo.md("## Summary DataFrame")
-        _ = mo.ui.table(df_summary.sort_values(["dataset_label", "mode_label", "model", "source_file"]))
+        _top_rows = (
+            df_summary.sort_values(["pass_rate", "avg_cost_usd"], ascending=[False, True])
+            .loc[:, ["dataset_label", "mode_label", "pass_rate", "avg_cost_usd", "avg_time_s", "source_dir"]]
+            .head(15)
+        )
+        _out = mo.vstack([mo.md("## Top Configurations (Filtered)"), mo.ui.table(_top_rows)])
+    else:
+        _out = mo.md("No configurations available for current filters.")
+    mo.output.replace(_out)
     return
 
 
 @app.cell
-def __(df_runs, mo):
+def _(df_summary, mo):
+    if not df_summary.empty:
+        _mode_rank = (
+            df_summary.groupby("mode_label", as_index=False)
+            .agg(
+                mean_pass_rate=("pass_rate", "mean"),
+                mean_cost=("avg_cost_usd", "mean"),
+                mean_time_s=("avg_time_s", "mean"),
+            )
+            .sort_values("mean_pass_rate", ascending=False)
+        )
+        _best = _mode_rank.iloc[0]
+        _out = mo.md(
+            f"### Filtered Snapshot\n"
+            f"- Best mean pass-rate mode: **{_best['mode_label']}** ({_best['mean_pass_rate']:.2f}%)\n"
+            f"- Mean cost for best mode: **${_best['mean_cost']:.6f}** per task\n"
+            f"- Mean latency for best mode: **{_best['mean_time_s']:.2f}s** per task"
+        )
+    else:
+        _out = mo.md("Filtered snapshot unavailable with current filters.")
+    mo.output.replace(_out)
+    return
+
+
+@app.cell
+def _(df_summary, mo):
+    if not df_summary.empty:
+        _out = mo.vstack(
+            [
+                mo.md("## Summary DataFrame"),
+                mo.ui.table(df_summary.sort_values(["dataset_label", "mode_label", "model", "source_file"])),
+            ]
+        )
+    else:
+        _out = mo.md("Summary table is empty for current filters.")
+    mo.output.replace(_out)
+    return
+
+
+@app.cell
+def _(df_runs, mo):
     if not df_runs.empty:
-        _ = mo.md("## Run-Level DataFrame")
-        _ = mo.ui.table(df_runs.sort_values(["dataset_label", "mode_label", "task_id", "run_idx"]))
+        _out = mo.vstack(
+            [
+                mo.md("## Run-Level DataFrame"),
+                mo.ui.table(df_runs.sort_values(["dataset_label", "mode_label", "task_id", "run_idx"])),
+            ]
+        )
+    else:
+        _out = mo.md("Run-level table is empty for current filters.")
+    mo.output.replace(_out)
     return
 
 
 @app.cell
-def __(df_summary, plt):
+def _(df_summary, mo, plt):
     if not df_summary.empty:
         _pivot = (
             df_summary.groupby(["dataset_label", "mode_label"], as_index=False)["pass_rate"]
@@ -505,12 +565,15 @@ def __(df_summary, plt):
                 _ax.text(j, i, f"{_pivot.values[i, j]:.1f}", ha="center", va="center", fontsize=7)
         _fig.colorbar(_im, ax=_ax, fraction=0.03, pad=0.02)
         _fig.tight_layout()
-        _ = _fig
+        _out = _fig
+    else:
+        _out = mo.md("Pass-rate heatmap unavailable for current filters.")
+    mo.output.replace(_out)
     return
 
 
 @app.cell
-def __(df_summary, plt):
+def _(df_summary, mo, plt):
     if not df_summary.empty:
         _fig, _ax = plt.subplots(figsize=(8.5, 5.2))
         for dataset, grp in df_summary.groupby("dataset_label"):
@@ -521,12 +584,15 @@ def __(df_summary, plt):
         _ax.grid(alpha=0.3)
         _ax.legend(fontsize=7)
         _fig.tight_layout()
-        _ = _fig
+        _out = _fig
+    else:
+        _out = mo.md("Cost vs pass-rate chart unavailable for current filters.")
+    mo.output.replace(_out)
     return
 
 
 @app.cell
-def __(df_runs, pd, plt):
+def _(df_runs, mo, plt):
     if not df_runs.empty:
         _agg = (
             df_runs.groupby(["mode_label", "outcome"], as_index=False)
@@ -556,12 +622,15 @@ def __(df_runs, pd, plt):
         _ax.grid(axis="y", alpha=0.3)
         _ax.legend()
         _fig.tight_layout()
-        _ = _fig
+        _out = _fig
+    else:
+        _out = mo.md("Outcome breakdown chart unavailable for current filters.")
+    mo.output.replace(_out)
     return
 
 
 @app.cell
-def __(df_summary, plt):
+def _(df_summary, mo, plt):
     if not df_summary.empty:
         _mode_ci = (
             df_summary.groupby("mode_label", as_index=False)
@@ -576,8 +645,11 @@ def __(df_summary, plt):
         _fig, _ax = plt.subplots(figsize=(9, 4.8))
         _x = range(len(_mode_ci))
         _y = _mode_ci["pass_rate"].values
-        _yerr_low = _y - _mode_ci["ci_low"].values
-        _yerr_high = _mode_ci["ci_high"].values - _y
+        # Averaging CI endpoints across mixed slices can invert bounds; clamp around mean.
+        _ci_low = _mode_ci["ci_low"].values
+        _ci_high = _mode_ci["ci_high"].values
+        _yerr_low = (_y - _ci_low).clip(min=0)
+        _yerr_high = (_ci_high - _y).clip(min=0)
         _ax.errorbar(_x, _y, yerr=[_yerr_low, _yerr_high], fmt="o", capsize=4)
         _ax.set_xticks(list(_x))
         _ax.set_xticklabels(_mode_ci["mode_label"], rotation=20)
@@ -585,12 +657,15 @@ def __(df_summary, plt):
         _ax.set_title("Mode pass rate with average CI bounds")
         _ax.grid(axis="y", alpha=0.3)
         _fig.tight_layout()
-        _ = _fig
+        _out = _fig
+    else:
+        _out = mo.md("Mode CI chart unavailable for current filters.")
+    mo.output.replace(_out)
     return
 
 
 @app.cell
-def __(df_tasks, mo, pd):
+def _(df_tasks, mo):
     profile = None
     if not df_tasks.empty:
         profile = (
@@ -602,13 +677,15 @@ def __(df_tasks, mo, pd):
             )
             .sort_values("dataset_label")
         )
-        _ = mo.md("## Task Dataset Profile")
-        _ = mo.ui.table(profile)
-    return profile
+        _out = mo.vstack([mo.md("## Task Dataset Profile"), mo.ui.table(profile)])
+    else:
+        _out = mo.md("Task dataset profile unavailable (task files not found).")
+    mo.output.replace(_out)
+    return (profile,)
 
 
 @app.cell
-def __(plt, profile):
+def _(mo, plt, profile):
     if profile is not None and not profile.empty:
         _fig, _axes = plt.subplots(1, 3, figsize=(15, 4.2))
         _axes[0].bar(profile["dataset_label"], profile["tasks"], color="#4c78a8")
@@ -624,23 +701,35 @@ def __(plt, profile):
         _axes[2].tick_params(axis="x", rotation=35, labelsize=8)
 
         _fig.tight_layout()
-        _ = _fig
+        _out = _fig
+    else:
+        _out = mo.md("Task profile charts unavailable.")
+    mo.output.replace(_out)
     return
 
 
 @app.cell
-def __(mo):
+def _(mo):
     export_root = mo.ui.text(value="benchmarks/analysis-marimo", label="Export root")
     export_btn = mo.ui.run_button(label="Export filtered tables")
-    _ = mo.hstack([export_root, export_btn], justify="start")
+    mo.output.replace(mo.hstack([export_root, export_btn], justify="start"))
     return export_btn, export_root
 
 
 @app.cell
-def __(Path, datetime, df_runs, df_summary, export_btn, export_root, mo, profile):
+def _(
+    Path,
+    datetime,
+    df_runs,
+    df_summary,
+    export_btn,
+    export_root,
+    mo,
+    profile,
+):
     if export_btn.value:
         if df_summary.empty:
-            _ = mo.md("No filtered summary rows to export.")
+            _out = mo.md("No filtered summary rows to export.")
         else:
             stamp = datetime.now().strftime("%Y%m%d-%H%M%S")
             out_dir = Path(export_root.value).resolve() / f"analysis-{stamp}"
@@ -676,7 +765,8 @@ def __(Path, datetime, df_runs, df_summary, export_btn, export_root, mo, profile
                 )
             (out_dir / "summary_filtered.md").write_text("\n".join(lines) + "\n")
 
-            _ = mo.md(f"Exported filtered analysis tables to `{out_dir}`")
+            _out = mo.md(f"Exported filtered analysis tables to `{out_dir}`")
+        mo.output.replace(_out)
     return
 
 

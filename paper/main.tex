@@ -38,11 +38,7 @@
 \maketitle
 
 \begin{abstract}
-Recursive Language Models are usually motivated by long-context and long-horizon reasoning \cite{zhang2025rlm,primeintellect2026rlm}. This paper asks a narrower operational question: \emph{for short-horizon tasks, does recursion help beyond simply giving non-recursive setups more attempts?}
-
-We evaluate \axon, a Rust implementation of an \rlm-style scaffold, under controlled mode profiles and explicit evidence tiers. Axon extends recursion-only \rlm framing with checkpoint/restore, branch-style fork switching, and per-fork workspace state inside the sandbox loop. On a targeted short-horizon synthetic suite (8 tasks), depth1-iter3 and no-recursion-best-of-3 tie at 37.5\% pass while default and depth6-single-pass are 0\%, indicating that attempt budget matters more than depth alone. On a fixed non-synthetic Hugging Face smoke slice (40 runs), typed deterministic scoring raises measured pass rate from 10.0\% to 75.0\%, and runtime hardening reduces hard errors from 7 to 1 while leaving a single timeout. On the runtime-hardened slice, depth1-iter3 has the strongest mean dataset pass rate (100\%), no-recursion-best-of-3 is close (90\%), default is lower (60\%), and depth6-single-pass underperforms (50\%).
-
-For Codeforces-like strict executable tasks (8 matched runs), a strict Rust-only output contract yields 4/8 strict passes and zero hard runtime errors; remaining failures are compile rejects. Long-context suites are used as stress context rather than the main claim target: books depth-profile measurements favor iteration-rich profiles, while ledger evidence remains mixed and partially incomplete for full four-profile comparison. Overall, current evidence supports a calibrated claim: shallow recursion can help, but gains are tightly coupled to attempt budget, evaluator design, and output-contract compliance.
+Recursive language model (RLM) scaffolds are typically motivated by long-horizon reasoning tasks, yet many practical workloads are short-horizon but demand strict output compliance. Here we ask whether recursion provides measurable benefit beyond simply granting a non-recursive setup more attempts. Using Axon, a Rust implementation of an RLM scaffold with checkpointed branching and per-fork workspace state, we evaluate four mode profiles across seven models on the Synthetic inference platform (224 runs). We find that attempt budget, not recursion depth, is the dominant factor: both shallow recursion with three iterations and non-recursive best-of-three consistently outperform deep single-pass recursion, which scores 0\% across all six pre-fix models on our eight-task synthetic suite. Evaluation policy is equally consequential---switching from strict string matching to typed lenient checks on the same 40 Hugging Face runs raises measured pass rate from 10\% to 75\%. A multi-model Pareto analysis identifies two co-dominant configurations, Qwen3.5-397B (75\% pass, 11.9\,s, \$0.004 per task) and Kimi-K2.5 (75\% pass, 38.1\,s, \$0.006 per task), with tenfold speed variation across models. Crucially, the optimal scaffold mode is model-dependent: Qwen3.5 strongly favours recursion while MiniMax-M2.5 favours pure iteration. These results support a calibrated conclusion: shallow recursion can help on short-horizon tasks, but gains are tightly coupled to attempt budget, evaluator design, and output-contract compliance rather than recursion depth per se.
 \end{abstract}
 
 \section{Introduction}
@@ -56,14 +52,7 @@ Most prior framing, however, centers on long-horizon settings. In practical depl
 
 We study this question using \axon, an open Rust implementation of an \rlm-style scaffold with sandboxed execution and deterministic benchmark harnessing (implementation details and code: \url{https://github.com/diogenesoftoronto/axon}).
 
-\paragraph{Main findings.}
-\begin{enumerate}
-  \item \textbf{Depth alone is weak:} deep single-pass recursion (depth6-single-pass) is consistently poor on short-horizon slices.
-  \item \textbf{Attempt budget is first-order:} depth1-iter3 and no-recursion-best-of-3 usually dominate single-pass variants.
-  \item \textbf{Measurement policy is first-order:} typed lenient checks change HF measured pass from 10\% to 75\% on the same 40 runs.
-  \item \textbf{Runtime hardening helps but does not remove all systems risk:} hard errors drop from 7 to 1, with one residual timeout.
-  \item \textbf{Executable bottleneck shifted:} Codeforces-like failures moved from runtime crashes to compile-quality and output-contract compliance.
-\end{enumerate}
+Our findings challenge the assumption that recursion depth is the primary lever for scaffold performance. Deep single-pass recursion (depth 6, one iteration) is consistently the weakest profile on short-horizon slices, while configurations with larger attempt budgets---whether recursive or not---dominate. The choice of evaluation policy proves equally consequential: switching from strict string matching to typed lenient checks on the same 40 Hugging Face runs raises measured pass rate from 10\% to 75\%, revealing that apparent quality differences can be artefacts of checker design. Runtime hardening reduces hard engine errors from 7 to 1, though a single residual timeout shows that systems risk is not fully eliminated. On Codeforces-like executable tasks, the failure bottleneck shifts from runtime crashes to compile-quality and output-contract compliance, indicating that the scaffold's value is bounded by the model's ability to produce well-formed artefacts.
 
 \section{System and Comparison Setup}
 \axon implements a recursive controller that can call a child model loop and run sandboxed Python tools between reasoning steps. For this paper, we treat implementation as fixed and vary only mode profiles.
@@ -84,26 +73,23 @@ current-depth1-iter3 & 1 & 3 & shallow recursion plus larger attempt budget \\
 \end{tabular}
 \end{table}
 
-This table defines the core experimental axis: recursion depth versus attempt budget.
+Table~\ref{tab:modes} defines the core experimental axis: recursion depth versus attempt budget. These four profiles span the space from minimal baseline (single pass, no recursion) through two forms of budget increase---pure iteration and shallow recursion with iteration---to deep recursion with minimal budget, enabling direct comparison of depth and attempt count as independent factors.
 
-Depth-profile comparisons are prompt-neutral in the benchmark harness: for non-Codeforces tasks, all modes receive the same task query and context text, and mode differences are introduced only via runtime controls (max depth and max iterations). The only mode-independent query augmentation is the strict Rust-output contract used for \texttt{rust\_exec\_exact} tasks.
+Depth-profile comparisons are evaluated under two explicitly reported conditions: \emph{policy-off} and \emph{policy-conditioned}. In policy-off runs, all modes receive identical task query/context text and differ only by runtime controls (max depth, max iterations). In policy-conditioned runs, the harness can inject a selected policy profile that adds format-contract and depth-strategy instructions (optionally prepended into runtime context) and can enable strict depth gates. All result artifacts therefore log policy settings (\texttt{policy\_profile}, \texttt{inject\_policy\_into\_context}, \texttt{depth\_enforcement}, thresholds) so depth effects and policy effects remain distinguishable.
 
 \subsection{Checkpointed Branching State as an Axon Extension}
 Relative to recursion-centric \rlm descriptions \cite{zhang2025rlm,primeintellect2026rlm}, Axon exposes explicit state-management operators inside each sandbox loop: \texttt{CHECKPOINT\_CREATE}/\texttt{CHECKPOINT\_RESTORE} for recoverable snapshots, \texttt{FORK\_CREATE}/\texttt{FORK\_SWITCH}/\texttt{FORK\_LIST} for branch navigation, \texttt{VFS\_WRITE}/\texttt{VFS\_READ}/\texttt{VFS\_LIST} for per-branch scratch state, and \texttt{STRATEGY\_COMMIT}/\texttt{STRATEGY\_STATUS} for rationale tracking.
 
 This shifts the agent from pure recursive delegation toward checkpointed exploratory search with reversible branch-local state. In this paper, these controls are held fixed across all profiles; mode comparisons therefore isolate depth/iteration settings rather than a checkpointing ablation.
 
+\subsection{Policy Profiles and Depth Enforcement}
+To improve reproducibility of strict-format evaluations, Axon supports explicit policy bundles loaded from a versioned JSON catalog (\texttt{config/prompt\_policies.json}). Each bundle combines format-contract text with depth-strategy instructions, a flag controlling whether policy text is prepended into the model's runtime context, and default depth-enforcement thresholds.
+
+Depth enforcement operates at three levels: in \emph{off} mode, no depth gate is applied, preserving legacy behaviour; in \emph{soft} mode, the system emits depth-guidance telemetry without constraining execution; and in \emph{strict} mode, the engine rejects final answers whose recursive-call count or achieved depth falls below configurable thresholds. Both the command-line interface and MCP tool endpoint expose these controls, enabling fixed-policy offline benchmarking and per-call policy overrides in tool-driven workflows.
+
 \section{Benchmarks and Evidence Policy}
 \subsection{Benchmark Families}
-We use four benchmark families, each serving a distinct role.
-
-\textbf{Short-horizon mode discrimination (synthetic, 8 tasks).} Small deterministic tasks designed to separate profile behavior under strict matching.
-
-\textbf{Short-horizon external benchmarks (non-synthetic HF slice, 40 runs).} Five Hugging Face-derived packs, two tasks per pack, four modes. These runs are used for evaluator and runtime ablations under fixed workload.
-
-\textbf{Strict executable coding (Codeforces-like, 8 runs).} Two tasks across four modes with compile-and-run validation.
-
-\textbf{Long-context stress suites (books, ledger).} Used as context and stress tests, not as sole basis for short-horizon claims.
+We use four benchmark families, each serving a distinct role. The first is a short-horizon synthetic suite of eight deterministic tasks designed to separate profile behaviour under strict matching. The second draws on five Hugging Face-derived packs (two tasks per pack, four modes, 40 runs total), which serve as the fixed workload for evaluator and runtime ablation experiments. The third targets strict executable coding through two Codeforces-like tasks evaluated across four modes with compile-and-run validation. Finally, two long-context stress suites---books with semantic distractors and a dense numerical ledger---probe retrieval and aggregation under extended context; these are treated as supplementary stress tests rather than the basis for short-horizon claims.
 
 \subsection{Books and Ledger Intent}
 Books+distractors evaluates retrieval under semantic interference: overlapping entities and narratives force selective grounding rather than keyword lookup. Ledger evaluates exact dense aggregation over large record sets, emphasizing coverage, arithmetic correctness, and output contract adherence. Together, they probe different failure modes in long contexts.
@@ -127,12 +113,7 @@ HellaSwag subset & 100 & 38.0 & 475.3 \\
 \end{table}
 
 \subsection{Evidence Tiering}
-We separate claims by evidence strength:
-\begin{itemize}
-  \item \textbf{Tier A (higher confidence):} repeated long-context suites and controlled intervention contrasts.
-  \item \textbf{Tier B (diagnostic):} small smoke slices (HF 40 runs total, Codeforces 8 runs total).
-\end{itemize}
-Tier B is used for mechanism discovery and hypothesis refinement, not broad capability claims.
+We separate claims into two tiers by evidence strength. Tier~A (higher confidence) encompasses the repeated long-context suites and controlled intervention contrasts where sample sizes support directional conclusions. Tier~B (diagnostic) covers the smaller smoke slices---40 runs for Hugging Face and 8 runs for Codeforces---which are used for mechanism discovery and hypothesis refinement rather than broad capability claims.
 
 \section{Results: Short-Horizon Recursion vs Iterations}
 \subsection{Head-to-Head Profile Outcomes}
@@ -230,6 +211,33 @@ The table shows the independence baseline is only partially descriptive: it is c
 \begin{tikzpicture}
 \begin{axis}[
   ybar,
+  bar width=11pt,
+  width=0.95\linewidth,
+  height=6cm,
+  ymin=0,
+  ymax=100,
+  ylabel={Pass rate (\%)},
+  symbolic x coords={Synthetic,HF,Books,Codeforces},
+  xtick=data,
+  legend style={at={(0.5,1.12)},anchor=south,legend columns=2},
+  nodes near coords,
+  nodes near coords align={vertical},
+  every node near coord/.append style={font=\scriptsize}
+]
+\addplot coordinates {(Synthetic,0) (HF,93.6) (Books,48.8) (Codeforces,87.5)};
+\addplot coordinates {(Synthetic,37.5) (HF,90) (Books,80) (Codeforces,50)};
+\legend{$A_3(p_1)$ predicted,Observed no-rec best-of-3}
+\end{axis}
+\end{tikzpicture}
+\caption{Independence-assumption prediction $A_3(p_1)$ vs observed no-recursion-best-of-3 pass rate. The prediction is close on HF, optimistic on Codeforces (non-independent failures), and pessimistic on synthetic and books (correlated retries improve beyond independence).}
+\label{fig:predicted-vs-observed}
+\end{figure}
+
+\begin{figure}[t]
+\centering
+\begin{tikzpicture}
+\begin{axis}[
+  ybar,
   bar width=14pt,
   width=0.95\linewidth,
   height=5.8cm,
@@ -321,8 +329,38 @@ Mean across datasets & 60 & 100 & 50 & 90 \\
 
 Because each cell is based on two tasks, this matrix is directional rather than definitive. Still, it matches the broader short-horizon pattern: depth without attempts is weak, and attempt-rich profiles are stronger.
 
+\begin{figure}[t]
+\centering
+\begin{tikzpicture}
+\begin{axis}[
+  ybar,
+  bar width=7pt,
+  width=0.95\linewidth,
+  height=6.2cm,
+  ymin=0,
+  ymax=115,
+  ylabel={Pass rate (\%)},
+  symbolic x coords={ARC,BoolQ,GSM8K,HellaSwag,MBPP,Mean},
+  xtick=data,
+  x tick label style={rotate=20,anchor=east,font=\small},
+  legend style={at={(0.5,1.15)},anchor=south,legend columns=4,font=\small},
+  nodes near coords,
+  nodes near coords align={vertical},
+  every node near coord/.append style={font=\tiny}
+]
+\addplot coordinates {(ARC,50) (BoolQ,100) (GSM8K,0) (HellaSwag,100) (MBPP,50) (Mean,60)};
+\addplot coordinates {(ARC,100) (BoolQ,100) (GSM8K,100) (HellaSwag,100) (MBPP,100) (Mean,100)};
+\addplot coordinates {(ARC,50) (BoolQ,50) (GSM8K,0) (HellaSwag,50) (MBPP,100) (Mean,50)};
+\addplot coordinates {(ARC,100) (BoolQ,100) (GSM8K,100) (HellaSwag,50) (MBPP,100) (Mean,90)};
+\legend{default,depth1-iter3,depth6-single,no-rec-best3}
+\end{axis}
+\end{tikzpicture}
+\caption{HF runtime-hardened pass rates by dataset and mode. depth1-iter3 achieves 100\% across all datasets; depth6-single-pass is consistently weaker, especially on GSM8K (0\%).}
+\label{fig:hf-matrix-bars}
+\end{figure}
+
 \subsection{Codeforces-Like Strict Executable Tasks}
-Two prompt-contract conditions were evaluated on matched 8-run Codeforces-like slices: a standard contract and a strict Rust-only contract with explicit invalid non-Rust examples.
+To assess whether scaffold mode interacts with output-format discipline, we evaluated two prompt-contract conditions on matched 8-run Codeforces-like slices. The standard contract provides no language constraint, while the strict Rust-only contract specifies the expected output language and includes explicit examples of invalid non-Rust submissions.
 
 \begin{table}[t]
 \centering
@@ -334,7 +372,7 @@ Metric & Standard contract & Strict Rust-only contract \\
 \midrule
 Strict compile-and-run passes & 0/8 (0.0\%) & 4/8 (50.0\%) \\
 Hard engine errors & 4/8 (50.0\%) & 0/8 (0.0\%) \\
-Completed but unmatched & 4/8 (50.0\%) & 4/8 (50.0\%) \\
+Completed but non-passing & 4/8 (50.0\%) & 4/8 (50.0\%) \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -350,14 +388,14 @@ Completed but unmatched & 4/8 (50.0\%) & 4/8 (50.0\%) \\
   ymin=0,
   ymax=8,
   ylabel={Run count (out of 8)},
-  symbolic x coords={StrictPass,HardErrors,Unmatched},
+  symbolic x coords={StrictPass,HardErrors,NonPassing},
   xtick=data,
   legend style={at={(0.5,1.12)},anchor=south,legend columns=2},
   nodes near coords,
   nodes near coords align={vertical}
 ]
-\addplot coordinates {(StrictPass,0) (HardErrors,4) (Unmatched,4)};
-\addplot coordinates {(StrictPass,4) (HardErrors,0) (Unmatched,4)};
+\addplot coordinates {(StrictPass,0) (HardErrors,4) (NonPassing,4)};
+\addplot coordinates {(StrictPass,4) (HardErrors,0) (NonPassing,4)};
 \legend{Standard contract,Strict Rust-only contract}
 \end{axis}
 \end{tikzpicture}
@@ -365,7 +403,7 @@ Completed but unmatched & 4/8 (50.0\%) & 4/8 (50.0\%) \\
 \label{fig:cf-contract-shift}
 \end{figure}
 
-Under the strict contract condition, remaining misses are compile rejects rather than runtime crashes.
+Under the strict contract condition, the 4 completed-but-unmatched runs are specifically compile rejects rather than runtime crashes, as detailed in Table~\ref{tab:cf-taxonomy}.
 
 \begin{table}[t]
 \centering
@@ -383,22 +421,50 @@ Rust type mismatch (bitmask \texttt{usize} vs \texttt{u32}) & 1 & 25\% \\
 
 For the short-horizon question, this supports a practical conclusion: recursive scaffolds help only if the final artifact channel remains contract-compliant.
 
+\paragraph{Failure taxonomy update.}
+To separate algorithmic misses from artifact-channel failures, we now generate a per-run failure taxonomy report (\texttt{scripts/failure\_taxonomy.py}) over benchmark JSON outputs. In the latest aggregate slice (\texttt{benchmarks/overall-20260228-165727}), the dominant class is still scratchpad/trace leakage (\texttt{format\_trace\_or\_scratchpad\_leak}, 58.12\%), followed by wrong exact values (17.09\%). This reinforces that output-channel discipline remains a first-order bottleneck independent of nominal recursion depth.
+
+\begin{figure}[t]
+\centering
+\begin{tikzpicture}
+\begin{axis}[
+  xbar,
+  bar width=10pt,
+  width=0.92\linewidth,
+  height=6.5cm,
+  xmin=0,
+  xmax=65,
+  xlabel={Share of failures (\%)},
+  symbolic y coords={Other,Hallucinated abstain,Missing numeric,Wrong choice,Partial match,Wrong exact value,Trace/scratchpad leak},
+  ytick=data,
+  y tick label style={font=\small},
+  nodes near coords,
+  nodes near coords align={horizontal},
+  every node near coord/.append style={font=\scriptsize}
+]
+\addplot coordinates {(58.12,Trace/scratchpad leak) (17.09,Wrong exact value) (9.40,Partial match) (7.69,Wrong choice) (4.27,Missing numeric) (0.05,Hallucinated abstain) (3.38,Other)};
+\end{axis}
+\end{tikzpicture}
+\caption{Failure taxonomy distribution from the latest aggregate benchmark (4{,}151 failures). Trace/scratchpad leakage dominates at 58\%, indicating output-channel discipline is the primary bottleneck over algorithmic errors.}
+\label{fig:failure-taxonomy}
+\end{figure}
+
 \section{Long-Context Results as Stress Context}
 \subsection{Books Depth-Profile Measurement}
-A dedicated books depth-profile measurement (10 tasks per mode) is aligned with the short-horizon mode set.
+The latest completed books depth-profile measurement comes from \texttt{benchmarks/overall-20260226-refresh} (2026-02-26), with 15 evaluated runs per mode.
 
 \begin{table}[t]
 \centering
-\caption{Books+distractors depth/iteration profile results (10 tasks per mode).}
+\caption{Books+distractors depth/iteration profile results (15 runs per mode, refresh run 2026-02-26).}
 \label{tab:books-depth}
 \begin{tabular}{lcc}
 \toprule
 Mode & Pass rate & 95\% CI \\
 \midrule
-current-default & 20.0\% & [5.67, 50.98] \\
-current-depth1-iter3 & 90.0\% & [59.58, 98.21] \\
-current-depth6-single-pass & 20.0\% & [5.67, 50.98] \\
-current-no-recursion-best-of-3 & 80.0\% & [49.02, 94.33] \\
+current-default & 26.67\% & [10.90, 51.95] \\
+current-depth1-iter3 & 73.33\% & [48.05, 89.10] \\
+current-depth6-single-pass & 33.33\% & [15.18, 58.29] \\
+current-no-recursion-best-of-3 & 80.0\% & [54.81, 92.95] \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -420,19 +486,46 @@ current-no-recursion-best-of-3 & 80.0\% & [49.02, 94.33] \\
   nodes near coords,
   nodes near coords align={vertical}
 ]
-\addplot coordinates {(default,20) (depth1-iter3,90) (depth6-single,20) (no-rec-best3,80)};
+\addplot coordinates {(default,26.67) (depth1-iter3,73.33) (depth6-single,33.33) (no-rec-best3,80)};
 \end{axis}
 \end{tikzpicture}
-\caption{Books+distractors depth-profile pass rates (10 tasks per mode).}
+\caption{Books+distractors depth-profile pass rates (15 runs per mode, refresh run 2026-02-26).}
 \label{fig:books-depth-bars}
 \end{figure}
 
-This long-context measurement is consistent with the short-horizon pattern: iteration-rich profiles dominate single-pass profiles; shallow recursion plus attempts is best on this slice, with substantial overlap in uncertainty intervals.
+On this larger books slice, iteration-rich profiles separate clearly from single-pass profiles. No-recursion-best-of-3 is highest (80.0\%), followed by depth1-iter3 (73.33\%), while single-pass variants are lower (26.67\% and 33.33\%).
 
 \subsection{Ledger Status and Interpretation Limits}
-Ledger evidence is currently split across two non-identical measurement sets. One set reports default 61.11\%, low-budget 44.44\%, and no-recursion 83.33\%. A second set reports depth1-iter3 at 57.14\% over 7 runs. Because profile coverage and run composition differ across these sets, this does not yet provide a consolidated four-profile ledger ranking.
+The refresh run now includes ledger with 18 evaluated runs per mode (\texttt{benchmarks/overall-20260226-refresh/results-information\_dense\_ledger.json}). Results are: current-default 0.0\% [0.00, 17.59], current-depth1-iter3 66.67\% [43.75, 83.72], current-depth6-single-pass 0.0\% [0.00, 17.59], and current-no-recursion-best-of-3 66.67\% [43.75, 83.72].
 
-Therefore, ledger supports heterogeneity and failure analysis, but not a final profile ranking under the new recursion-vs-iterations framing.
+This supports a clear iteration-budget effect on dense aggregation: both 3-iteration profiles outperform all single-pass profiles, while recursion depth alone does not help in this suite.
+
+\begin{figure}[t]
+\centering
+\begin{tikzpicture}
+\begin{axis}[
+  ybar,
+  bar width=12pt,
+  width=0.95\linewidth,
+  height=5.7cm,
+  ymin=0,
+  ymax=85,
+  ylabel={Pass rate (\%)},
+  symbolic x coords={default,depth1-iter3,depth6-single,no-rec-best3},
+  xtick=data,
+  x tick label style={rotate=16,anchor=east},
+  nodes near coords,
+  nodes near coords align={vertical}
+]
+\addplot coordinates {(default,0) (depth1-iter3,66.67) (depth6-single,0) (no-rec-best3,66.67)};
+\end{axis}
+\end{tikzpicture}
+\caption{Ledger depth-profile pass rates (18 runs per mode, refresh run 2026-02-26). Both 3-iteration profiles reach 66.67\%; both single-pass profiles score 0\%, mirroring the books pattern.}
+\label{fig:ledger-depth-bars}
+\end{figure}
+
+\paragraph{Reproducibility workflow.}
+These long-context tables can be regenerated directly from artifacts with the marimo workflow in \texttt{notebooks/benchmark\_results\_analysis.py} (select \texttt{source\_dir} as \texttt{benchmarks/overall-20260226-refresh}); benchmark execution and analysis workflows are documented in \texttt{docs/benchmarking.md}.
 
 \section{Multi-Model Pareto Analysis Across Synthetic Providers}
 
@@ -444,7 +537,7 @@ To test whether our findings generalize beyond the default MiniMax-M2.5 model, w
 
 \begin{table}[t]
 \centering
-\caption{Pass rate (\%) by model and mode on the targeted 8-task profile suite (224 total runs).}
+\caption{Pass rate (\%) by model and mode on the targeted 8-task profile suite (224 total runs: 192 pre-fix across six models, 32 post-fix for Kimi-K2.5).}
 \label{tab:multimodel-passrate}
 \begin{tabular}{lrrrr}
 \toprule
@@ -638,7 +731,113 @@ Total pass & 3/8 & 3/8 & 6/8 & 3/8 & 4/8 & 3/8 & 4/8 \\
 \end{tabular}
 \end{table}
 
-The task difficulty spectrum reveals a clear gradient: \texttt{iter3\_trap\_2} (bat-and-ball variant) is universally solved (6/6 models), while \texttt{depth6\_topo\_sort} (10-node topological sort) is universally failed (0/6). This confirms that the benchmark discriminates task difficulty, not just random noise.
+The task difficulty spectrum reveals a clear gradient: \texttt{iter3\_trap\_2} (bat-and-ball variant) is universally solved (7/7 models, including K2.5* post-fix), while \texttt{depth6\_topo\_sort} (10-node topological sort) is universally failed (0/7). This confirms that the benchmark discriminates task difficulty, not just random noise.
+
+\begin{figure}[t]
+\centering
+\begin{tikzpicture}[
+  cell/.style={minimum width=0.85cm,minimum height=0.55cm,font=\scriptsize,anchor=center},
+  pass/.style={cell,fill=green!35},
+  fail/.style={cell,fill=red!25},
+  err/.style={cell,fill=orange!40},
+  hdr/.style={cell,font=\scriptsize\bfseries,fill=gray!15}
+]
+% Column headers
+\node[hdr] at (0,0) {};
+\node[hdr] at (1,0) {M2.1};
+\node[hdr] at (2,0) {M2.5};
+\node[hdr] at (3,0) {Q3.5};
+\node[hdr] at (4,0) {Q235};
+\node[hdr] at (5,0) {DSV3};
+\node[hdr] at (6,0) {K2};
+\node[hdr] at (7,0) {K2.5*};
+% Row 1: iter3_trap_2
+\node[hdr,minimum width=2.2cm] at (-0.7,-0.6) {trap\_2};
+\node[pass] at (1,-0.6) {\checkmark};
+\node[pass] at (2,-0.6) {\checkmark};
+\node[pass] at (3,-0.6) {\checkmark};
+\node[pass] at (4,-0.6) {\checkmark};
+\node[pass] at (5,-0.6) {\checkmark};
+\node[pass] at (6,-0.6) {\checkmark};
+\node[pass] at (7,-0.6) {\checkmark};
+% Row 2: iter3_trap_1
+\node[hdr,minimum width=2.2cm] at (-0.7,-1.2) {trap\_1};
+\node[pass] at (1,-1.2) {\checkmark};
+\node[pass] at (2,-1.2) {\checkmark};
+\node[pass] at (3,-1.2) {\checkmark};
+\node[fail] at (4,-1.2) {$\times$};
+\node[pass] at (5,-1.2) {\checkmark};
+\node[pass] at (6,-1.2) {\checkmark};
+\node[pass] at (7,-1.2) {\checkmark};
+% Row 3: baseline_match_1
+\node[hdr,minimum width=2.2cm] at (-0.7,-1.8) {match\_1};
+\node[fail] at (1,-1.8) {$\times$};
+\node[pass] at (2,-1.8) {\checkmark};
+\node[fail] at (3,-1.8) {$\times$};
+\node[pass] at (4,-1.8) {\checkmark};
+\node[fail] at (5,-1.8) {$\times$};
+\node[fail] at (6,-1.8) {$\times$};
+\node[fail] at (7,-1.8) {$\times$};
+% Row 4: baseline_match_2
+\node[hdr,minimum width=2.2cm] at (-0.7,-2.4) {match\_2};
+\node[pass] at (1,-2.4) {\checkmark};
+\node[fail] at (2,-2.4) {$\times$};
+\node[pass] at (3,-2.4) {\checkmark};
+\node[fail] at (4,-2.4) {$\times$};
+\node[fail] at (5,-2.4) {$\times$};
+\node[fail] at (6,-2.4) {$\times$};
+\node[fail] at (7,-2.4) {$\times$};
+% Row 5: depth6_state_trace
+\node[hdr,minimum width=2.2cm] at (-0.7,-3.0) {state\_tr};
+\node[fail] at (1,-3.0) {$\times$};
+\node[fail] at (2,-3.0) {$\times$};
+\node[pass] at (3,-3.0) {\checkmark};
+\node[fail] at (4,-3.0) {$\times$};
+\node[pass] at (5,-3.0) {\checkmark};
+\node[pass] at (6,-3.0) {\checkmark};
+\node[fail] at (7,-3.0) {$\times$};
+% Row 6: delegation
+\node[hdr,minimum width=2.2cm] at (-0.7,-3.6) {deleg.};
+\node[fail] at (1,-3.6) {$\times$};
+\node[fail] at (2,-3.6) {$\times$};
+\node[pass] at (3,-3.6) {\checkmark};
+\node[pass] at (4,-3.6) {\checkmark};
+\node[pass] at (5,-3.6) {\checkmark};
+\node[err] at (6,-3.6) {ERR};
+\node[pass] at (7,-3.6) {\checkmark};
+% Row 7: word_puzzle
+\node[hdr,minimum width=2.2cm] at (-0.7,-4.2) {w\_puz};
+\node[fail] at (1,-4.2) {$\times$};
+\node[fail] at (2,-4.2) {$\times$};
+\node[pass] at (3,-4.2) {\checkmark};
+\node[fail] at (4,-4.2) {$\times$};
+\node[err] at (5,-4.2) {ERR};
+\node[fail] at (6,-4.2) {$\times$};
+\node[pass] at (7,-4.2) {\checkmark};
+% Row 8: depth6_topo_sort
+\node[hdr,minimum width=2.2cm] at (-0.7,-4.8) {topo\_s};
+\node[fail] at (1,-4.8) {$\times$};
+\node[fail] at (2,-4.8) {$\times$};
+\node[fail] at (3,-4.8) {$\times$};
+\node[fail] at (4,-4.8) {$\times$};
+\node[fail] at (5,-4.8) {$\times$};
+\node[err] at (6,-4.8) {ERR};
+\node[fail] at (7,-4.8) {$\times$};
+% Divider
+\draw[thick] (-0.2,-5.1) -- (7.45,-5.1);
+% Totals row
+\node[hdr,minimum width=2.2cm] at (-0.7,-5.5) {Total};
+\node[cell] at (1,-5.5) {3/8};
+\node[cell] at (2,-5.5) {3/8};
+\node[cell,font=\scriptsize\bfseries] at (3,-5.5) {6/8};
+\node[cell] at (4,-5.5) {3/8};
+\node[cell] at (5,-5.5) {4/8};
+\node[cell] at (6,-5.5) {3/8};
+\node[cell] at (7,-5.5) {4/8};
+\end{tikzpicture}
+\caption{Per-task pass/fail heatmap in depth1-iter3 mode across seven models. Green = pass, red = fail, orange = engine error. Tasks are ordered by decreasing solve rate; a clear difficulty gradient emerges from universally solved (top) to universally failed (bottom).}
+\label{fig:pertask-heatmap}
+\end{figure}
 
 \subsection{Composite Score Analysis}
 
@@ -664,9 +863,37 @@ Kimi-K2.5 & no-rec-best3 & 75.0 & 79.7 & 38.1 & Promising \\
 \end{tabular}
 \end{table}
 
+\begin{figure}[t]
+\centering
+\begin{tikzpicture}
+\begin{axis}[
+  xbar,
+  bar width=10pt,
+  width=0.92\linewidth,
+  height=6.5cm,
+  xmin=0,
+  xmax=95,
+  xlabel={Composite score},
+  symbolic y coords={Kimi-K2,Qwen3-235B,DSV3.2,M2.1,M2.5,K2.5* best3,K2.5* default,Qwen3.5},
+  ytick=data,
+  y tick label style={font=\small},
+  nodes near coords,
+  nodes near coords align={horizontal},
+  every node near coord/.append style={font=\scriptsize},
+  xmajorgrids=true,
+]
+\addplot[fill=red!30] coordinates {(51.5,Kimi-K2) (58.6,Qwen3-235B)};
+\addplot[fill=orange!40] coordinates {(59.5,DSV3.2) (64.5,M2.1) (65.9,M2.5)};
+\addplot[fill=blue!40] coordinates {(76.1,Qwen3.5) (79.7,K2.5* best3) (83.7,K2.5* default)};
+\end{axis}
+\end{tikzpicture}
+\caption{Composite readiness scores (best mode per model). Colours indicate readiness tier: blue = Promising ($>$70), orange = Experimental (60--70), red = NotProdReady ($<$60). Kimi-K2.5 (post-fix) achieves the highest composite at 83.7; Qwen3.5-397B is the strongest pre-fix model at 76.1.}
+\label{fig:composite-bars}
+\end{figure}
+
 \section{Statistical Analysis: Bayesian Inference and Mode Selection}
 
-With only $n{=}8$ Bernoulli trials per model-mode configuration, point estimates of pass rate carry substantial uncertainty. We apply Bayesian inference and multi-armed bandit analysis to formalize this uncertainty and guide mode selection under posterior beliefs.
+With only $n{=}8$ Bernoulli trials per model--mode configuration, point estimates of pass rate carry substantial uncertainty. To move beyond raw percentages, we apply Bayesian inference and multi-armed bandit analysis to formalise this uncertainty and guide mode selection under posterior beliefs.
 
 \subsection{Bayesian Posterior Analysis}
 
@@ -777,7 +1004,7 @@ Kimi-K2 & 0.020 & \textbf{0.666} & 0.016 & 0.298 \\
 \multicolumn{5}{l}{\emph{Post-FINAL-fix:}} \\
 K2.5* & 0.205 & 0.069 & 0.207 & \textbf{0.519} \\
 \midrule
-Macro-avg & 0.038 & \textbf{0.554} & 0.037 & 0.372 \\
+Macro-avg (6 pre-fix) & 0.038 & \textbf{0.554} & 0.037 & 0.372 \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -808,7 +1035,7 @@ Macro-avg & 0.038 & \textbf{0.554} & 0.037 & 0.372 \\
 \label{fig:thompson-allocation}
 \end{figure}
 
-Three patterns emerge from the Thompson analysis. First, \textbf{depth1-iter3 is the aggregate optimal mode} (55.4\% selection across models), confirming shallow recursion with attempts as the best general recommendation. Second, \textbf{model--mode interaction is extreme}: Qwen3.5 selects depth1-iter3 in 99.1\% of rounds, while M2.5 selects no-rec-best3 in 67.2\%---the ``best mode'' genuinely depends on the model. Third, \textbf{deep single-pass and unscaffolded modes are never selected} ($<2\%$ for pre-fix models), formalizing the finding that attempt budget is a prerequisite for competitive performance.
+Three patterns emerge from the Thompson analysis. Depth1-iter3 is the aggregate optimal mode, selected in 55.4\% of simulated rounds across models, confirming shallow recursion with attempts as the best general recommendation. However, model--mode interaction proves extreme: Qwen3.5 selects depth1-iter3 in 99.1\% of rounds, while M2.5 selects no-rec-best3 in 67.2\%, demonstrating that the ``best mode'' genuinely depends on the model. Deep single-pass and unscaffolded modes are never selected (below 2\% for all pre-fix models), formalising the finding that attempt budget is a prerequisite for competitive performance.
 
 \subsection{Latency Variability}
 
@@ -914,21 +1141,32 @@ For short-horizon tasks, recursion is \emph{not} uniformly beneficial by itself.
 This is compatible with \rlm literature in spirit \cite{zhang2025rlm,primeintellect2026rlm}, but narrower in scope: our results are about practical profile behavior under strict checkers, not a universal claim that deeper recursion improves all task classes.
 
 \section{Threats to Validity}
-\paragraph{Internal validity.}
-Observed improvements combine multiple interventions (typed checking, runtime hardening, prompt contract changes) and cannot be attributed to recursion alone without larger controlled factorial studies.
-Checkpoint/fork/workspace controls are available in all modes but are not independently ablated, so causal attribution to these controls is out of scope for current results.
+Several limitations constrain the strength of our conclusions. With respect to internal validity, the observed improvements combine multiple simultaneous interventions---typed checking, runtime hardening, and prompt contract changes---and cannot be attributed to recursion alone without larger controlled factorial studies. The checkpoint, fork, and workspace controls are available in all modes but are not independently ablated, so causal attribution to these mechanisms is out of scope for the current results. External validity is limited by the small slice sizes: the Hugging Face analysis covers 40 runs and the Codeforces analysis covers only 8, making both useful as diagnostic instruments but insufficient for strong generalisation to broader task populations. Construct validity is complicated by the fact that strict executable scoring conflates algorithmic errors with formatting and compilation discipline; our compile-reject taxonomy partially separates these factors but not perfectly. Finally, statistical conclusion validity is constrained by sample size: many confidence intervals span 30--50 percentage points, and claims are therefore directional unless corroborated by the higher-sample long-context runs.
 
-\paragraph{External validity.}
-HF and Codeforces analyses rely on small slices (40 and 8 runs). These are useful diagnostic instruments but insufficient for strong generalization.
+\section{Tool-Call Hallucination and the Case for Natively Trained RLMs}
 
-\paragraph{Construct validity.}
-Strict executable scoring conflates algorithmic errors with formatting and compilation discipline. The compile taxonomy partially separates these factors but not perfectly.
+A persistent failure mode across our benchmarks is \emph{tool-call hallucination}: the underlying LLM generates fabricated tool invocations instead of task-relevant answers. In our latest full benchmark run (4{,}151 total failures), we observed MiniMax-M2.5 emitting XML-encoded pseudo-tool-calls such as \texttt{<minimax:tool\_call>} and \texttt{<FunctionCall>} tags directed at non-existent tools (\texttt{filesystem\_search\_files}, \texttt{inspect\_context}, etc.). These hallucinated calls appeared in 0.07\% of runs as explicit format leaks, but contributed more broadly to wrong-answer and empty-output categories when the model substituted tool attempts for direct reasoning.
 
-\paragraph{Statistical conclusion validity.}
-Many confidence intervals are wide due to low sample counts. Claims are therefore directional unless supported by higher-sample runs.
+This failure is not a scaffold bug but a \emph{model training mismatch}: current models are trained to use tool-calling conventions from their native providers (OpenAI function calling, Anthropic tool use, etc.) but have never seen the RLM REPL interface during training. When placed in a recursive scaffold, they sometimes revert to their trained tool-use patterns rather than following the RLM prompt contract.
 
-\section{Future Work: Plan Annealing for Recursive Coordination}
-A concrete next step is plan annealing: explicit progress propagation across recursive calls so sub-LLMs receive only unresolved objectives.
+\subsection{Evidence from Failure Taxonomy}
+
+Three categories in our failure taxonomy trace directly to this mismatch. In the \texttt{format\_trace\_or\_scratchpad\_leak} category (0.07\% of runs), the model returns raw tool-call XML as its final answer---for example, emitting \texttt{<FunctionCall>} blocks directed at a nonexistent \texttt{inspect} tool. In the \texttt{missing\_numeric\_answer} category (0.07\%), the model substitutes a \texttt{<minimax:tool\_call>} invocation for the expected numeric output, attempting to call sandbox functions that do not exist. In the \texttt{hallucinated\_when\_should\_abstain} category (0.05\%), tasks requiring explicit abstention instead elicit tool calls to \texttt{filesystem\_list\_allowed\_directories}. Although these categories are small in percentage terms, they represent a qualitatively distinct failure mode: the model is not attempting the task at all, but rather invoking infrastructure that does not exist in the RLM environment.
+
+\subsection{Mitigation: Output Filtering}
+
+As an engineering mitigation, we implemented a post-processing step that strips hallucinated tool-call patterns from final answers using regex-based filtering. This removes \texttt{<minimax:tool\_call>}, \texttt{<FunctionCall>}, and \texttt{<invoke>} XML blocks before answer extraction. While effective at preventing garbage output, this is a symptom-level fix that does not address the underlying training gap.
+
+\subsection{Toward Natively Recursive Models}
+
+The principled solution is to train models that natively understand the RLM interface. The updated RLM paper (v2) \cite{zhang2025rlm} provides the first evidence that this is both feasible and highly effective. Zhang et al.\ post-trained \textbf{RLM-Qwen3-8B} by distilling only ${\sim}1{,}000$ filtered RLM trajectories from a larger model (Qwen3-Coder-480B-A35B) evaluated on LongBenchPro \cite{chen2026longbenchpro} tasks. The resulting model outperforms the base Qwen3-8B by 28.3\% on average across long-context tasks and approaches vanilla GPT-5 quality on three benchmarks, despite a remarkably small training budget of 300 steps with batch size 64 using the prime-rl library \cite{primerl2025}. Crucially, training focused on improving the root model's ability to interact with the REPL and to discern when sub-calls are useful; sub-call behaviour generalises from general-purpose reasoning capability rather than requiring explicit sub-call supervision. A programmatic trajectory correction step proved critical: 16\% of collected trajectories contained incorrect \texttt{FINAL} usage and 13\% incorrectly called REPL variables as final answers, and fixing these template errors substantially improved the distilled model's performance.
+
+This result directly addresses our observed hallucination failures. A natively trained RLM would not revert to provider-specific tool-call conventions because it has learned the correct REPL interaction patterns. The trajectory correction finding is particularly relevant to Axon: it demonstrates that even large frontier models make systematic template mistakes in RLM usage, and that cleaning these during training data preparation is essential.
+
+For Axon specifically, two paths forward are most promising. The first is trajectory collection and distillation: collecting RLM trajectories from strong scaffold runs (for example, using GPT-5 or Qwen3-Coder as the root model), filtering and correcting template errors, and distilling the result into a smaller model following the recipe in \cite{zhang2025rlm}. Axon's existing trajectory logging infrastructure makes this directly applicable. The second path is reinforcement learning from scaffold feedback, in which scaffold-level signals---pass/fail outcomes, depth utilisation, and format compliance---serve as reward signals for RLHF or DPO fine-tuning, building on the STaR bootstrapping approach \cite{zelikman2022star,zelikman2024quiet}. Axon's benchmark harness already produces the per-task scoring artefacts needed for this pipeline.
+
+\section{Future Work: Plan Annealing and Prompt-Policy Learning}
+Our results point to two concrete directions for improving recursive scaffold performance. The first is plan annealing: explicit progress propagation across recursive calls so that child models receive only the unresolved objectives from a structured plan, rather than the entire problem context.
 
 \begin{lstlisting}[language={}]
 PLAN = [{task, state}]  # state in {pending, in_progress, done, blocked}
@@ -942,14 +1180,16 @@ for each recursive handoff:
 
 This mechanism is aligned with emerging evidence that stable internal structure, not only depth, matters for long reasoning quality \cite{chen2026molecular}. Evaluation should test whether plan annealing lowers token use per solved task, reduces timeout/error rate, and improves strict executable pass rate at fixed budgets.
 
+In parallel, prompt-policy optimization should be treated as a first-class scaffold optimization layer rather than ad-hoc prompt edits. We now expose policy bundles and depth gates as explicit knobs in both CLI and MCP, which enables offline policy search over benchmark artifacts. A practical optimization loop is to score candidate policies on pass rate, format-leak rate, and cost, then promote Pareto-dominant policies per model/mode family. This is directly compatible with LLM-driven prompt optimization methods such as OPRO \cite{zhou2023opro}, automatic prompt engineering \cite{zhou2023ape}, and iterative self-improvement pipelines \cite{zelikman2022star}; for decomposition-aware tasks, policy search can also borrow branch/search structure from Tree-of-Thought style methods \cite{yao2023tot}.
+
 \section{Conclusion}
-This paper reframes \axon evaluation around a practical question from \rlm deployment: recursion versus extra iterations on short-horizon tasks. A multi-model Pareto analysis across seven Synthetic-hosted models (224 runs) yields three main conclusions.
+This paper reframes \axon evaluation around a practical question arising from \rlm deployment: whether recursion provides measurable benefit over extra iterations on short-horizon tasks. A multi-model Pareto analysis across six pre-fix models and one post-fix model (Kimi-K2.5) on the Synthetic platform (224 total runs) yields three principal conclusions.
 
-First, \textbf{scaffold bugs can masquerade as model limitations}. A FINAL-extraction bug in the fallback path caused depth6-single-pass to score 0\% across all pre-fix models, even when the underlying answers were correct. After fixing, Kimi-K2.5 achieved 62.5\% in depth6-single-pass---demonstrating that deep recursion can work when the scaffold faithfully surfaces model outputs.
+The most immediate lesson is that scaffold bugs can masquerade as model limitations. A FINAL-extraction bug in the fallback path caused depth6-single-pass to score 0\% across all pre-fix models, even when the underlying answers were correct; after fixing, Kimi-K2.5 achieved 62.5\% in depth6-single-pass, demonstrating that deep recursion can work when the scaffold faithfully surfaces model outputs. This finding underscores the importance of end-to-end contract verification before attributing failure to model capability.
 
-Second, \textbf{the Pareto frontier has two co-dominant configurations}: Qwen3.5-397B with depth1-iter3 (75\% pass, 11.9s, \$0.0044/task---best speed and cost) and Kimi-K2.5 with no-rec-best3 (75\% pass, 38.1s, \$0.0064/task---best single-pass robustness at 62.5\% even in default mode). Speed varies 10$\times$ across models (7.4s to 71.7s), making latency a first-order deployment concern.
+At the deployment level, the Pareto frontier reveals two co-dominant configurations: Qwen3.5-397B with depth1-iter3 (75\% pass, 11.9\,s, \$0.0044 per task) offers the best speed and cost, while Kimi-K2.5 with no-rec-best3 (75\% pass, 38.1\,s, \$0.0064 per task) provides the strongest single-pass robustness at 62.5\% even in default mode. The tenfold speed variation across models (7.4\,s to 71.7\,s) makes latency a first-order deployment concern that interacts with mode selection.
 
-Third, \textbf{whether recursion or iteration wins is model-dependent}: Qwen3.5 strongly favors recursion (75\% vs 12.5\%) while MiniMax-M2.5 favors iteration (50\% vs 37.5\%), and Kimi-K2.5 is relatively mode-insensitive (50--75\% across all modes). This interaction effect between model capability and scaffold mode is a new finding that cautions against universal mode recommendations.
+Perhaps most consequentially, whether recursion or iteration wins is model-dependent. Qwen3.5 strongly favours recursion (75\% versus 12.5\% for no-rec-best3), MiniMax-M2.5 favours iteration (50\% versus 37.5\%), and Kimi-K2.5 is relatively mode-insensitive (50--75\% across all modes). This interaction effect between model capability and scaffold mode cautions against universal mode recommendations and motivates the adaptive policy selection mechanisms described in our future work.
 
 \bibliographystyle{plain}
 \bibliography{refs}

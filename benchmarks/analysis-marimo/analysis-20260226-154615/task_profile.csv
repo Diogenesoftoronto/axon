@@ -1,0 +1,10 @@
+dataset_label,tasks,avg_context_chars,avg_query_chars
+Codeforces Hard Like (Rust-Strict),10,184.2,160.0
+HF ARC Challenge (100),100,52.0,398.24
+HF BoolQ (100),100,554.92,77.04
+HF GSM8K (100),100,64.0,231.3
+HF HellaSwag (100),100,38.0,475.27
+HF MBPP Calls (100),100,59.0,311.4
+Information Dense Ledger,6,0.0,75.66666666666667
+Long Context Books with Distractors,5,0.0,92.0
+Mode Profile Targeted,12,100.66666666666667,128.41666666666666

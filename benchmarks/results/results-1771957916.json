@@ -1,0 +1,205 @@
+{
+  "created_at": 1771957916,
+  "dataset": "benchmarks/rlm_challenges.json",
+  "base_url": "https://api.synthetic.new/openai/v1/",
+  "runs": 1,
+  "timeout": 90,
+  "modes": [
+    {
+      "name": "current-default",
+      "binary": "/home/diogenes/Monolith/target/release/axon",
+      "extra_args": [
+        "--max-depth",
+        "2",
+        "--max-iterations",
+        "6"
+      ]
+    },
+    {
+      "name": "current-no-recursion",
+      "binary": "/home/diogenes/Monolith/target/release/axon",
+      "extra_args": [
+        "--max-depth",
+        "0",
+        "--max-iterations",
+        "6"
+      ]
+    },
+    {
+      "name": "current-low-budget",
+      "binary": "/home/diogenes/Monolith/target/release/axon",
+      "extra_args": [
+        "--max-depth",
+        "2",
+        "--max-iterations",
+        "3"
+      ]
+    },
+    {
+      "name": "previous-default",
+      "binary": "/tmp/axon-prev-gy2d3pt2/axon-prev",
+      "extra_args": [
+        "--max-depth",
+        "2",
+        "--max-iterations",
+        "6"
+      ]
+    }
+  ],
+  "summary": [
+    {
+      "mode": "current-default",
+      "total": 3,
+      "ok": 3,
+      "matched": 3,
+      "pass_rate": 100.0,
+      "avg_time_s": 9.659
+    },
+    {
+      "mode": "current-low-budget",
+      "total": 3,
+      "ok": 3,
+      "matched": 3,
+      "pass_rate": 100.0,
+      "avg_time_s": 9.43
+    },
+    {
+      "mode": "current-no-recursion",
+      "total": 3,
+      "ok": 3,
+      "matched": 3,
+      "pass_rate": 100.0,
+      "avg_time_s": 9.982
+    },
+    {
+      "mode": "previous-default",
+      "total": 3,
+      "ok": 3,
+      "matched": 3,
+      "pass_rate": 100.0,
+      "avg_time_s": 12.752
+    }
+  ],
+  "results": [
+    {
+      "mode": "current-default",
+      "task_id": "hanoi_moves_12",
+      "run_idx": 1,
+      "ok": true,
+      "matched": true,
+      "elapsed_s": 10.382166147232056,
+      "answer": "4095",
+      "error": ""
+    },
+    {
+      "mode": "current-default",
+      "task_id": "hanoi_moves_20",
+      "run_idx": 1,
+      "ok": true,
+      "matched": true,
+      "elapsed_s": 6.156699895858765,
+      "answer": "1048575",
+      "error": ""
+    },
+    {
+      "mode": "current-default",
+      "task_id": "hanoi_recurrence_6",
+      "run_idx": 1,
+      "ok": true,
+      "matched": true,
+      "elapsed_s": 12.438806056976318,
+      "answer": "63",
+      "error": ""
+    },
+    {
+      "mode": "current-no-recursion",
+      "task_id": "hanoi_moves_12",
+      "run_idx": 1,
+      "ok": true,
+      "matched": true,
+      "elapsed_s": 10.660151720046997,
+      "answer": "4095",
+      "error": ""
+    },
+    {
+      "mode": "current-no-recursion",
+      "task_id": "hanoi_moves_20",
+      "run_idx": 1,
+      "ok": true,
+      "matched": true,
+      "elapsed_s": 9.467751741409302,
+      "answer": "1048575",
+      "error": ""
+    },
+    {
+      "mode": "current-no-recursion",
+      "task_id": "hanoi_recurrence_6",
+      "run_idx": 1,
+      "ok": true,
+      "matched": true,
+      "elapsed_s": 9.819124221801758,
+      "answer": "63",
+      "error": ""
+    },
+    {
+      "mode": "current-low-budget",
+      "task_id": "hanoi_moves_12",
+      "run_idx": 1,
+      "ok": true,
+      "matched": true,
+      "elapsed_s": 13.556201219558716,
+      "answer": "4095",
+      "error": ""
+    },
+    {
+      "mode": "current-low-budget",
+      "task_id": "hanoi_moves_20",
+      "run_idx": 1,
+      "ok": true,
+      "matched": true,
+      "elapsed_s": 7.537476062774658,
+      "answer": "1048575",
+      "error": ""
+    },
+    {
+      "mode": "current-low-budget",
+      "task_id": "hanoi_recurrence_6",
+      "run_idx": 1,
+      "ok": true,
+      "matched": true,
+      "elapsed_s": 7.196619510650635,
+      "answer": "63",
+      "error": ""
+    },
+    {
+      "mode": "previous-default",
+      "task_id": "hanoi_moves_12",
+      "run_idx": 1,
+      "ok": true,
+      "matched": true,
+      "elapsed_s": 18.257442235946655,
+      "answer": "4095",
+      "error": ""
+    },
+    {
+      "mode": "previous-default",
+      "task_id": "hanoi_moves_20",
+      "run_idx": 1,
+      "ok": true,
+      "matched": true,
+      "elapsed_s": 10.06113886833191,
+      "answer": "1048575",
+      "error": ""
+    },
+    {
+      "mode": "previous-default",
+      "task_id": "hanoi_recurrence_6",
+      "run_idx": 1,
+      "ok": true,
+      "matched": true,
+      "elapsed_s": 9.937068462371826,
+      "answer": "63",
+      "error": ""
+    }
+  ]
+}

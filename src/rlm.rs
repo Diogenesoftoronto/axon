@@ -5,6 +5,7 @@ use regex::Regex;
 use std::collections::{BTreeMap, HashMap};
 
 use crate::llm::{LlmClient, Message};
+use crate::policy::{DepthEnforcementMode, RuntimePolicy};
 use crate::prompts;
 use crate::sandbox::{Sandbox, MAIN_SESSION_ID};
 
@@ -17,6 +18,7 @@ pub struct RlmConfig {
     pub max_depth: usize,
     pub verbose: bool,
     pub trace_sandbox: bool,
+    pub runtime_policy: RuntimePolicy,
 }
 
 pub struct Rlm {
@@ -74,6 +76,40 @@ struct RuntimeState {
     pending_sandbox_actions: Vec<PendingSandboxAction>,
 }
 
+#[derive(Clone, Debug)]
+struct DepthTelemetry {
+    max_depth_reached: usize,
+    recursive_call_count: usize,
+    recursive_calls_by_depth: BTreeMap<usize, usize>,
+}
+
+impl DepthTelemetry {
+    fn new(current_depth: usize) -> Self {
+        Self {
+            max_depth_reached: current_depth,
+            recursive_call_count: 0,
+            recursive_calls_by_depth: BTreeMap::new(),
+        }
+    }
+
+    fn record_spawn(&mut self, child_depth: usize) {
+        self.recursive_call_count += 1;
+        self.max_depth_reached = self.max_depth_reached.max(child_depth);
+        *self
+            .recursive_calls_by_depth
+            .entry(child_depth)
+            .or_insert(0) += 1;
+    }
+
+    fn merge_child(&mut self, child: &DepthTelemetry) {
+        self.max_depth_reached = self.max_depth_reached.max(child.max_depth_reached);
+        self.recursive_call_count += child.recursive_call_count;
+        for (depth, count) in &child.recursive_calls_by_depth {
+            *self.recursive_calls_by_depth.entry(*depth).or_insert(0) += count;
+        }
+    }
+}
+
 impl RuntimeState {
     fn new(_context: &str) -> Self {
         let mut forks = HashMap::new();
@@ -110,14 +146,33 @@ impl Rlm {
     }
 
     pub async fn completion(&self, query: &str, context: &str) -> Result<String> {
+        let (answer, _) = self.completion_with_telemetry(query, context).await?;
+        Ok(answer)
+    }
+
+    async fn completion_with_telemetry(
+        &self,
+        query: &str,
+        context: &str,
+    ) -> Result<(String, DepthTelemetry)> {
+        self.validate_depth_policy_feasibility()?;
         let mut sandbox = Sandbox::new()?;
         let mut runtime = RuntimeState::new(context);
+        let mut telemetry = DepthTelemetry::new(self.config.depth);
 
-        if !context.is_empty() {
-            sandbox.set_variable("context", Object::String(context.to_string()))?;
+        let mut effective_context = context.to_string();
+        if self.config.runtime_policy.inject_policy_into_context {
+            effective_context = self.config.runtime_policy.prepend_to_context(context);
+        }
+
+        if !effective_context.is_empty() {
+            sandbox.set_variable("context", Object::String(effective_context))?;
         }
 
         let mut messages = prompts::build_system_prompt(self.config.depth);
+        if let Some(policy_block) = self.config.runtime_policy.prompt_instruction_block() {
+            messages.push(Message::system(&policy_block));
+        }
 
         for iteration in 0..self.config.max_iterations {
             messages.push(prompts::next_action_prompt(query, iteration, false));
@@ -162,7 +217,7 @@ impl Rlm {
                         );
                     }
                     let result = self
-                        .execute_in_sandbox(&mut sandbox, code, &mut runtime)
+                        .execute_in_sandbox(&mut sandbox, code, &mut runtime, &mut telemetry)
                         .await?;
                     if let Some(fork) = runtime.active_fork_mut() {
                         fork.code_blocks.push(code.to_string());
@@ -173,6 +228,19 @@ impl Rlm {
             }
 
             if let Some(answer) = check_final_answer(&response, &sandbox) {
+                if let Some(reason) = self.depth_policy_unmet_reason(&telemetry) {
+                    if self.config.runtime_policy.depth_enforcement == DepthEnforcementMode::Strict
+                    {
+                        if iteration + 1 < self.config.max_iterations {
+                            messages.push(Message::user(&format!(
+                                "Policy requirement not met: {}. Continue with recursive llm_query calls before FINAL(...).",
+                                reason
+                            )));
+                            continue;
+                        }
+                        anyhow::bail!("Depth policy unmet: {}", reason);
+                    }
+                }
                 if self.config.verbose {
                     eprintln!(
                         "[depth={}] FINAL: {}...",
@@ -180,7 +248,7 @@ impl Rlm {
                         &answer[..answer.len().min(120)]
                     );
                 }
-                return Ok(strip_final_wrapper(&answer));
+                return Ok((strip_final_wrapper(&answer), telemetry));
             }
         }
 
@@ -196,14 +264,76 @@ impl Rlm {
         let fallback_code_blocks = find_code_blocks(response);
         for code in &fallback_code_blocks {
             let _ = self
-                .execute_in_sandbox(&mut sandbox, code, &mut runtime)
+                .execute_in_sandbox(&mut sandbox, code, &mut runtime, &mut telemetry)
                 .await;
         }
 
         if let Some(answer) = check_final_answer(response, &sandbox) {
-            return Ok(strip_final_wrapper(&answer));
+            if let Some(reason) = self.depth_policy_unmet_reason(&telemetry) {
+                if self.config.runtime_policy.depth_enforcement == DepthEnforcementMode::Strict {
+                    anyhow::bail!("Depth policy unmet: {}", reason);
+                }
+            }
+            return Ok((strip_final_wrapper(&answer), telemetry));
         }
-        Ok(strip_final_wrapper(&completion.text))
+        if let Some(reason) = self.depth_policy_unmet_reason(&telemetry) {
+            if self.config.runtime_policy.depth_enforcement == DepthEnforcementMode::Strict {
+                anyhow::bail!("Depth policy unmet: {}", reason);
+            }
+        }
+        Ok((strip_final_wrapper(&completion.text), telemetry))
+    }
+
+    fn validate_depth_policy_feasibility(&self) -> Result<()> {
+        if self.config.runtime_policy.depth_enforcement != DepthEnforcementMode::Strict {
+            return Ok(());
+        }
+
+        if let Some(min_depth) = self.config.runtime_policy.require_min_depth {
+            if min_depth > self.config.max_depth {
+                anyhow::bail!(
+                    "Depth policy invalid: require_min_depth={} exceeds max_depth={}",
+                    min_depth,
+                    self.config.max_depth
+                );
+            }
+        }
+
+        if let Some(min_calls) = self.config.runtime_policy.require_min_recursive_calls {
+            if min_calls > 0 && self.config.depth >= self.config.max_depth {
+                anyhow::bail!(
+                    "Depth policy invalid: require_min_recursive_calls={} but current depth {} has no remaining recursion budget (max_depth={})",
+                    min_calls,
+                    self.config.depth,
+                    self.config.max_depth
+                );
+            }
+        }
+
+        Ok(())
+    }
+
+    fn depth_policy_unmet_reason(&self, telemetry: &DepthTelemetry) -> Option<String> {
+        if self.config.runtime_policy.depth_enforcement == DepthEnforcementMode::Off {
+            return None;
+        }
+        if let Some(min_depth) = self.config.runtime_policy.require_min_depth {
+            if telemetry.max_depth_reached < min_depth {
+                return Some(format!(
+                    "max depth reached {} < required {}",
+                    telemetry.max_depth_reached, min_depth
+                ));
+            }
+        }
+        if let Some(min_calls) = self.config.runtime_policy.require_min_recursive_calls {
+            if telemetry.recursive_call_count < min_calls {
+                return Some(format!(
+                    "recursive call count {} < required {}",
+                    telemetry.recursive_call_count, min_calls
+                ));
+            }
+        }
+        None
     }
 
     async fn execute_in_sandbox(
@@ -211,6 +341,7 @@ impl Rlm {
         sandbox: &mut Sandbox,
         code: &str,
         runtime: &mut RuntimeState,
+        telemetry: &mut DepthTelemetry,
     ) -> Result<String> {
         let output = match sandbox.execute(code) {
             Ok(out) => out,
@@ -248,7 +379,7 @@ impl Rlm {
                         );
                     }
                     let ret = self
-                        .handle_external(sandbox, &function_name, &args, runtime)
+                        .handle_external(sandbox, &function_name, &args, runtime, telemetry)
                         .await?;
                     if self.config.trace_sandbox {
                         eprintln!(
@@ -363,17 +494,18 @@ impl Rlm {
         function_name: &str,
         args: &[Object],
         runtime: &mut RuntimeState,
+        telemetry: &mut DepthTelemetry,
     ) -> Result<Object> {
         match function_name {
             "llm_query" => {
                 let prompt = obj_to_string(args.first().unwrap_or(&Object::None));
-                self.handle_llm_query(&prompt).await
+                self.handle_llm_query(&prompt, telemetry).await
             }
             "llm_query_batched" => {
                 let prompts = obj_to_string_list(args.first().unwrap_or(&Object::None));
                 let mut results = Vec::new();
                 for p in &prompts {
-                    results.push(self.handle_llm_query(p).await?);
+                    results.push(self.handle_llm_query(p, telemetry).await?);
                 }
                 Ok(Object::List(results))
             }
@@ -629,13 +761,18 @@ impl Rlm {
         }
     }
 
-    async fn handle_llm_query(&self, prompt: &str) -> Result<Object> {
+    async fn handle_llm_query(
+        &self,
+        prompt: &str,
+        telemetry: &mut DepthTelemetry,
+    ) -> Result<Object> {
         if self.config.depth < self.config.max_depth {
+            let child_depth = self.config.depth + 1;
+            telemetry.record_spawn(child_depth);
             if self.config.verbose {
                 eprintln!(
                     "[depth={}] → spawning sub-RLM at depth {}",
-                    self.config.depth,
-                    self.config.depth + 1
+                    self.config.depth, child_depth
                 );
             }
             let sub = Rlm::new(RlmConfig {
@@ -643,16 +780,18 @@ impl Rlm {
                 model: self.config.sub_model.clone(),
                 sub_model: self.config.sub_model.clone(),
                 max_iterations: self.config.max_iterations.min(5),
-                depth: self.config.depth + 1,
+                depth: child_depth,
                 max_depth: self.config.max_depth,
                 verbose: self.config.verbose,
                 trace_sandbox: self.config.trace_sandbox,
+                runtime_policy: self.config.runtime_policy.for_sub_rlm(),
             });
-            let result = Box::pin(sub.completion(
+            let (result, child_telemetry) = Box::pin(sub.completion_with_telemetry(
                 "Analyze the context and answer the question within it.",
                 prompt,
             ))
             .await?;
+            telemetry.merge_child(&child_telemetry);
             Ok(Object::String(result))
         } else {
             if self.config.verbose {
@@ -732,18 +871,26 @@ fn extract_balanced_parens(text: &str, start: usize) -> Option<String> {
     Some(text[start + 1..].to_string())
 }
 
+fn strip_hallucinated_tool_calls(text: &str) -> String {
+    let re = Regex::new(
+        r"(?s)<minimax:tool_call>.*?</minimax:tool_call>|<FunctionCall>.*?</FunctionCall>|<invoke\s+name=[^>]*>.*?</invoke>",
+    )
+    .unwrap();
+    re.replace_all(text, "").trim().to_string()
+}
+
 fn strip_final_wrapper(text: &str) -> String {
     let trimmed = text.trim();
     if let Some((_, content)) = find_final_answer(trimmed) {
-        return content;
+        return strip_hallucinated_tool_calls(&content);
     }
-    trimmed.to_string()
+    strip_hallucinated_tool_calls(trimmed)
 }
 
 fn check_final_answer(response: &str, sandbox: &Sandbox) -> Option<String> {
     let (kind, content) = find_final_answer(response)?;
     Some(match kind {
-        FinalType::Direct => content,
+        FinalType::Direct => strip_hallucinated_tool_calls(&content),
         FinalType::Variable => {
             let name = content.trim().trim_matches('"').trim_matches('\'');
             sandbox
@@ -839,6 +986,7 @@ fn normalize_vfs_prefix(path: &str) -> String {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use crate::policy::{DepthEnforcementMode, RuntimePolicy};
     use genai::Client;
 
     fn make_test_rlm() -> Rlm {
@@ -852,6 +1000,7 @@ mod tests {
             max_depth: 0,
             verbose: false,
             trace_sandbox: false,
+            runtime_policy: RuntimePolicy::default(),
         })
     }
 
@@ -862,8 +1011,9 @@ mod tests {
         runtime: &mut RuntimeState,
         code: &str,
     ) {
+        let mut telemetry = DepthTelemetry::new(0);
         let out = rt
-            .block_on(rlm.execute_in_sandbox(sandbox, code, runtime))
+            .block_on(rlm.execute_in_sandbox(sandbox, code, runtime, &mut telemetry))
             .unwrap();
         assert!(
             !out.contains("Sandbox execution error"),
@@ -951,6 +1101,120 @@ mod tests {
     fn test_normalize_vfs_path() {
         assert_eq!(normalize_vfs_path("foo/bar"), "/foo/bar");
         assert_eq!(normalize_vfs_path("/foo/bar"), "/foo/bar");
+    }
+
+    #[test]
+    fn test_depth_policy_unmet_reason_min_depth() {
+        let client = Client::builder().build();
+        let rlm = Rlm::new(RlmConfig {
+            client,
+            model: "test-model".to_string(),
+            sub_model: "test-sub-model".to_string(),
+            max_iterations: 1,
+            depth: 0,
+            max_depth: 2,
+            verbose: false,
+            trace_sandbox: false,
+            runtime_policy: RuntimePolicy {
+                profile_name: "depth_strict".to_string(),
+                format_contract_template: "".to_string(),
+                depth_strategy_template: "".to_string(),
+                inject_policy_into_context: false,
+                depth_enforcement: DepthEnforcementMode::Strict,
+                require_min_depth: Some(2),
+                require_min_recursive_calls: None,
+            },
+        });
+        let telemetry = DepthTelemetry::new(0);
+        let reason = rlm.depth_policy_unmet_reason(&telemetry);
+        assert!(reason.is_some());
+    }
+
+    #[test]
+    fn test_depth_policy_unmet_reason_min_recursive_calls() {
+        let client = Client::builder().build();
+        let rlm = Rlm::new(RlmConfig {
+            client,
+            model: "test-model".to_string(),
+            sub_model: "test-sub-model".to_string(),
+            max_iterations: 1,
+            depth: 0,
+            max_depth: 2,
+            verbose: false,
+            trace_sandbox: false,
+            runtime_policy: RuntimePolicy {
+                profile_name: "depth_strict".to_string(),
+                format_contract_template: "".to_string(),
+                depth_strategy_template: "".to_string(),
+                inject_policy_into_context: false,
+                depth_enforcement: DepthEnforcementMode::Strict,
+                require_min_depth: None,
+                require_min_recursive_calls: Some(1),
+            },
+        });
+        let telemetry = DepthTelemetry::new(0);
+        let reason = rlm.depth_policy_unmet_reason(&telemetry);
+        assert!(reason.is_some());
+    }
+
+    #[test]
+    fn test_validate_depth_policy_feasibility_rejects_min_depth_above_max() {
+        let client = Client::builder().build();
+        let rlm = Rlm::new(RlmConfig {
+            client,
+            model: "test-model".to_string(),
+            sub_model: "test-sub-model".to_string(),
+            max_iterations: 1,
+            depth: 0,
+            max_depth: 1,
+            verbose: false,
+            trace_sandbox: false,
+            runtime_policy: RuntimePolicy {
+                profile_name: "depth_strict".to_string(),
+                format_contract_template: "".to_string(),
+                depth_strategy_template: "".to_string(),
+                inject_policy_into_context: false,
+                depth_enforcement: DepthEnforcementMode::Strict,
+                require_min_depth: Some(3),
+                require_min_recursive_calls: None,
+            },
+        });
+        let err = rlm.validate_depth_policy_feasibility().unwrap_err();
+        assert!(
+            err.to_string().contains("require_min_depth"),
+            "unexpected error: {}",
+            err
+        );
+    }
+
+    #[test]
+    fn test_validate_depth_policy_feasibility_rejects_no_recursion_budget() {
+        let client = Client::builder().build();
+        let rlm = Rlm::new(RlmConfig {
+            client,
+            model: "test-model".to_string(),
+            sub_model: "test-sub-model".to_string(),
+            max_iterations: 1,
+            depth: 1,
+            max_depth: 1,
+            verbose: false,
+            trace_sandbox: false,
+            runtime_policy: RuntimePolicy {
+                profile_name: "depth_strict".to_string(),
+                format_contract_template: "".to_string(),
+                depth_strategy_template: "".to_string(),
+                inject_policy_into_context: false,
+                depth_enforcement: DepthEnforcementMode::Strict,
+                require_min_depth: None,
+                require_min_recursive_calls: Some(1),
+            },
+        });
+        let err = rlm.validate_depth_policy_feasibility().unwrap_err();
+        assert!(
+            err.to_string().contains("no remaining recursion budget"),
+            "unexpected error: {}",
+            err
+        );
     }
 
     #[test]
@@ -1071,8 +1335,7 @@ mod tests {
         let mut sandbox = Sandbox::new().unwrap();
         let mut runtime = RuntimeState::new("");
 
-        let fallback_response =
-            "Let me compute:\n```repl\nanswer = 5\n```\nFINAL_VAR(answer)";
+        let fallback_response = "Let me compute:\n```repl\nanswer = 5\n```\nFINAL_VAR(answer)";
 
         // Execute code blocks found in the fallback response.
         let code_blocks = find_code_blocks(fallback_response);
@@ -1095,8 +1358,7 @@ mod tests {
         let mut sandbox = Sandbox::new().unwrap();
         let mut runtime = RuntimeState::new("");
 
-        let fallback_response =
-            "```repl\nx = 42\n```\nFINAL(5)";
+        let fallback_response = "```repl\nx = 42\n```\nFINAL(5)";
 
         let code_blocks = find_code_blocks(fallback_response);
         assert_eq!(code_blocks.len(), 1);
@@ -1123,6 +1385,23 @@ mod tests {
 
         // strip_final_wrapper should pass through unchanged.
         assert_eq!(strip_final_wrapper(fallback_response), "The answer is 5.");
+    }
+
+    #[test]
+    fn test_strip_hallucinated_tool_calls() {
+        assert_eq!(
+            strip_hallucinated_tool_calls("Hello <minimax:tool_call>stuff\nhere</minimax:tool_call> world"),
+            "Hello  world"
+        );
+        assert_eq!(
+            strip_hallucinated_tool_calls("Answer <FunctionCall>foo()</FunctionCall>"),
+            "Answer"
+        );
+        assert_eq!(
+            strip_hallucinated_tool_calls("Result <invoke name=\"bar\">body</invoke> done"),
+            "Result  done"
+        );
+        assert_eq!(strip_hallucinated_tool_calls("no junk here"), "no junk here");
     }
 
     #[test]

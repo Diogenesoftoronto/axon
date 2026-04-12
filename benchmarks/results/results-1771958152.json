@@ -1,0 +1,125 @@
+{
+  "created_at": 1771958152,
+  "dataset": "benchmarks/rlm_challenges.json",
+  "base_url": "https://api.synthetic.new/openai/v1/",
+  "runs": 1,
+  "timeout": 60,
+  "modes": [
+    {
+      "name": "current-default",
+      "binary": "/home/diogenes/Monolith/target/release/axon",
+      "extra_args": [
+        "--max-depth",
+        "2",
+        "--max-iterations",
+        "6"
+      ]
+    },
+    {
+      "name": "current-no-recursion",
+      "binary": "/home/diogenes/Monolith/target/release/axon",
+      "extra_args": [
+        "--max-depth",
+        "0",
+        "--max-iterations",
+        "6"
+      ]
+    },
+    {
+      "name": "current-low-budget",
+      "binary": "/home/diogenes/Monolith/target/release/axon",
+      "extra_args": [
+        "--max-depth",
+        "2",
+        "--max-iterations",
+        "3"
+      ]
+    },
+    {
+      "name": "previous-default",
+      "binary": "/tmp/axon-prev-vuld60vg/axon-prev",
+      "extra_args": [
+        "--max-depth",
+        "2",
+        "--max-iterations",
+        "6"
+      ]
+    }
+  ],
+  "summary": [
+    {
+      "mode": "current-default",
+      "total": 1,
+      "ok": 1,
+      "matched": 1,
+      "pass_rate": 100.0,
+      "avg_time_s": 14.867
+    },
+    {
+      "mode": "current-low-budget",
+      "total": 1,
+      "ok": 1,
+      "matched": 1,
+      "pass_rate": 100.0,
+      "avg_time_s": 5.544
+    },
+    {
+      "mode": "current-no-recursion",
+      "total": 1,
+      "ok": 1,
+      "matched": 1,
+      "pass_rate": 100.0,
+      "avg_time_s": 7.312
+    },
+    {
+      "mode": "previous-default",
+      "total": 1,
+      "ok": 1,
+      "matched": 1,
+      "pass_rate": 100.0,
+      "avg_time_s": 9.649
+    }
+  ],
+  "results": [
+    {
+      "mode": "current-default",
+      "task_id": "hanoi_moves_12",
+      "run_idx": 1,
+      "ok": true,
+      "matched": true,
+      "elapsed_s": 14.866933107376099,
+      "answer": "4095",
+      "error": ""
+    },
+    {
+      "mode": "current-no-recursion",
+      "task_id": "hanoi_moves_12",
+      "run_idx": 1,
+      "ok": true,
+      "matched": true,
+      "elapsed_s": 7.3120622634887695,
+      "answer": "4095",
+      "error": ""
+    },
+    {
+      "mode": "current-low-budget",
+      "task_id": "hanoi_moves_12",
+      "run_idx": 1,
+      "ok": true,
+      "matched": true,
+      "elapsed_s": 5.543903827667236,
+      "answer": "4095",
+      "error": ""
+    },
+    {
+      "mode": "previous-default",
+      "task_id": "hanoi_moves_12",
+      "run_idx": 1,
+      "ok": true,
+      "matched": true,
+      "elapsed_s": 9.649070739746094,
+      "answer": "4095",
+      "error": ""
+    }
+  ]
+}

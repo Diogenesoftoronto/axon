@@ -1,0 +1,902 @@
+[
+  {
+    "id": "winogrande_validation_0000",
+    "context": "Commonsense coreference resolution. Return only the option number.",
+    "query": "Fill in the blank with the correct option. Return only 1 or 2.\n\nSentence: Sarah was a much better surgeon than Maria so _ always got the easier cases.\n1) Sarah\n2) Maria",
+    "check": {
+      "type": "choice_exact",
+      "value": "2"
+    }
+  },
+  {
+    "id": "winogrande_validation_0001",
+    "context": "Commonsense coreference resolution. Return only the option number.",
+    "query": "Fill in the blank with the correct option. Return only 1 or 2.\n\nSentence: Sarah was a much better surgeon than Maria so _ always got the harder cases.\n1) Sarah\n2) Maria",
+    "check": {
+      "type": "choice_exact",
+      "value": "1"
+    }
+  },
+  {
+    "id": "winogrande_validation_0002",
+    "context": "Commonsense coreference resolution. Return only the option number.",
+    "query": "Fill in the blank with the correct option. Return only 1 or 2.\n\nSentence: They were worried the wine would ruin the bed and the blanket, but the _ was't ruined.\n1) blanket\n2) bed",
+    "check": {
+      "type": "choice_exact",
+      "value": "2"
+    }
+  },
+  {
+    "id": "winogrande_validation_0003",
+    "context": "Commonsense coreference resolution. Return only the option number.",
+    "query": "Fill in the blank with the correct option. Return only 1 or 2.\n\nSentence: Terry tried to bake the eggplant in the toaster oven but the _ was too big.\n1) eggplant\n2) toaster",
+    "check": {
+      "type": "choice_exact",
+      "value": "1"
+    }
+  },
+  {
+    "id": "winogrande_validation_0004",
+    "context": "Commonsense coreference resolution. Return only the option number.",
+    "query": "Fill in the blank with the correct option. Return only 1 or 2.\n\nSentence: At night, Jeffrey always stays up later than Hunter to watch TV because _ wakes up late.\n1) Jeffrey\n2) Hunter",
+    "check": {
+      "type": "choice_exact",
+      "value": "1"
+    }
+  },
+  {
+    "id": "winogrande_validation_0005",
+    "context": "Commonsense coreference resolution. Return only the option number.",
+    "query": "Fill in the blank with the correct option. Return only 1 or 2.\n\nSentence: The cat of Sarah has some mouth problems, so she takes it to see Maria. _ is a responsible cat owner.\n1) Sarah\n2) Maria",
+    "check": {
+      "type": "choice_exact",
+      "value": "1"
+    }
+  },
+  {
+    "id": "winogrande_validation_0006",
+    "context": "Commonsense coreference resolution. Return only the option number.",
+    "query": "Fill in the blank with the correct option. Return only 1 or 2.\n\nSentence: The home that my parents had when I was in school was a lot nicer than my house now because the _ was sophisticated.\n1) home\n2) house",
+    "check": {
+      "type": "choice_exact",
+      "value": "1"
+    }
+  },
+  {
+    "id": "winogrande_validation_0007",
+    "context": "Commonsense coreference resolution. Return only the option number.",
+    "query": "Fill in the blank with the correct option. Return only 1 or 2.\n\nSentence: The home that my parents had when I was in school was a lot nicer than my house now because the _ is trashy.\n1) home\n2) house",
+    "check": {
+      "type": "choice_exact",
+      "value": "2"
+    }
+  },
+  {
+    "id": "winogrande_validation_0008",
+    "context": "Commonsense coreference resolution. Return only the option number.",
+    "query": "Fill in the blank with the correct option. Return only 1 or 2.\n\nSentence: Natalie has a rich husband and lots of money, Jennifer is poor _ needs to make her clothes.\n1) Natalie\n2) Jennifer",
+    "check": {
+      "type": "choice_exact",
+      "value": "2"
+    }
+  },
+  {
+    "id": "winogrande_validation_0009",
+    "context": "Commonsense coreference resolution. Return only the option number.",
+    "query": "Fill in the blank with the correct option. Return only 1 or 2.\n\nSentence: Joe immediately went to bakery before the bank because the _ had a limited supply of what he wanted.\n1) bakery\n2) bank",
+    "check": {
+      "type": "choice_exact",
+      "value": "1"
+    }
+  },
+  {
+    "id": "winogrande_validation_0010",
+    "context": "Commonsense coreference resolution. Return only the option number.",
+    "query": "Fill in the blank with the correct option. Return only 1 or 2.\n\nSentence: Joe immediately went to bakery before the bank because the _ had a substantial supply of what he wanted.\n1) bakery\n2) bank",
+    "check": {
+      "type": "choice_exact",
+      "value": "2"
+    }
+  },
+  {
+    "id": "winogrande_validation_0011",
+    "context": "Commonsense coreference resolution. Return only the option number.",
+    "query": "Fill in the blank with the correct option. Return only 1 or 2.\n\nSentence: I had to read an entire story for class tomorrow. Luckily, the _ was canceled.\n1) story\n2) class",
+    "check": {
+      "type": "choice_exact",
+      "value": "2"
+    }
+  },
+  {
+    "id": "winogrande_validation_0012",
+    "context": "Commonsense coreference resolution. Return only the option number.",
+    "query": "Fill in the blank with the correct option. Return only 1 or 2.\n\nSentence: I had to read an entire story for class tomorrow. Luckily, the _ was short.\n1) story\n2) class",
+    "check": {
+      "type": "choice_exact",
+      "value": "1"
+    }
+  },
+  {
+    "id": "winogrande_validation_0013",
+    "context": "Commonsense coreference resolution. Return only the option number.",
+    "query": "Fill in the blank with the correct option. Return only 1 or 2.\n\nSentence: He had enough time between classes to go to a cafe or to the library. He went to the _ because his paper could wait.\n1) cafe\n2) library",
+    "check": {
+      "type": "choice_exact",
+      "value": "1"
+    }
+  },
+  {
+    "id": "winogrande_validation_0014",
+    "context": "Commonsense coreference resolution. Return only the option number.",
+    "query": "Fill in the blank with the correct option. Return only 1 or 2.\n\nSentence: He had enough time between classes to go to a cafe or to the library. He went to the _ because his paper was due soon.\n1) cafe\n2) library",
+    "check": {
+      "type": "choice_exact",
+      "value": "2"
+    }
+  },
+  {
+    "id": "winogrande_validation_0015",
+    "context": "Commonsense coreference resolution. Return only the option number.",
+    "query": "Fill in the blank with the correct option. Return only 1 or 2.\n\nSentence: Lindsey like to read graphic novels but Natalie liked classic literature to read. _ bought the new Frank Miller comic at the book store.\n1) Lindsey\n2) Natalie",
+    "check": {
+      "type": "choice_exact",
+      "value": "1"
+    }
+  },
+  {
+    "id": "winogrande_validation_0016",
+    "context": "Commonsense coreference resolution. Return only the option number.",
+    "query": "Fill in the blank with the correct option. Return only 1 or 2.\n\nSentence: Michael just bought brand new wheels for his truck unlike Leslie because _ wheels were new and perfect.\n1) Michael\n2) Leslie",
+    "check": {
+      "type": "choice_exact",
+      "value": "2"
+    }
+  },
+  {
+    "id": "winogrande_validation_0017",
+    "context": "Commonsense coreference resolution. Return only the option number.",
+    "query": "Fill in the blank with the correct option. Return only 1 or 2.\n\nSentence: Michael just bought brand new wheels for his truck unlike Leslie because _ wheels were old and used.\n1) Michael\n2) Leslie",
+    "check": {
+      "type": "choice_exact",
+      "value": "1"
+    }
+  },
+  {
+    "id": "winogrande_validation_0018",
+    "context": "Commonsense coreference resolution. Return only the option number.",
+    "query": "Fill in the blank with the correct option. Return only 1 or 2.\n\nSentence: Leslie was nervous around parrots but Neil was not, since _ was bitten by a bird early in life.\n1) Leslie\n2) Neil",
+    "check": {
+      "type": "choice_exact",
+      "value": "1"
+    }
+  },
+  {
+    "id": "winogrande_validation_0019",
+    "context": "Commonsense coreference resolution. Return only the option number.",
+    "query": "Fill in the blank with the correct option. Return only 1 or 2.\n\nSentence: Christmas was a special holiday to Eric but not Adam since _ was a Jew.\n1) Eric\n2) Adam",
+    "check": {
+      "type": "choice_exact",
+      "value": "2"
+    }
+  },
+  {
+    "id": "winogrande_validation_0020",
+    "context": "Commonsense coreference resolution. Return only the option number.",
+    "query": "Fill in the blank with the correct option. Return only 1 or 2.\n\nSentence: To make frosting I needed pudding that was at a store 15 minutes away but pre-made frosting was at a store 5 minutes away.  The _ was closer.\n1) pudding\n2) frosting",
+    "check": {
+      "type": "choice_exact",
+      "value": "2"
+    }
+  },
+  {
+    "id": "winogrande_validation_0021",
+    "context": "Commonsense coreference resolution. Return only the option number.",
+    "query": "Fill in the blank with the correct option. Return only 1 or 2.\n\nSentence: Benjamin was chosen instead of Brett to be the makeup artist for the play because _ was less experienced.\n1) Benjamin\n2) Brett",
+    "check": {
+      "type": "choice_exact",
+      "value": "2"
+    }
+  },
+  {
+    "id": "winogrande_validation_0022",
+    "context": "Commonsense coreference resolution. Return only the option number.",
+    "query": "Fill in the blank with the correct option. Return only 1 or 2.\n\nSentence: Cynthia violated the rights of Amy, because _ had too much passivity with other people.\n1) Cynthia\n2) Amy",
+    "check": {
+      "type": "choice_exact",
+      "value": "2"
+    }
+  },
+  {
+    "id": "winogrande_validation_0023",
+    "context": "Commonsense coreference resolution. Return only the option number.",
+    "query": "Fill in the blank with the correct option. Return only 1 or 2.\n\nSentence: They had to eat a lot to gain the strength they had lost and be able to work, the _ was too much.\n1) work\n2) strength",
+    "check": {
+      "type": "choice_exact",
+      "value": "1"
+    }
+  },
+  {
+    "id": "winogrande_validation_0024",
+    "context": "Commonsense coreference resolution. Return only the option number.",
+    "query": "Fill in the blank with the correct option. Return only 1 or 2.\n\nSentence: They had to eat a lot to gain the strength they had lost and be able to work, the _ was too little.\n1) work\n2) strength",
+    "check": {
+      "type": "choice_exact",
+      "value": "2"
+    }
+  },
+  {
+    "id": "winogrande_validation_0025",
+    "context": "Commonsense coreference resolution. Return only the option number.",
+    "query": "Fill in the blank with the correct option. Return only 1 or 2.\n\nSentence: The roof of Rachel's home is old and falling apart, while Betty's is new. The home value of _ is lower.\n1) Rachel\n2) Betty",
+    "check": {
+      "type": "choice_exact",
+      "value": "1"
+    }
+  },
+  {
+    "id": "winogrande_validation_0026",
+    "context": "Commonsense coreference resolution. Return only the option number.",
+    "query": "Fill in the blank with the correct option. Return only 1 or 2.\n\nSentence: All the clutter in the house excited Leslie but not Derrick because cleaning energized _ very much.\n1) Leslie\n2) Derrick",
+    "check": {
+      "type": "choice_exact",
+      "value": "1"
+    }
+  },
+  {
+    "id": "winogrande_validation_0027",
+    "context": "Commonsense coreference resolution. Return only the option number.",
+    "query": "Fill in the blank with the correct option. Return only 1 or 2.\n\nSentence: The portions of food today were bigger than the sizes yesterday because the _ fed more people.\n1) portions\n2) sizes",
+    "check": {
+      "type": "choice_exact",
+      "value": "1"
+    }
+  },
+  {
+    "id": "winogrande_validation_0028",
+    "context": "Commonsense coreference resolution. Return only the option number.",
+    "query": "Fill in the blank with the correct option. Return only 1 or 2.\n\nSentence: Since Craig threw aluminum cans in the trash and Benjamin recycled, _ was environmentally irresponsible.\n1) Craig\n2) Benjamin",
+    "check": {
+      "type": "choice_exact",
+      "value": "1"
+    }
+  },
+  {
+    "id": "winogrande_validation_0029",
+    "context": "Commonsense coreference resolution. Return only the option number.",
+    "query": "Fill in the blank with the correct option. Return only 1 or 2.\n\nSentence: Christine was going to Jessica's house to do some cleaning in the kitchen, because _ was a energetic person.\n1) Christine\n2) Jessica",
+    "check": {
+      "type": "choice_exact",
+      "value": "1"
+    }
+  },
+  {
+    "id": "winogrande_validation_0030",
+    "context": "Commonsense coreference resolution. Return only the option number.",
+    "query": "Fill in the blank with the correct option. Return only 1 or 2.\n\nSentence: The students were at their desks taking tests with pencils, they used the _ to hold the papers.\n1) desks\n2) pencils",
+    "check": {
+      "type": "choice_exact",
+      "value": "1"
+    }
+  },
+  {
+    "id": "winogrande_validation_0031",
+    "context": "Commonsense coreference resolution. Return only the option number.",
+    "query": "Fill in the blank with the correct option. Return only 1 or 2.\n\nSentence: Mary thought poodles were a cool dog but Rachel thought Great Danes were cooler. _ bought a small dog bed for their pet.\n1) Mary\n2) Rachel",
+    "check": {
+      "type": "choice_exact",
+      "value": "1"
+    }
+  },
+  {
+    "id": "winogrande_validation_0032",
+    "context": "Commonsense coreference resolution. Return only the option number.",
+    "query": "Fill in the blank with the correct option. Return only 1 or 2.\n\nSentence: Mary thought poodles were a cool dog but Rachel thought Great Danes were cooler. _ bought a gigantic dog bed for their pet.\n1) Mary\n2) Rachel",
+    "check": {
+      "type": "choice_exact",
+      "value": "2"
+    }
+  },
+  {
+    "id": "winogrande_validation_0033",
+    "context": "Commonsense coreference resolution. Return only the option number.",
+    "query": "Fill in the blank with the correct option. Return only 1 or 2.\n\nSentence: Leslie had a lot of issues that Kyle was tired of dealing with, so _ felt abandoned when they finally moved out.\n1) Leslie\n2) Kyle",
+    "check": {
+      "type": "choice_exact",
+      "value": "1"
+    }
+  },
+  {
+    "id": "winogrande_validation_0034",
+    "context": "Commonsense coreference resolution. Return only the option number.",
+    "query": "Fill in the blank with the correct option. Return only 1 or 2.\n\nSentence: Jessica enjoyed a simple, basic life with Betty, but _ was bored having a quiet existence.\n1) Jessica\n2) Betty",
+    "check": {
+      "type": "choice_exact",
+      "value": "2"
+    }
+  },
+  {
+    "id": "winogrande_validation_0035",
+    "context": "Commonsense coreference resolution. Return only the option number.",
+    "query": "Fill in the blank with the correct option. Return only 1 or 2.\n\nSentence: I wanted to build a bathroom on the third floor of the house but I couldn't because the _ would be too full.\n1) bathroom\n2) floor",
+    "check": {
+      "type": "choice_exact",
+      "value": "2"
+    }
+  },
+  {
+    "id": "winogrande_validation_0036",
+    "context": "Commonsense coreference resolution. Return only the option number.",
+    "query": "Fill in the blank with the correct option. Return only 1 or 2.\n\nSentence: Joel researched laws and helped to open a preschool for Eric. Because _ is very good with kids.\n1) Joel\n2) Eric",
+    "check": {
+      "type": "choice_exact",
+      "value": "2"
+    }
+  },
+  {
+    "id": "winogrande_validation_0037",
+    "context": "Commonsense coreference resolution. Return only the option number.",
+    "query": "Fill in the blank with the correct option. Return only 1 or 2.\n\nSentence: Tanya told Emily she couldn't come to work because her cat had an infection, but _ was lying.\n1) Tanya\n2) Emily",
+    "check": {
+      "type": "choice_exact",
+      "value": "1"
+    }
+  },
+  {
+    "id": "winogrande_validation_0038",
+    "context": "Commonsense coreference resolution. Return only the option number.",
+    "query": "Fill in the blank with the correct option. Return only 1 or 2.\n\nSentence: Angela thinks her husband might be cheating with Lindsey, and _ confesses at the dinner party.\n1) Angela\n2) Lindsey",
+    "check": {
+      "type": "choice_exact",
+      "value": "2"
+    }
+  },
+  {
+    "id": "winogrande_validation_0039",
+    "context": "Commonsense coreference resolution. Return only the option number.",
+    "query": "Fill in the blank with the correct option. Return only 1 or 2.\n\nSentence: Donald's understanding of math isn't as good as Joseph's, so _ is more likely a professor.\n1) Donald\n2) Joseph",
+    "check": {
+      "type": "choice_exact",
+      "value": "2"
+    }
+  },
+  {
+    "id": "winogrande_validation_0040",
+    "context": "Commonsense coreference resolution. Return only the option number.",
+    "query": "Fill in the blank with the correct option. Return only 1 or 2.\n\nSentence: Brian was jealous of Brett's new car because _ couldn't afford to buy a new car.\n1) Brian\n2) Brett",
+    "check": {
+      "type": "choice_exact",
+      "value": "1"
+    }
+  },
+  {
+    "id": "winogrande_validation_0041",
+    "context": "Commonsense coreference resolution. Return only the option number.",
+    "query": "Fill in the blank with the correct option. Return only 1 or 2.\n\nSentence: The man used  his eyes to read the letters but the _ were too small.\n1) letters\n2) eyes",
+    "check": {
+      "type": "choice_exact",
+      "value": "1"
+    }
+  },
+  {
+    "id": "winogrande_validation_0042",
+    "context": "Commonsense coreference resolution. Return only the option number.",
+    "query": "Fill in the blank with the correct option. Return only 1 or 2.\n\nSentence: Jill was on a budget so she only bought a new dress for the ceremony and wore an old hat. She figured the _ would be less noticeable.\n1) dress\n2) hat",
+    "check": {
+      "type": "choice_exact",
+      "value": "2"
+    }
+  },
+  {
+    "id": "winogrande_validation_0043",
+    "context": "Commonsense coreference resolution. Return only the option number.",
+    "query": "Fill in the blank with the correct option. Return only 1 or 2.\n\nSentence: Jill was on a budget so she only bought a new dress for the ceremony and wore an old hat. She figured the _ would be more noticeable.\n1) dress\n2) hat",
+    "check": {
+      "type": "choice_exact",
+      "value": "1"
+    }
+  },
+  {
+    "id": "winogrande_validation_0044",
+    "context": "Commonsense coreference resolution. Return only the option number.",
+    "query": "Fill in the blank with the correct option. Return only 1 or 2.\n\nSentence: On Monday, Patricia made Felicia eggs for an early breakfast, but _ does not like fried eggs.\n1) Patricia\n2) Felicia",
+    "check": {
+      "type": "choice_exact",
+      "value": "2"
+    }
+  },
+  {
+    "id": "winogrande_validation_0045",
+    "context": "Commonsense coreference resolution. Return only the option number.",
+    "query": "Fill in the blank with the correct option. Return only 1 or 2.\n\nSentence: Since Craig wears clear contacts and William wears colored ones, it is safe to assume that _ loves the color of their eyes.\n1) Craig\n2) William",
+    "check": {
+      "type": "choice_exact",
+      "value": "1"
+    }
+  },
+  {
+    "id": "winogrande_validation_0046",
+    "context": "Commonsense coreference resolution. Return only the option number.",
+    "query": "Fill in the blank with the correct option. Return only 1 or 2.\n\nSentence: Since Craig wears clear contacts and William wears colored ones, it is safe to assume that _ dislikes the color of their eyes.\n1) Craig\n2) William",
+    "check": {
+      "type": "choice_exact",
+      "value": "2"
+    }
+  },
+  {
+    "id": "winogrande_validation_0047",
+    "context": "Commonsense coreference resolution. Return only the option number.",
+    "query": "Fill in the blank with the correct option. Return only 1 or 2.\n\nSentence: It was easy for Angela to become a vegetarian although Kayla couldn't do it. _ really missed the taste of chicken.\n1) Angela\n2) Kayla",
+    "check": {
+      "type": "choice_exact",
+      "value": "2"
+    }
+  },
+  {
+    "id": "winogrande_validation_0048",
+    "context": "Commonsense coreference resolution. Return only the option number.",
+    "query": "Fill in the blank with the correct option. Return only 1 or 2.\n\nSentence: Hunter was a better baker than Logan so _ made the kitchen a mess when they tried to make an apple pie.\n1) Hunter\n2) Logan",
+    "check": {
+      "type": "choice_exact",
+      "value": "2"
+    }
+  },
+  {
+    "id": "winogrande_validation_0049",
+    "context": "Commonsense coreference resolution. Return only the option number.",
+    "query": "Fill in the blank with the correct option. Return only 1 or 2.\n\nSentence: Tanya spent more on the children's birthday party than Amy. _ thought a magician was a good use of funds.\n1) Tanya\n2) Amy",
+    "check": {
+      "type": "choice_exact",
+      "value": "1"
+    }
+  },
+  {
+    "id": "winogrande_validation_0050",
+    "context": "Commonsense coreference resolution. Return only the option number.",
+    "query": "Fill in the blank with the correct option. Return only 1 or 2.\n\nSentence: Judy bought new brushes to paint the etched glasses crack but it didn't fit. The _ was too wide.\n1) brush\n2) crack",
+    "check": {
+      "type": "choice_exact",
+      "value": "1"
+    }
+  },
+  {
+    "id": "winogrande_validation_0051",
+    "context": "Commonsense coreference resolution. Return only the option number.",
+    "query": "Fill in the blank with the correct option. Return only 1 or 2.\n\nSentence: Judy bought new brushes to paint the etched glasses crack but it didn't fit. The _ was too narrow.\n1) brush\n2) crack",
+    "check": {
+      "type": "choice_exact",
+      "value": "2"
+    }
+  },
+  {
+    "id": "winogrande_validation_0052",
+    "context": "Commonsense coreference resolution. Return only the option number.",
+    "query": "Fill in the blank with the correct option. Return only 1 or 2.\n\nSentence: I look forward to the Sunday newspaper so I can look at the comics.  This is the only reason I still get the _ in this day and age.\n1) newspaper\n2) comics",
+    "check": {
+      "type": "choice_exact",
+      "value": "1"
+    }
+  },
+  {
+    "id": "winogrande_validation_0053",
+    "context": "Commonsense coreference resolution. Return only the option number.",
+    "query": "Fill in the blank with the correct option. Return only 1 or 2.\n\nSentence: Jennifer was more of a morning person than Natalie although _ always went to bed early and got a good night's rest.\n1) Jennifer\n2) Natalie",
+    "check": {
+      "type": "choice_exact",
+      "value": "2"
+    }
+  },
+  {
+    "id": "winogrande_validation_0054",
+    "context": "Commonsense coreference resolution. Return only the option number.",
+    "query": "Fill in the blank with the correct option. Return only 1 or 2.\n\nSentence: Jennifer was more of a morning person than Natalie because _ always went to bed early and got a good night's rest.\n1) Jennifer\n2) Natalie",
+    "check": {
+      "type": "choice_exact",
+      "value": "1"
+    }
+  },
+  {
+    "id": "winogrande_validation_0055",
+    "context": "Commonsense coreference resolution. Return only the option number.",
+    "query": "Fill in the blank with the correct option. Return only 1 or 2.\n\nSentence: Alcohol is a love of Matthew's, but Ryan can't stand the stuff because _ is a sober alcoholic.\n1) Matthew\n2) Ryan",
+    "check": {
+      "type": "choice_exact",
+      "value": "2"
+    }
+  },
+  {
+    "id": "winogrande_validation_0056",
+    "context": "Commonsense coreference resolution. Return only the option number.",
+    "query": "Fill in the blank with the correct option. Return only 1 or 2.\n\nSentence: Joe brought the horse out to the country quite a distance and gave him food but the _ was too much.\n1) food\n2) distance",
+    "check": {
+      "type": "choice_exact",
+      "value": "2"
+    }
+  },
+  {
+    "id": "winogrande_validation_0057",
+    "context": "Commonsense coreference resolution. Return only the option number.",
+    "query": "Fill in the blank with the correct option. Return only 1 or 2.\n\nSentence: Randy gave their heart to Brian, and _ soon told them that they should have kept their heart to themselves.\n1) Randy\n2) Brian",
+    "check": {
+      "type": "choice_exact",
+      "value": "2"
+    }
+  },
+  {
+    "id": "winogrande_validation_0058",
+    "context": "Commonsense coreference resolution. Return only the option number.",
+    "query": "Fill in the blank with the correct option. Return only 1 or 2.\n\nSentence: Nick wanted to play a game on the floor, but Dennis was hesitant because of his knees. _ was disappointed.\n1) Nick\n2) Dennis",
+    "check": {
+      "type": "choice_exact",
+      "value": "1"
+    }
+  },
+  {
+    "id": "winogrande_validation_0059",
+    "context": "Commonsense coreference resolution. Return only the option number.",
+    "query": "Fill in the blank with the correct option. Return only 1 or 2.\n\nSentence: Although she was being prosecuted, Monica was welcomed into the sanctuary of the church by Samantha because _ was a sinful criminal.\n1) Monica\n2) Samantha",
+    "check": {
+      "type": "choice_exact",
+      "value": "1"
+    }
+  },
+  {
+    "id": "winogrande_validation_0060",
+    "context": "Commonsense coreference resolution. Return only the option number.",
+    "query": "Fill in the blank with the correct option. Return only 1 or 2.\n\nSentence: The battle was less fierce than the great war, because the _ lasted one year.\n1) battle\n2) war",
+    "check": {
+      "type": "choice_exact",
+      "value": "2"
+    }
+  },
+  {
+    "id": "winogrande_validation_0061",
+    "context": "Commonsense coreference resolution. Return only the option number.",
+    "query": "Fill in the blank with the correct option. Return only 1 or 2.\n\nSentence: Laura used too much super glue on Erins hands, so _ needed to get to the doctor to separate their hands.\n1) Laura\n2) Erin",
+    "check": {
+      "type": "choice_exact",
+      "value": "2"
+    }
+  },
+  {
+    "id": "winogrande_validation_0062",
+    "context": "Commonsense coreference resolution. Return only the option number.",
+    "query": "Fill in the blank with the correct option. Return only 1 or 2.\n\nSentence: James panicked when his phone fell on the table thinking it will break but the _ is soft.\n1) phone\n2) table",
+    "check": {
+      "type": "choice_exact",
+      "value": "2"
+    }
+  },
+  {
+    "id": "winogrande_validation_0063",
+    "context": "Commonsense coreference resolution. Return only the option number.",
+    "query": "Fill in the blank with the correct option. Return only 1 or 2.\n\nSentence: James panicked when his phone fell on the table thinking it will break but the _ is strong.\n1) phone\n2) table",
+    "check": {
+      "type": "choice_exact",
+      "value": "1"
+    }
+  },
+  {
+    "id": "winogrande_validation_0064",
+    "context": "Commonsense coreference resolution. Return only the option number.",
+    "query": "Fill in the blank with the correct option. Return only 1 or 2.\n\nSentence: John cannot touch the cup as it was just brought out of the refrigerator. He wanted some air to blow around it. The _ is very warm.\n1) cup\n2) air",
+    "check": {
+      "type": "choice_exact",
+      "value": "2"
+    }
+  },
+  {
+    "id": "winogrande_validation_0065",
+    "context": "Commonsense coreference resolution. Return only the option number.",
+    "query": "Fill in the blank with the correct option. Return only 1 or 2.\n\nSentence: The fireman used several rags to polish the nozzles on the fire hose; when he was done the _ were dirty.\n1) nozzles\n2) rags",
+    "check": {
+      "type": "choice_exact",
+      "value": "2"
+    }
+  },
+  {
+    "id": "winogrande_validation_0066",
+    "context": "Commonsense coreference resolution. Return only the option number.",
+    "query": "Fill in the blank with the correct option. Return only 1 or 2.\n\nSentence: Mary wanted to get another piercing in her ear, but the _ was much too tiny.\n1) ear\n2) piercing",
+    "check": {
+      "type": "choice_exact",
+      "value": "1"
+    }
+  },
+  {
+    "id": "winogrande_validation_0067",
+    "context": "Commonsense coreference resolution. Return only the option number.",
+    "query": "Fill in the blank with the correct option. Return only 1 or 2.\n\nSentence: Mary wanted to get another piercing in her ear, but the _ was much too huge.\n1) ear\n2) piercing",
+    "check": {
+      "type": "choice_exact",
+      "value": "2"
+    }
+  },
+  {
+    "id": "winogrande_validation_0068",
+    "context": "Commonsense coreference resolution. Return only the option number.",
+    "query": "Fill in the blank with the correct option. Return only 1 or 2.\n\nSentence: Laura just loved the taste of green beans but Felicia hated the taste of them. _ didn't have a second serving.\n1) Laura\n2) Felicia",
+    "check": {
+      "type": "choice_exact",
+      "value": "2"
+    }
+  },
+  {
+    "id": "winogrande_validation_0069",
+    "context": "Commonsense coreference resolution. Return only the option number.",
+    "query": "Fill in the blank with the correct option. Return only 1 or 2.\n\nSentence: The bartender cut Carrie off but continued to serve Emily because _ was too drunk.\n1) Carrie\n2) Emily",
+    "check": {
+      "type": "choice_exact",
+      "value": "1"
+    }
+  },
+  {
+    "id": "winogrande_validation_0070",
+    "context": "Commonsense coreference resolution. Return only the option number.",
+    "query": "Fill in the blank with the correct option. Return only 1 or 2.\n\nSentence: Blaze always wore a t-shirt instead of a shirt because he thought that the _ was stuffy and old fashioned.\n1) shirt\n2) t-shirt",
+    "check": {
+      "type": "choice_exact",
+      "value": "1"
+    }
+  },
+  {
+    "id": "winogrande_validation_0071",
+    "context": "Commonsense coreference resolution. Return only the option number.",
+    "query": "Fill in the blank with the correct option. Return only 1 or 2.\n\nSentence: The paint would melt in the sun, so we used a varnish instead, since the _ was susceptible to heat.\n1) paint\n2) varnish",
+    "check": {
+      "type": "choice_exact",
+      "value": "1"
+    }
+  },
+  {
+    "id": "winogrande_validation_0072",
+    "context": "Commonsense coreference resolution. Return only the option number.",
+    "query": "Fill in the blank with the correct option. Return only 1 or 2.\n\nSentence: I tried to make mini lamps by using glow sticks in mason jars, but had to get larger jars because the _ were too big.\n1) glow sticks\n2) jars",
+    "check": {
+      "type": "choice_exact",
+      "value": "1"
+    }
+  },
+  {
+    "id": "winogrande_validation_0073",
+    "context": "Commonsense coreference resolution. Return only the option number.",
+    "query": "Fill in the blank with the correct option. Return only 1 or 2.\n\nSentence: Joel always liked to turn the heater up higher than Joseph did for the reason that _ was never cold.\n1) Joel\n2) Joseph",
+    "check": {
+      "type": "choice_exact",
+      "value": "2"
+    }
+  },
+  {
+    "id": "winogrande_validation_0074",
+    "context": "Commonsense coreference resolution. Return only the option number.",
+    "query": "Fill in the blank with the correct option. Return only 1 or 2.\n\nSentence: Joel always liked to turn the heater up higher than Joseph did for the reason that _ was always cold.\n1) Joel\n2) Joseph",
+    "check": {
+      "type": "choice_exact",
+      "value": "1"
+    }
+  },
+  {
+    "id": "winogrande_validation_0075",
+    "context": "Commonsense coreference resolution. Return only the option number.",
+    "query": "Fill in the blank with the correct option. Return only 1 or 2.\n\nSentence: The teen found the new hat was no substitute for his cool shirt.  The _ was just cool to wear to school.\n1) hat\n2) shirt",
+    "check": {
+      "type": "choice_exact",
+      "value": "2"
+    }
+  },
+  {
+    "id": "winogrande_validation_0076",
+    "context": "Commonsense coreference resolution. Return only the option number.",
+    "query": "Fill in the blank with the correct option. Return only 1 or 2.\n\nSentence: Mary was helping Patricia's daughter put on makeup but  _ watches a lot of makeup tutorials.\n1) Mary\n2) Patricia",
+    "check": {
+      "type": "choice_exact",
+      "value": "2"
+    }
+  },
+  {
+    "id": "winogrande_validation_0077",
+    "context": "Commonsense coreference resolution. Return only the option number.",
+    "query": "Fill in the blank with the correct option. Return only 1 or 2.\n\nSentence: Mary was helping Patricia's daughter put on makeup because _ watches a lot of makeup tutorials.\n1) Mary\n2) Patricia",
+    "check": {
+      "type": "choice_exact",
+      "value": "1"
+    }
+  },
+  {
+    "id": "winogrande_validation_0078",
+    "context": "Commonsense coreference resolution. Return only the option number.",
+    "query": "Fill in the blank with the correct option. Return only 1 or 2.\n\nSentence: He wanted to kill time at the house instead of the playground, because everyone at the _ was fun.\n1) playground\n2) house",
+    "check": {
+      "type": "choice_exact",
+      "value": "2"
+    }
+  },
+  {
+    "id": "winogrande_validation_0079",
+    "context": "Commonsense coreference resolution. Return only the option number.",
+    "query": "Fill in the blank with the correct option. Return only 1 or 2.\n\nSentence: Aaron didn't know Dennis had a peanut allergy, so when _ made peanut chicken an ambulance was called.\n1) Aaron\n2) Dennis",
+    "check": {
+      "type": "choice_exact",
+      "value": "1"
+    }
+  },
+  {
+    "id": "winogrande_validation_0080",
+    "context": "Commonsense coreference resolution. Return only the option number.",
+    "query": "Fill in the blank with the correct option. Return only 1 or 2.\n\nSentence: Aaron didn't know Dennis had a peanut allergy, so when _ ate peanut chicken an ambulance was called.\n1) Aaron\n2) Dennis",
+    "check": {
+      "type": "choice_exact",
+      "value": "2"
+    }
+  },
+  {
+    "id": "winogrande_validation_0081",
+    "context": "Commonsense coreference resolution. Return only the option number.",
+    "query": "Fill in the blank with the correct option. Return only 1 or 2.\n\nSentence: God liked to control the day and the night, but the _ was too bright.\n1) day\n2) night",
+    "check": {
+      "type": "choice_exact",
+      "value": "1"
+    }
+  },
+  {
+    "id": "winogrande_validation_0082",
+    "context": "Commonsense coreference resolution. Return only the option number.",
+    "query": "Fill in the blank with the correct option. Return only 1 or 2.\n\nSentence: Brett asked Joel for advice and guidance about waxing his mustache, and afterwards _ felt burdened.\n1) Brett\n2) Joel",
+    "check": {
+      "type": "choice_exact",
+      "value": "2"
+    }
+  },
+  {
+    "id": "winogrande_validation_0083",
+    "context": "Commonsense coreference resolution. Return only the option number.",
+    "query": "Fill in the blank with the correct option. Return only 1 or 2.\n\nSentence: The filter in the living room needed to be changed more often than the one in the bedroom because the _ was dirtier.\n1) living room\n2) bedroom",
+    "check": {
+      "type": "choice_exact",
+      "value": "1"
+    }
+  },
+  {
+    "id": "winogrande_validation_0084",
+    "context": "Commonsense coreference resolution. Return only the option number.",
+    "query": "Fill in the blank with the correct option. Return only 1 or 2.\n\nSentence: The filter in the living room needed to be changed more often than the one in the bedroom because the _ was cleaner.\n1) living room\n2) bedroom",
+    "check": {
+      "type": "choice_exact",
+      "value": "2"
+    }
+  },
+  {
+    "id": "winogrande_validation_0085",
+    "context": "Commonsense coreference resolution. Return only the option number.",
+    "query": "Fill in the blank with the correct option. Return only 1 or 2.\n\nSentence: Amy went over to the waiting room at the hospital to calm Samantha because _ was placid.\n1) Amy\n2) Samantha",
+    "check": {
+      "type": "choice_exact",
+      "value": "1"
+    }
+  },
+  {
+    "id": "winogrande_validation_0086",
+    "context": "Commonsense coreference resolution. Return only the option number.",
+    "query": "Fill in the blank with the correct option. Return only 1 or 2.\n\nSentence: Megan forgot to buy deodorant at the store so they borrowed Jessica's deodorant and _ never found out.\n1) Megan\n2) Jessica",
+    "check": {
+      "type": "choice_exact",
+      "value": "2"
+    }
+  },
+  {
+    "id": "winogrande_validation_0087",
+    "context": "Commonsense coreference resolution. Return only the option number.",
+    "query": "Fill in the blank with the correct option. Return only 1 or 2.\n\nSentence: Megan forgot to buy deodorant at the store so they borrowed Jessica's deodorant and _ hoped they never found out.\n1) Megan\n2) Jessica",
+    "check": {
+      "type": "choice_exact",
+      "value": "1"
+    }
+  },
+  {
+    "id": "winogrande_validation_0088",
+    "context": "Commonsense coreference resolution. Return only the option number.",
+    "query": "Fill in the blank with the correct option. Return only 1 or 2.\n\nSentence: Amy thought she was the mirror image of Natalie , but _ could not be convinced to see the similarity.\n1) Amy\n2) Natalie",
+    "check": {
+      "type": "choice_exact",
+      "value": "2"
+    }
+  },
+  {
+    "id": "winogrande_validation_0089",
+    "context": "Commonsense coreference resolution. Return only the option number.",
+    "query": "Fill in the blank with the correct option. Return only 1 or 2.\n\nSentence: Amy thought she was the mirror image of Natalie , but _ could not persuade her to see the similarity.\n1) Amy\n2) Natalie",
+    "check": {
+      "type": "choice_exact",
+      "value": "1"
+    }
+  },
+  {
+    "id": "winogrande_validation_0090",
+    "context": "Commonsense coreference resolution. Return only the option number.",
+    "query": "Fill in the blank with the correct option. Return only 1 or 2.\n\nSentence: I helped my sister find her gold necklace. She couldn't wear her woven necklace to the ball because the _ was so casual.\n1) woven necklace\n2) ball",
+    "check": {
+      "type": "choice_exact",
+      "value": "1"
+    }
+  },
+  {
+    "id": "winogrande_validation_0091",
+    "context": "Commonsense coreference resolution. Return only the option number.",
+    "query": "Fill in the blank with the correct option. Return only 1 or 2.\n\nSentence: Emily never had as much money to spend as Carrie, because _ had a good job.\n1) Emily\n2) Carrie",
+    "check": {
+      "type": "choice_exact",
+      "value": "2"
+    }
+  },
+  {
+    "id": "winogrande_validation_0092",
+    "context": "Commonsense coreference resolution. Return only the option number.",
+    "query": "Fill in the blank with the correct option. Return only 1 or 2.\n\nSentence: The wooden doors at my friends work are worse than the wooden desks at my work, because the _ material is cheaper.\n1) doors\n2) desks",
+    "check": {
+      "type": "choice_exact",
+      "value": "1"
+    }
+  },
+  {
+    "id": "winogrande_validation_0093",
+    "context": "Commonsense coreference resolution. Return only the option number.",
+    "query": "Fill in the blank with the correct option. Return only 1 or 2.\n\nSentence: The wooden doors at my friends work are worse than the wooden desks at my work, because the _ material is stronger.\n1) doors\n2) desks",
+    "check": {
+      "type": "choice_exact",
+      "value": "2"
+    }
+  },
+  {
+    "id": "winogrande_validation_0094",
+    "context": "Commonsense coreference resolution. Return only the option number.",
+    "query": "Fill in the blank with the correct option. Return only 1 or 2.\n\nSentence: The arrow stuck to the bark but not the stone because the _ was flimsy.\n1) bark\n2) stone",
+    "check": {
+      "type": "choice_exact",
+      "value": "1"
+    }
+  },
+  {
+    "id": "winogrande_validation_0095",
+    "context": "Commonsense coreference resolution. Return only the option number.",
+    "query": "Fill in the blank with the correct option. Return only 1 or 2.\n\nSentence: The arrow stuck to the bark but not the stone because the _ was hard.\n1) bark\n2) stone",
+    "check": {
+      "type": "choice_exact",
+      "value": "2"
+    }
+  },
+  {
+    "id": "winogrande_validation_0096",
+    "context": "Commonsense coreference resolution. Return only the option number.",
+    "query": "Fill in the blank with the correct option. Return only 1 or 2.\n\nSentence: The leg of the pig body stuck out of the grave where it was buried because the _ is large.\n1) body\n2) grave",
+    "check": {
+      "type": "choice_exact",
+      "value": "1"
+    }
+  },
+  {
+    "id": "winogrande_validation_0097",
+    "context": "Commonsense coreference resolution. Return only the option number.",
+    "query": "Fill in the blank with the correct option. Return only 1 or 2.\n\nSentence: The sheet recovered can easily be hiding between the space in the door. The _ is thin.\n1) sheet\n2) space",
+    "check": {
+      "type": "choice_exact",
+      "value": "1"
+    }
+  },
+  {
+    "id": "winogrande_validation_0098",
+    "context": "Commonsense coreference resolution. Return only the option number.",
+    "query": "Fill in the blank with the correct option. Return only 1 or 2.\n\nSentence: The sheet recovered can easily be hiding between the space in the door. The _ is wide.\n1) sheet\n2) space",
+    "check": {
+      "type": "choice_exact",
+      "value": "2"
+    }
+  },
+  {
+    "id": "winogrande_validation_0099",
+    "context": "Commonsense coreference resolution. Return only the option number.",
+    "query": "Fill in the blank with the correct option. Return only 1 or 2.\n\nSentence: Mike doesn't like the table in his living room as much as the couch. The _ resonates with the other decorations.\n1) table\n2) couch",
+    "check": {
+      "type": "choice_exact",
+      "value": "2"
+    }
+  }
+]

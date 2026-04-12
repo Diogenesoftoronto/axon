@@ -104,6 +104,15 @@ Options:
   --api-key <KEY>           API key (or set AXON_API_KEY env var)
   --max-iterations <N>      Max iterations per RLM level [default: 10]
   --max-depth <N>           Max recursion depth [default: 2]
+  --policy-profile <NAME>   Prompt policy profile [default: baseline]
+  --policy-config <PATH>    Policy config JSON [default: config/prompt_policies.json]
+  --inject-policy-into-context
+                            Prepend active policy into runtime context
+  --depth-enforcement <MODE>
+                            Depth gate mode: off|soft|strict [default: off]
+  --require-min-depth <N>   Strict mode: minimum depth reached
+  --require-min-recursive-calls <N>
+                            Strict mode: minimum recursive llm_query calls
   --data-dir <DIR>          Data directory for context [default: data]
   -v, --verbose             Verbose logging to stderr
 
@@ -142,6 +151,11 @@ Query the RLM with persistent thread context.
 |-------|------|-------------|
 | `query` | string | The question to ask |
 | `thread_id` | string | Thread identifier - context accumulates per thread |
+| `policy_profile` | string (optional) | Per-call policy profile override |
+| `inject_policy_into_context` | boolean (optional) | Prepend policy text to context for this call |
+| `depth_enforcement` | string (optional) | `off`, `soft`, or `strict` |
+| `require_min_depth` | integer (optional) | Strict minimum depth threshold |
+| `require_min_recursive_calls` | integer (optional) | Strict minimum recursive call threshold |
 
 ### `upload_context`
 
@@ -255,21 +269,24 @@ python3 scripts/benchmark_axon.py \
   --runs 1 \
   --attempts-per-run 3 \
   --timeout 180 \
-  --out benchmarks/results-latest.json \
-  --summary-md benchmarks/summary-latest.md
+  --out benchmarks/results/results-latest.json \
+  --summary-md benchmarks/results/summary-latest.md
+
+# Policy optimization from benchmark artifacts
+python3 scripts/optimize_prompt_policy.py benchmarks/results/results-*.json
 ```
 
 ### Statistical analysis
 
 ```bash
 # Bayesian posteriors, Thompson sampling, latency variability
-python3 scripts/analyze_bayesian.py benchmarks/results-latest.json
+python3 scripts/analyze_bayesian.py benchmarks/results/results-latest.json
 
 # From in-progress benchmark log
 python3 scripts/analyze_bayesian.py --from-log /tmp/benchmark.log
 
 # Generate LaTeX snippets for paper
-python3 scripts/analyze_bayesian.py benchmarks/results-latest.json --latex-out paper/stats.tex
+python3 scripts/analyze_bayesian.py benchmarks/results/results-latest.json --latex-out paper/stats.tex
 ```
 
 ### Documentation

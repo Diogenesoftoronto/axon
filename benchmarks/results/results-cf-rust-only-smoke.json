@@ -1,0 +1,172 @@
+{
+  "created_at": 1771963139,
+  "dataset": "benchmarks/codeforces_hard_like.json",
+  "base_url": "https://api.synthetic.new/openai/v1/",
+  "runs": 1,
+  "timeout": 45,
+  "modes": [
+    {
+      "name": "current-default",
+      "binary": "/home/diogenes/Monolith/target/release/axon",
+      "extra_args": [
+        "--max-depth",
+        "2",
+        "--max-iterations",
+        "6"
+      ]
+    },
+    {
+      "name": "current-no-recursion",
+      "binary": "/home/diogenes/Monolith/target/release/axon",
+      "extra_args": [
+        "--max-depth",
+        "0",
+        "--max-iterations",
+        "6"
+      ]
+    },
+    {
+      "name": "current-low-budget",
+      "binary": "/home/diogenes/Monolith/target/release/axon",
+      "extra_args": [
+        "--max-depth",
+        "2",
+        "--max-iterations",
+        "3"
+      ]
+    }
+  ],
+  "summary": [
+    {
+      "mode": "current-default",
+      "total": 1,
+      "ok": 0,
+      "matched": 0,
+      "ok_rate": 0.0,
+      "pass_rate": 0.0,
+      "avg_time_s": 45.004,
+      "total_tokens": 0,
+      "avg_tokens_per_task": 0.0,
+      "llm_calls": 0,
+      "avg_calls_per_task": 0.0,
+      "total_cost_usd": 0.0,
+      "avg_cost_usd": 0.0,
+      "hallucination_tasks": 0,
+      "hallucinations": 0,
+      "hallucination_rate": 0.0,
+      "quality_score": 30.0,
+      "efficiency_score": 9.97,
+      "reliability_score": 0.0,
+      "composite_score": 18.49,
+      "readiness": "NotProductionReady"
+    },
+    {
+      "mode": "current-low-budget",
+      "total": 1,
+      "ok": 0,
+      "matched": 0,
+      "ok_rate": 0.0,
+      "pass_rate": 0.0,
+      "avg_time_s": 14.963,
+      "total_tokens": 4033,
+      "avg_tokens_per_task": 4033.0,
+      "llm_calls": 2,
+      "avg_calls_per_task": 2.0,
+      "total_cost_usd": 0.00217,
+      "avg_cost_usd": 0.00217,
+      "hallucination_tasks": 0,
+      "hallucinations": 0,
+      "hallucination_rate": 0.0,
+      "quality_score": 30.0,
+      "efficiency_score": 100.0,
+      "reliability_score": 0.0,
+      "composite_score": 36.5,
+      "readiness": "NotProductionReady"
+    },
+    {
+      "mode": "current-no-recursion",
+      "total": 1,
+      "ok": 0,
+      "matched": 0,
+      "ok_rate": 0.0,
+      "pass_rate": 0.0,
+      "avg_time_s": 42.609,
+      "total_tokens": 11102,
+      "avg_tokens_per_task": 11102.0,
+      "llm_calls": 4,
+      "avg_calls_per_task": 4.0,
+      "total_cost_usd": 0.005078,
+      "avg_cost_usd": 0.005078,
+      "hallucination_tasks": 0,
+      "hallucinations": 0,
+      "hallucination_rate": 0.0,
+      "quality_score": 30.0,
+      "efficiency_score": 39.17,
+      "reliability_score": 0.0,
+      "composite_score": 24.33,
+      "readiness": "NotProductionReady"
+    }
+  ],
+  "results": [
+    {
+      "mode": "current-default",
+      "task_id": "cf_tree_dp_weighted_independent_set",
+      "run_idx": 1,
+      "ok": false,
+      "matched": false,
+      "elapsed_s": 45.00352692604065,
+      "context_chars": 299,
+      "query_chars": 159,
+      "llm_calls": 0,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "total_tokens": 0,
+      "prompt_chars_logged": 0,
+      "response_chars_logged": 0,
+      "estimated_cost_usd": 0.0,
+      "is_hallucination_probe": false,
+      "answer": "",
+      "error": "timeout after 45s"
+    },
+    {
+      "mode": "current-no-recursion",
+      "task_id": "cf_tree_dp_weighted_independent_set",
+      "run_idx": 1,
+      "ok": false,
+      "matched": false,
+      "elapsed_s": 42.60904836654663,
+      "context_chars": 299,
+      "query_chars": 159,
+      "llm_calls": 4,
+      "prompt_tokens": 9161,
+      "completion_tokens": 1941,
+      "total_tokens": 11102,
+      "prompt_chars_logged": 32761,
+      "response_chars_logged": 3868,
+      "estimated_cost_usd": 0.0050775,
+      "is_hallucination_probe": false,
+      "answer": "",
+      "error": "[depth=0][iter=1/6] response: 636 chars\n[depth=0][iter=1/6] usage: prompt_tokens=1132 completion_tokens=199 total_tokens=1331 prompt_chars=4702\n[depth=0][iter=2/6] response: 573 chars\n[depth=0][iter=2/6] usage: prompt_tokens=1736 completion_tokens=269 total_tokens=2005 prompt_chars=6721\n[depth=0][iter=3/6] response: 1260 chars\n[depth=0][iter=3/6] usage: prompt_tokens=2529 completion_tokens=987 total_tokens=3516 prompt_chars=9030\n[depth=0][iter=4/6] response: 1399 chars\n[depth=0][iter=4/6] usage: prompt_tokens=3764 completion_tokens=486 total_tokens=4250 prompt_chars=12308\nError: Traceback (most recent call last):\n  File \"repl.py\", line 39, in <module>\n    if node in dp:\n               ~~\nNameError: name 'dp' is not defined"
+    },
+    {
+      "mode": "current-low-budget",
+      "task_id": "cf_tree_dp_weighted_independent_set",
+      "run_idx": 1,
+      "ok": false,
+      "matched": false,
+      "elapsed_s": 14.963287830352783,
+      "context_chars": 299,
+      "query_chars": 159,
+      "llm_calls": 2,
+      "prompt_tokens": 2966,
+      "completion_tokens": 1067,
+      "total_tokens": 4033,
+      "prompt_chars_logged": 11795,
+      "response_chars_logged": 2447,
+      "estimated_cost_usd": 0.0021702,
+      "is_hallucination_probe": false,
+      "answer": "",
+      "error": "[depth=0][iter=1/3] response: 780 chars\n[depth=0][iter=1/3] usage: prompt_tokens=1132 completion_tokens=256 total_tokens=1388 prompt_chars=4702\n[depth=0][iter=2/3] response: 1667 chars\n[depth=0][iter=2/3] usage: prompt_tokens=1834 completion_tokens=811 total_tokens=2645 prompt_chars=7093\nError: Traceback (most recent call last):\n  File \"repl.py\", line 16, in <module>\n    u, v = map(int, part[1:-1].split(','))\n           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\nValueError: invalid literal for int() with base 10: ''"
+    }
+  ]
+}

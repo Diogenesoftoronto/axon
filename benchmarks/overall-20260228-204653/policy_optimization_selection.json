@@ -1,0 +1,64 @@
+{
+  "generated_from": "optimize_prompt_policy.py",
+  "selection_rule": {
+    "top_k": 10,
+    "min_samples": 10
+  },
+  "recommended_profiles": [
+    {
+      "policy_profile": "baseline",
+      "model": "hf:MiniMaxAI/MiniMax-M2.5",
+      "mode": "d0-i1",
+      "n": 1359,
+      "pass_rate": 59.23473142016188,
+      "format_leak_rate": 0.0,
+      "avg_cost_usd": 0.0018168238410596028,
+      "avg_time_s": 13.335479640921994,
+      "objective": 0.5832631949963207
+    },
+    {
+      "policy_profile": "baseline",
+      "model": "hf:MiniMaxAI/MiniMax-M2.5",
+      "mode": "d0-i3",
+      "n": 1359,
+      "pass_rate": 46.35761589403973,
+      "format_leak_rate": 0.07358351729212656,
+      "avg_cost_usd": 0.001581021633554084,
+      "avg_time_s": 11.660549880107437,
+      "objective": 0.45545030022075056
+    },
+    {
+      "policy_profile": "baseline",
+      "model": "hf:MiniMaxAI/MiniMax-M2.5",
+      "mode": "d1-i3",
+      "n": 1359,
+      "pass_rate": 40.69168506254599,
+      "format_leak_rate": 0.14716703458425312,
+      "avg_cost_usd": 0.00174861412803532,
+      "avg_time_s": 11.573123749392238,
+      "objective": 0.39773227888153057
+    },
+    {
+      "policy_profile": "baseline",
+      "model": "hf:MiniMaxAI/MiniMax-M2.5",
+      "mode": "d3-i1",
+      "n": 1359,
+      "pass_rate": 37.38042678440029,
+      "format_leak_rate": 0.14716703458425312,
+      "avg_cost_usd": 0.0016954529801324503,
+      "avg_time_s": 11.038721594680641,
+      "objective": 0.36488550183958796
+    },
+    {
+      "policy_profile": "baseline",
+      "model": "hf:MiniMaxAI/MiniMax-M2.5",
+      "mode": "d6-i1",
+      "n": 1359,
+      "pass_rate": 10.89036055923473,
+      "format_leak_rate": 0.14716703458425312,
+      "avg_cost_usd": 0.0008942551876379691,
+      "avg_time_s": 6.888800035579036,
+      "objective": 0.10399082855040472
+    }
+  ]
+}

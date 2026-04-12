@@ -1,0 +1,38 @@
+[
+  {
+    "id": "critical_path_release_plan",
+    "context": "Release plan tasks with durations and dependencies.\nA: 3 days, deps=[]\nB: 5 days, deps=[A]\nC: 4 days, deps=[A]\nD: 6 days, deps=[B,C]\nE: 2 days, deps=[C]\nF: 3 days, deps=[D,E]\nQuestion is total minimum completion time with unlimited parallelism.",
+    "query": "What is the minimum project duration in days? Return just the integer.",
+    "check": {"type": "exact", "value": "17"}
+  },
+  {
+    "id": "knapsack_0_1",
+    "context": "0/1 knapsack: weights=[10,20,30], values=[60,100,120], capacity=50.",
+    "query": "What is the maximum achievable value? Return just the integer.",
+    "check": {"type": "exact", "value": "220"}
+  },
+  {
+    "id": "interval_scheduling",
+    "context": "Intervals (start,end): (1,4), (3,5), (0,6), (5,7), (3,9), (5,9), (6,10), (8,11), (8,12), (2,14), (12,16).",
+    "query": "Maximum number of non-overlapping intervals if touching endpoints is allowed? Return just the integer.",
+    "check": {"type": "exact", "value": "4"}
+  },
+  {
+    "id": "mini_swe_bug_localization",
+    "context": "Repository summary:\n- src/config.py defines parse_config(raw: str) -> dict\n- src/server.py calls parse_config on startup\n- tests/test_config.py failing: test_parse_bool_flags\n\nFailing traceback:\nValueError: invalid literal for int() with base 10: 'true'\n  at src/config.py line 48 in parse_config\n\nRelevant snippet from src/config.py:\nline 40: if key in ('enabled','dry_run','verbose'):\nline 41:     cfg[key] = int(value)\nline 42: else:\nline 43:     cfg[key] = value\n",
+    "query": "Which function should be patched first to fix the failure? Return just the function name.",
+    "check": {"type": "exact", "value": "parse_config"}
+  },
+  {
+    "id": "long_horizon_incident_state",
+    "context": "Incident log over a long horizon.\n\nDay 1: Feature flag ALPHA set ON.\nDay 2: ALPHA remains ON.\nDay 3: Rollout BETA set OFF.\nDay 4: ALPHA set OFF due to regression.\nDay 5: BETA set ON for canary.\nDay 6: Emergency rollback - BETA set OFF.\nDay 7: ALPHA re-enabled ON after patch.\nDay 8: Notes: no change to ALPHA/BETA.\nDay 9: BETA enabled ON for 10%.\nDay 10: BETA enabled ON for 30% (still ON).\nDay 11: ALPHA toggled OFF for maintenance window.\nDay 12: Maintenance done, ALPHA toggled ON.\nDay 13: BETA toggled OFF due to metrics spike.\nDay 14: BETA toggled ON after mitigation.\nDay 15: no change.\nDay 16: no change.\nDay 17: ALPHA remains ON.\nDay 18: BETA remains ON.\n",
+    "query": "At the end of Day 18, what are ALPHA and BETA states? Return exact JSON like {\"ALPHA\":\"ON\",\"BETA\":\"OFF\"}.",
+    "check": {"type": "exact", "value": "{\"ALPHA\":\"ON\",\"BETA\":\"ON\"}"}
+  },
+  {
+    "id": "dependency_order",
+    "context": "Modules with dependencies:\n- parser depends on lexer\n- typecheck depends on parser\n- codegen depends on typecheck\n- optimizer depends on parser\n- packager depends on codegen and optimizer\n",
+    "query": "Provide one valid build order as comma-separated list. Return exactly: lexer,parser,typecheck,optimizer,codegen,packager",
+    "check": {"type": "exact", "value": "lexer,parser,typecheck,optimizer,codegen,packager"}
+  }
+]

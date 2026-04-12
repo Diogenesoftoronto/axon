@@ -1,0 +1,1402 @@
+[
+  {
+    "id": "mbpp_test_0000",
+    "context": "You are solving a deterministic programming task from MBPP.",
+    "query": "Problem:\nWrite a python function to remove first and last occurrence of a given character from the string.\n\nCompute outputs for the following Python function calls and return only the outputs, one per line, in the same order:\nremove_Occ(\"hello\",\"l\")\nremove_Occ(\"abcda\",\"a\")\nremove_Occ(\"PHP\",\"P\")",
+    "check": {
+      "type": "lines_in_order",
+      "value": "heo\nbcd\nH",
+      "values": [
+        "heo",
+        "bcd",
+        "H"
+      ]
+    }
+  },
+  {
+    "id": "mbpp_test_0001",
+    "context": "You are solving a deterministic programming task from MBPP.",
+    "query": "Problem:\nWrite a function to sort a given matrix in ascending order according to the sum of its rows.\n\nCompute outputs for the following Python function calls and return only the outputs, one per line, in the same order:\nsort_matrix([[1, 2, 3], [2, 4, 5], [1, 1, 1]])\nsort_matrix([[1, 2, 3], [-2, 4, -5], [1, -1, 1]])\nsort_matrix([[5,8,9],[6,4,3],[2,1,4]])",
+    "check": {
+      "type": "lines_in_order",
+      "value": "[[1, 1, 1], [1, 2, 3], [2, 4, 5]]\n[[-2, 4, -5], [1, -1, 1], [1, 2, 3]]\n[[2, 1, 4], [6, 4, 3], [5, 8, 9]]",
+      "values": [
+        "[[1, 1, 1], [1, 2, 3], [2, 4, 5]]",
+        "[[-2, 4, -5], [1, -1, 1], [1, 2, 3]]",
+        "[[2, 1, 4], [6, 4, 3], [5, 8, 9]]"
+      ]
+    }
+  },
+  {
+    "id": "mbpp_test_0002",
+    "context": "You are solving a deterministic programming task from MBPP.",
+    "query": "Problem:\nWrite a function to count the most common words in a dictionary.\n\nCompute outputs for the following Python function calls and return only the outputs, one per line, in the same order:\ncount_common(['red','green','black','pink','black','white','black','eyes','white','black','orange','pink','pink','red','red','white','orange','white',\"black\",'pink','green','green','pink','green','pink','white','orange',\"orange\",'red'])\ncount_common(['one', 'two', 'three', 'four', 'five', 'one', 'two', 'one', 'three', 'one'])\ncount_common(['Facebook', 'Apple', 'Amazon', 'Netflix', 'Google', 'Apple', 'Netflix', 'Amazon'])",
+    "check": {
+      "type": "lines_in_order",
+      "value": "[('pink', 6), ('black', 5), ('white', 5), ('red', 4)]\n[('one', 4), ('two', 2), ('three', 2), ('four', 1)]\n[('Apple', 2), ('Amazon', 2), ('Netflix', 2), ('Facebook', 1)]",
+      "values": [
+        "[('pink', 6), ('black', 5), ('white', 5), ('red', 4)]",
+        "[('one', 4), ('two', 2), ('three', 2), ('four', 1)]",
+        "[('Apple', 2), ('Amazon', 2), ('Netflix', 2), ('Facebook', 1)]"
+      ]
+    }
+  },
+  {
+    "id": "mbpp_test_0003",
+    "context": "You are solving a deterministic programming task from MBPP.",
+    "query": "Problem:\nWrite a python function to find the volume of a triangular prism.\n\nCompute outputs for the following Python function calls and return only the outputs, one per line, in the same order:\nfind_Volume(10,8,6)\nfind_Volume(3,2,2)\nfind_Volume(1,2,1)",
+    "check": {
+      "type": "lines_in_order",
+      "value": "240\n6\n1",
+      "values": [
+        "240",
+        "6",
+        "1"
+      ]
+    }
+  },
+  {
+    "id": "mbpp_test_0004",
+    "context": "You are solving a deterministic programming task from MBPP.",
+    "query": "Problem:\nWrite a function to split a string at lowercase letters.\n\nCompute outputs for the following Python function calls and return only the outputs, one per line, in the same order:\nsplit_lowerstring(\"AbCd\")\nsplit_lowerstring(\"Python\")\nsplit_lowerstring(\"Programming\")",
+    "check": {
+      "type": "lines_in_order",
+      "value": "['bC', 'd']\n['y', 't', 'h', 'o', 'n']\n['r', 'o', 'g', 'r', 'a', 'm', 'm', 'i', 'n', 'g']",
+      "values": [
+        "['bC', 'd']",
+        "['y', 't', 'h', 'o', 'n']",
+        "['r', 'o', 'g', 'r', 'a', 'm', 'm', 'i', 'n', 'g']"
+      ]
+    }
+  },
+  {
+    "id": "mbpp_test_0005",
+    "context": "You are solving a deterministic programming task from MBPP.",
+    "query": "Problem:\nWrite a function to find sequences of lowercase letters joined with an underscore.\n\nCompute outputs for the following Python function calls and return only the outputs, one per line, in the same order:\ntext_lowercase_underscore(\"aab_cbbbc\")\ntext_lowercase_underscore(\"aab_Abbbc\")\ntext_lowercase_underscore(\"Aaab_abbbc\")",
+    "check": {
+      "type": "lines_in_order",
+      "value": "Found a match!\nNot matched!\nNot matched!",
+      "values": [
+        "Found a match!",
+        "Not matched!",
+        "Not matched!"
+      ]
+    }
+  },
+  {
+    "id": "mbpp_test_0006",
+    "context": "You are solving a deterministic programming task from MBPP.",
+    "query": "Problem:\nWrite a function to find the perimeter of a square.\n\nCompute outputs for the following Python function calls and return only the outputs, one per line, in the same order:\nsquare_perimeter(10)\nsquare_perimeter(5)\nsquare_perimeter(4)",
+    "check": {
+      "type": "lines_in_order",
+      "value": "40\n20\n16",
+      "values": [
+        "40",
+        "20",
+        "16"
+      ]
+    }
+  },
+  {
+    "id": "mbpp_test_0007",
+    "context": "You are solving a deterministic programming task from MBPP.",
+    "query": "Problem:\nWrite a function to remove characters from the first string which are present in the second string.\n\nCompute outputs for the following Python function calls and return only the outputs, one per line, in the same order:\nremove_dirty_chars(\"probasscurve\", \"pros\")\nremove_dirty_chars(\"digitalindia\", \"talent\")\nremove_dirty_chars(\"exoticmiles\", \"toxic\")",
+    "check": {
+      "type": "lines_in_order",
+      "value": "bacuve\ndigiidi\nemles",
+      "values": [
+        "bacuve",
+        "digiidi",
+        "emles"
+      ]
+    }
+  },
+  {
+    "id": "mbpp_test_0008",
+    "context": "You are solving a deterministic programming task from MBPP.",
+    "query": "Problem:\nWrite a function to find whether a given array of integers contains any duplicate element.\n\nCompute outputs for the following Python function calls and return only the outputs, one per line, in the same order:\ntest_duplicate(([1,2,3,4,5]))\ntest_duplicate(([1,2,3,4, 4]))\ntest_duplicate([1,1,2,2,3,3,4,4,5])",
+    "check": {
+      "type": "lines_in_order",
+      "value": "False\nTrue\nTrue",
+      "values": [
+        "False",
+        "True",
+        "True"
+      ]
+    }
+  },
+  {
+    "id": "mbpp_test_0009",
+    "context": "You are solving a deterministic programming task from MBPP.",
+    "query": "Problem:\nWrite a function to check if the given number is woodball or not.\n\nCompute outputs for the following Python function calls and return only the outputs, one per line, in the same order:\nis_woodall(383)\nis_woodall(254)\nis_woodall(200)",
+    "check": {
+      "type": "lines_in_order",
+      "value": "True\nFalse\nFalse",
+      "values": [
+        "True",
+        "False",
+        "False"
+      ]
+    }
+  },
+  {
+    "id": "mbpp_test_0010",
+    "context": "You are solving a deterministic programming task from MBPP.",
+    "query": "Problem:\nWrite a function to find m number of multiples of n.\n\nCompute outputs for the following Python function calls and return only the outputs, one per line, in the same order:\nmultiples_of_num(4,3)\nmultiples_of_num(2,5)\nmultiples_of_num(9,2)",
+    "check": {
+      "type": "lines_in_order",
+      "value": "[3, 6, 9, 12]\n[5, 10]\n[2, 4, 6, 8, 10, 12, 14, 16, 18]",
+      "values": [
+        "[3, 6, 9, 12]",
+        "[5, 10]",
+        "[2, 4, 6, 8, 10, 12, 14, 16, 18]"
+      ]
+    }
+  },
+  {
+    "id": "mbpp_test_0011",
+    "context": "You are solving a deterministic programming task from MBPP.",
+    "query": "Problem:\nWrite a function to find the first duplicate element in a given array of integers.\n\nCompute outputs for the following Python function calls and return only the outputs, one per line, in the same order:\nfind_first_duplicate(([1, 2, 3, 4, 4, 5]))\nfind_first_duplicate([1, 2, 3, 4])\nfind_first_duplicate([1, 1, 2, 3, 3, 2, 2])",
+    "check": {
+      "type": "lines_in_order",
+      "value": "4\n-1\n1",
+      "values": [
+        "4",
+        "-1",
+        "1"
+      ]
+    }
+  },
+  {
+    "id": "mbpp_test_0012",
+    "context": "You are solving a deterministic programming task from MBPP.",
+    "query": "Problem:\nWrite a python function to find the maximum sum of elements of list in a list of lists.\n\nCompute outputs for the following Python function calls and return only the outputs, one per line, in the same order:\nmaximum_Sum([[1,2,3],[4,5,6],[10,11,12],[7,8,9]])\nmaximum_Sum([[0,1,1],[1,1,2],[3,2,1]])\nmaximum_Sum([[0,1,3],[1,2,1],[9,8,2],[0,1,0],[6,4,8]])",
+    "check": {
+      "type": "lines_in_order",
+      "value": "33\n6\n19",
+      "values": [
+        "33",
+        "6",
+        "19"
+      ]
+    }
+  },
+  {
+    "id": "mbpp_test_0013",
+    "context": "You are solving a deterministic programming task from MBPP.",
+    "query": "Problem:\nWrite a function to convert the given binary number to its decimal equivalent.\n\nCompute outputs for the following Python function calls and return only the outputs, one per line, in the same order:\nbinary_to_decimal(100)\nbinary_to_decimal(1011)\nbinary_to_decimal(1101101)",
+    "check": {
+      "type": "lines_in_order",
+      "value": "4\n11\n109",
+      "values": [
+        "4",
+        "11",
+        "109"
+      ]
+    }
+  },
+  {
+    "id": "mbpp_test_0014",
+    "context": "You are solving a deterministic programming task from MBPP.",
+    "query": "Problem:\nWrite a python function to find the product of non-repeated elements in a given array.\n\nCompute outputs for the following Python function calls and return only the outputs, one per line, in the same order:\nfind_Product([1,1,2,3],4)\nfind_Product([1,2,3,1,1],5)\nfind_Product([1,1,4,5,6],5)",
+    "check": {
+      "type": "lines_in_order",
+      "value": "6\n6\n120",
+      "values": [
+        "6",
+        "6",
+        "120"
+      ]
+    }
+  },
+  {
+    "id": "mbpp_test_0015",
+    "context": "You are solving a deterministic programming task from MBPP.",
+    "query": "Problem:\nWrite a function to check if the given tuple list has all k elements.\n\nCompute outputs for the following Python function calls and return only the outputs, one per line, in the same order:\ncheck_k_elements([(4, 4), (4, 4, 4), (4, 4), (4, 4, 4, 4), (4, )], 4)\ncheck_k_elements([(7, 7, 7), (7, 7)], 7)\ncheck_k_elements([(9, 9), (9, 9, 9, 9)], 7)",
+    "check": {
+      "type": "lines_in_order",
+      "value": "True\nTrue\nFalse",
+      "values": [
+        "True",
+        "True",
+        "False"
+      ]
+    }
+  },
+  {
+    "id": "mbpp_test_0016",
+    "context": "You are solving a deterministic programming task from MBPP.",
+    "query": "Problem:\nWrite a python function to remove all digits from a list of strings.\n\nCompute outputs for the following Python function calls and return only the outputs, one per line, in the same order:\nremove(['4words', '3letters', '4digits'])\nremove(['28Jan','12Jan','11Jan'])\nremove(['wonder1','wonder2','wonder3'])",
+    "check": {
+      "type": "lines_in_order",
+      "value": "['words', 'letters', 'digits']\n['Jan', 'Jan', 'Jan']\n['wonder', 'wonder', 'wonder']",
+      "values": [
+        "['words', 'letters', 'digits']",
+        "['Jan', 'Jan', 'Jan']",
+        "['wonder', 'wonder', 'wonder']"
+      ]
+    }
+  },
+  {
+    "id": "mbpp_test_0017",
+    "context": "You are solving a deterministic programming task from MBPP.",
+    "query": "Problem:\nWrite a python function to find binomial co-efficient.\n\nCompute outputs for the following Python function calls and return only the outputs, one per line, in the same order:\nbinomial_Coeff(5,2)\nbinomial_Coeff(4,3)\nbinomial_Coeff(3,2)",
+    "check": {
+      "type": "lines_in_order",
+      "value": "10\n4\n3",
+      "values": [
+        "10",
+        "4",
+        "3"
+      ]
+    }
+  },
+  {
+    "id": "mbpp_test_0018",
+    "context": "You are solving a deterministic programming task from MBPP.",
+    "query": "Problem:\nWrite a python function to find the element occurring odd number of times.\n\nCompute outputs for the following Python function calls and return only the outputs, one per line, in the same order:\nget_Odd_Occurrence([1,2,3,1,2,3,1],7)\nget_Odd_Occurrence([1,2,3,2,3,1,3],7)\nget_Odd_Occurrence([2,3,5,4,5,2,4,3,5,2,4,4,2],13)",
+    "check": {
+      "type": "lines_in_order",
+      "value": "1\n3\n5",
+      "values": [
+        "1",
+        "3",
+        "5"
+      ]
+    }
+  },
+  {
+    "id": "mbpp_test_0019",
+    "context": "You are solving a deterministic programming task from MBPP.",
+    "query": "Problem:\nWrite a python function to count all the substrings starting and ending with same characters.\n\nCompute outputs for the following Python function calls and return only the outputs, one per line, in the same order:\ncount_Substring_With_Equal_Ends(\"abc\")\ncount_Substring_With_Equal_Ends(\"abcda\")\ncount_Substring_With_Equal_Ends(\"ab\")",
+    "check": {
+      "type": "lines_in_order",
+      "value": "3\n6\n2",
+      "values": [
+        "3",
+        "6",
+        "2"
+      ]
+    }
+  },
+  {
+    "id": "mbpp_test_0020",
+    "context": "You are solving a deterministic programming task from MBPP.",
+    "query": "Problem:\nWrite a function to find the top k integers that occur most frequently from given lists of sorted and distinct integers using heap queue algorithm.\n\nCompute outputs for the following Python function calls and return only the outputs, one per line, in the same order:\nfunc([[1, 2, 6], [1, 3, 4, 5, 7, 8], [1, 3, 5, 6, 8, 9], [2, 5, 7, 11], [1, 4, 7, 8, 12]],3)\nfunc([[1, 2, 6], [1, 3, 4, 5, 7, 8], [1, 3, 5, 6, 8, 9], [2, 5, 7, 11], [1, 4, 7, 8, 12]],1)\nfunc([[1, 2, 6], [1, 3, 4, 5, 7, 8], [1, 3, 5, 6, 8, 9], [2, 5, 7, 11], [1, 4, 7, 8, 12]],5)",
+    "check": {
+      "type": "lines_in_order",
+      "value": "[5, 7, 1]\n[1]\n[6, 5, 7, 8, 1]",
+      "values": [
+        "[5, 7, 1]",
+        "[1]",
+        "[6, 5, 7, 8, 1]"
+      ]
+    }
+  },
+  {
+    "id": "mbpp_test_0021",
+    "context": "You are solving a deterministic programming task from MBPP.",
+    "query": "Problem:\nWrite a python function to find the largest prime factor of a given number.\n\nCompute outputs for the following Python function calls and return only the outputs, one per line, in the same order:\nmax_Prime_Factors(15)\nmax_Prime_Factors(6)\nmax_Prime_Factors(2)",
+    "check": {
+      "type": "lines_in_order",
+      "value": "5\n3\n2",
+      "values": [
+        "5",
+        "3",
+        "2"
+      ]
+    }
+  },
+  {
+    "id": "mbpp_test_0022",
+    "context": "You are solving a deterministic programming task from MBPP.",
+    "query": "Problem:\nWrite a python function to convert a decimal number to binary number.\n\nCompute outputs for the following Python function calls and return only the outputs, one per line, in the same order:\ndecimal_To_Binary(10)\ndecimal_To_Binary(1)\ndecimal_To_Binary(20)",
+    "check": {
+      "type": "lines_in_order",
+      "value": "1010\n1\n10100",
+      "values": [
+        "1010",
+        "1",
+        "10100"
+      ]
+    }
+  },
+  {
+    "id": "mbpp_test_0023",
+    "context": "You are solving a deterministic programming task from MBPP.",
+    "query": "Problem:\nWrite a python function to find the missing number in a sorted array.\n\nCompute outputs for the following Python function calls and return only the outputs, one per line, in the same order:\nfind_missing([1,2,3,5],4)\nfind_missing([1,3,4,5],4)\nfind_missing([1,2,3,5,6,7],5)",
+    "check": {
+      "type": "lines_in_order",
+      "value": "4\n2\n4",
+      "values": [
+        "4",
+        "2",
+        "4"
+      ]
+    }
+  },
+  {
+    "id": "mbpp_test_0024",
+    "context": "You are solving a deterministic programming task from MBPP.",
+    "query": "Problem:\nWrite a function to find the n-th rectangular number.\n\nCompute outputs for the following Python function calls and return only the outputs, one per line, in the same order:\nfind_rect_num(4)\nfind_rect_num(5)\nfind_rect_num(6)",
+    "check": {
+      "type": "lines_in_order",
+      "value": "20\n30\n42",
+      "values": [
+        "20",
+        "30",
+        "42"
+      ]
+    }
+  },
+  {
+    "id": "mbpp_test_0025",
+    "context": "You are solving a deterministic programming task from MBPP.",
+    "query": "Problem:\nWrite a python function to find the nth digit in the proper fraction of two given numbers.\n\nCompute outputs for the following Python function calls and return only the outputs, one per line, in the same order:\nfind_Nth_Digit(1,2,1)\nfind_Nth_Digit(3,5,1)\nfind_Nth_Digit(5,6,5)",
+    "check": {
+      "type": "lines_in_order",
+      "value": "5\n6\n3",
+      "values": [
+        "5",
+        "6",
+        "3"
+      ]
+    }
+  },
+  {
+    "id": "mbpp_test_0026",
+    "context": "You are solving a deterministic programming task from MBPP.",
+    "query": "Problem:\nWrite a function to sort a given mixed list of integers and strings.\n\nCompute outputs for the following Python function calls and return only the outputs, one per line, in the same order:\nsort_mixed_list([19,'red',12,'green','blue', 10,'white','green',1])\nsort_mixed_list([19,'red',12,'green','blue', 10,'white','green',1])\nsort_mixed_list([19,'red',12,'green','blue', 10,'white','green',1])",
+    "check": {
+      "type": "lines_in_order",
+      "value": "[1, 10, 12, 19, 'blue', 'green', 'green', 'red', 'white']\n[1, 10, 12, 19, 'blue', 'green', 'green', 'red', 'white']\n[1, 10, 12, 19, 'blue', 'green', 'green', 'red', 'white']",
+      "values": [
+        "[1, 10, 12, 19, 'blue', 'green', 'green', 'red', 'white']",
+        "[1, 10, 12, 19, 'blue', 'green', 'green', 'red', 'white']",
+        "[1, 10, 12, 19, 'blue', 'green', 'green', 'red', 'white']"
+      ]
+    }
+  },
+  {
+    "id": "mbpp_test_0027",
+    "context": "You are solving a deterministic programming task from MBPP.",
+    "query": "Problem:\nWrite a function to find the division of first even and odd number of a given list.\n\nCompute outputs for the following Python function calls and return only the outputs, one per line, in the same order:\ndiv_even_odd([1,3,5,7,4,1,6,8])\ndiv_even_odd([1,2,3,4,5,6,7,8,9,10])\ndiv_even_odd([1,5,7,9,10])",
+    "check": {
+      "type": "lines_in_order",
+      "value": "4\n2\n10",
+      "values": [
+        "4",
+        "2",
+        "10"
+      ]
+    }
+  },
+  {
+    "id": "mbpp_test_0028",
+    "context": "You are solving a deterministic programming task from MBPP.",
+    "query": "Problem:\nWrite a function to check if the letters of a given string can be rearranged so that two characters that are adjacent to each other are different.\n\nCompute outputs for the following Python function calls and return only the outputs, one per line, in the same order:\nrearange_string(\"aab\")\nrearange_string(\"aabb\")\nrearange_string(\"abccdd\")",
+    "check": {
+      "type": "lines_in_order",
+      "value": "aba\nabab\ncdabcd",
+      "values": [
+        "aba",
+        "abab",
+        "cdabcd"
+      ]
+    }
+  },
+  {
+    "id": "mbpp_test_0029",
+    "context": "You are solving a deterministic programming task from MBPP.",
+    "query": "Problem:\nWrite a function to find frequency of the elements in a given list of lists using collections module.\n\nCompute outputs for the following Python function calls and return only the outputs, one per line, in the same order:\nfreq_element([[1, 2, 3, 2], [4, 5, 6, 2], [7, 1, 9, 5]])\nfreq_element([[1,2,3,4],[5,6,7,8],[9,10,11,12]])\nfreq_element([[15,20,30,40],[80,90,100,110],[30,30,80,90]])",
+    "check": {
+      "type": "lines_in_order",
+      "value": "{2: 3, 1: 2, 5: 2, 3: 1, 4: 1, 6: 1, 7: 1, 9: 1}\n{1: 1, 2: 1, 3: 1, 4: 1, 5: 1, 6: 1, 7: 1, 8: 1, 9: 1, 10: 1, 11: 1, 12: 1}\n{30: 3, 80: 2, 90: 2, 15: 1, 20: 1, 40: 1, 100: 1, 110: 1}",
+      "values": [
+        "{2: 3, 1: 2, 5: 2, 3: 1, 4: 1, 6: 1, 7: 1, 9: 1}",
+        "{1: 1, 2: 1, 3: 1, 4: 1, 5: 1, 6: 1, 7: 1, 8: 1, 9: 1, 10: 1, 11: 1, 12: 1}",
+        "{30: 3, 80: 2, 90: 2, 15: 1, 20: 1, 40: 1, 100: 1, 110: 1}"
+      ]
+    }
+  },
+  {
+    "id": "mbpp_test_0030",
+    "context": "You are solving a deterministic programming task from MBPP.",
+    "query": "Problem:\nWrite a function to filter even numbers using lambda function.\n\nCompute outputs for the following Python function calls and return only the outputs, one per line, in the same order:\nfilter_evennumbers([1, 2, 3, 4, 5, 6, 7, 8, 9, 10])\nfilter_evennumbers([10,20,45,67,84,93])\nfilter_evennumbers([5,7,9,8,6,4,3])",
+    "check": {
+      "type": "lines_in_order",
+      "value": "[2, 4, 6, 8, 10]\n[10, 20, 84]\n[8, 6, 4]",
+      "values": [
+        "[2, 4, 6, 8, 10]",
+        "[10, 20, 84]",
+        "[8, 6, 4]"
+      ]
+    }
+  },
+  {
+    "id": "mbpp_test_0031",
+    "context": "You are solving a deterministic programming task from MBPP.",
+    "query": "Problem:\nWrite a python function to find the sum of repeated elements in a given array.\n\nCompute outputs for the following Python function calls and return only the outputs, one per line, in the same order:\nfind_Sum([1,2,3,1,1,4,5,6],8)\nfind_Sum([1,2,3,1,1],5)\nfind_Sum([1,1,2],3)",
+    "check": {
+      "type": "lines_in_order",
+      "value": "3\n3\n2",
+      "values": [
+        "3",
+        "3",
+        "2"
+      ]
+    }
+  },
+  {
+    "id": "mbpp_test_0032",
+    "context": "You are solving a deterministic programming task from MBPP.",
+    "query": "Problem:\nWrite a function to find sequences of lowercase letters joined with an underscore using regex.\n\nCompute outputs for the following Python function calls and return only the outputs, one per line, in the same order:\ntext_match(\"aab_cbbbc\")\ntext_match(\"aab_Abbbc\")\ntext_match(\"Aaab_abbbc\")",
+    "check": {
+      "type": "lines_in_order",
+      "value": "Found a match!\nNot matched!\nNot matched!",
+      "values": [
+        "Found a match!",
+        "Not matched!",
+        "Not matched!"
+      ]
+    }
+  },
+  {
+    "id": "mbpp_test_0033",
+    "context": "You are solving a deterministic programming task from MBPP.",
+    "query": "Problem:\nWrite a function that matches a word at the beginning of a string.\n\nCompute outputs for the following Python function calls and return only the outputs, one per line, in the same order:\ntext_match_string(\" python\")\ntext_match_string(\"python\")\ntext_match_string(\"  lang\")",
+    "check": {
+      "type": "lines_in_order",
+      "value": "Not matched!\nFound a match!\nNot matched!",
+      "values": [
+        "Not matched!",
+        "Found a match!",
+        "Not matched!"
+      ]
+    }
+  },
+  {
+    "id": "mbpp_test_0034",
+    "context": "You are solving a deterministic programming task from MBPP.",
+    "query": "Problem:\nWrite a function to find the gcd of the given array elements.\n\nCompute outputs for the following Python function calls and return only the outputs, one per line, in the same order:\nget_gcd([2, 4, 6, 8, 16])\nget_gcd([1, 2, 3])\nget_gcd([2, 4, 6, 8])",
+    "check": {
+      "type": "lines_in_order",
+      "value": "2\n1\n2",
+      "values": [
+        "2",
+        "1",
+        "2"
+      ]
+    }
+  },
+  {
+    "id": "mbpp_test_0035",
+    "context": "You are solving a deterministic programming task from MBPP.",
+    "query": "Problem:\nWrite a python function to determine whether all the numbers are different from each other are not.\n\nCompute outputs for the following Python function calls and return only the outputs, one per line, in the same order:\ntest_distinct([1,5,7,9])\ntest_distinct([2,4,5,5,7,9])\ntest_distinct([1,2,3])",
+    "check": {
+      "type": "lines_in_order",
+      "value": "True\nFalse\nTrue",
+      "values": [
+        "True",
+        "False",
+        "True"
+      ]
+    }
+  },
+  {
+    "id": "mbpp_test_0036",
+    "context": "You are solving a deterministic programming task from MBPP.",
+    "query": "Problem:\nWrite a python function to find the last digit when factorial of a divides factorial of b.\n\nCompute outputs for the following Python function calls and return only the outputs, one per line, in the same order:\ncompute_Last_Digit(2,4)\ncompute_Last_Digit(6,8)\ncompute_Last_Digit(1,2)",
+    "check": {
+      "type": "lines_in_order",
+      "value": "2\n6\n2",
+      "values": [
+        "2",
+        "6",
+        "2"
+      ]
+    }
+  },
+  {
+    "id": "mbpp_test_0037",
+    "context": "You are solving a deterministic programming task from MBPP.",
+    "query": "Problem:\nWrite a python function to set all odd bits of a given number.\n\nCompute outputs for the following Python function calls and return only the outputs, one per line, in the same order:\nodd_bit_set_number(10)\nodd_bit_set_number(20)\nodd_bit_set_number(30)",
+    "check": {
+      "type": "lines_in_order",
+      "value": "15\n21\n31",
+      "values": [
+        "15",
+        "21",
+        "31"
+      ]
+    }
+  },
+  {
+    "id": "mbpp_test_0038",
+    "context": "You are solving a deterministic programming task from MBPP.",
+    "query": "Problem:\nWrite a function to extract every first or specified element from a given two-dimensional list.\n\nCompute outputs for the following Python function calls and return only the outputs, one per line, in the same order:\nspecified_element([[1, 2, 3, 2], [4, 5, 6, 2], [7, 1, 9, 5]],0)\nspecified_element([[1, 2, 3, 2], [4, 5, 6, 2], [7, 1, 9, 5]],2)\nspecified_element([[1, 2, 3, 2], [4, 5, 6, 2], [7, 1, 9, 5]],1)",
+    "check": {
+      "type": "lines_in_order",
+      "value": "[1, 4, 7]\n[3, 6, 9]\n[2, 5, 1]",
+      "values": [
+        "[1, 4, 7]",
+        "[3, 6, 9]",
+        "[2, 5, 1]"
+      ]
+    }
+  },
+  {
+    "id": "mbpp_test_0039",
+    "context": "You are solving a deterministic programming task from MBPP.",
+    "query": "Problem:\nWrite a function to find the list with minimum length using lambda function.\n\nCompute outputs for the following Python function calls and return only the outputs, one per line, in the same order:\nmin_length_list([[0], [1, 3], [5, 7], [9, 11], [13, 15, 17]])\nmin_length_list([[1,2,3,4,5],[1,2,3,4],[1,2,3],[1,2],[1]])\nmin_length_list([[3,4,5],[6,7,8,9],[10,11,12],[1,2]])",
+    "check": {
+      "type": "lines_in_order",
+      "value": "(1, [0])\n(1, [1])\n(2, [1, 2])",
+      "values": [
+        "(1, [0])",
+        "(1, [1])",
+        "(2, [1, 2])"
+      ]
+    }
+  },
+  {
+    "id": "mbpp_test_0040",
+    "context": "You are solving a deterministic programming task from MBPP.",
+    "query": "Problem:\nWrite a function to print check if the triangle is equilateral or not.\n\nCompute outputs for the following Python function calls and return only the outputs, one per line, in the same order:\ncheck_equilateral(6,8,12)\ncheck_equilateral(6,6,12)\ncheck_equilateral(6,6,6)",
+    "check": {
+      "type": "lines_in_order",
+      "value": "False\nFalse\nTrue",
+      "values": [
+        "False",
+        "False",
+        "True"
+      ]
+    }
+  },
+  {
+    "id": "mbpp_test_0041",
+    "context": "You are solving a deterministic programming task from MBPP.",
+    "query": "Problem:\nWrite a function to caluclate area of a parallelogram.\n\nCompute outputs for the following Python function calls and return only the outputs, one per line, in the same order:\nparallelogram_area(10,20)\nparallelogram_area(15,20)\nparallelogram_area(8,9)",
+    "check": {
+      "type": "lines_in_order",
+      "value": "200\n300\n72",
+      "values": [
+        "200",
+        "300",
+        "72"
+      ]
+    }
+  },
+  {
+    "id": "mbpp_test_0042",
+    "context": "You are solving a deterministic programming task from MBPP.",
+    "query": "Problem:\nWrite a python function to check whether the first and last characters of a given string are equal or not.\n\nCompute outputs for the following Python function calls and return only the outputs, one per line, in the same order:\ncheck_Equality(\"abcda\")\ncheck_Equality(\"ab\")\ncheck_Equality(\"mad\")",
+    "check": {
+      "type": "lines_in_order",
+      "value": "Equal\nNot Equal\nNot Equal",
+      "values": [
+        "Equal",
+        "Not Equal",
+        "Not Equal"
+      ]
+    }
+  },
+  {
+    "id": "mbpp_test_0043",
+    "context": "You are solving a deterministic programming task from MBPP.",
+    "query": "Problem:\nWrite a function to sort the given array by using counting sort.\n\nCompute outputs for the following Python function calls and return only the outputs, one per line, in the same order:\ncounting_sort([1,23,4,5,6,7,8])\ncounting_sort([12, 9, 28, 33, 69, 45])\ncounting_sort([8, 4, 14, 3, 2, 1])",
+    "check": {
+      "type": "lines_in_order",
+      "value": "[1, 4, 5, 6, 7, 8, 23]\n[9, 12, 28, 33, 45, 69]\n[1, 2, 3, 4, 8, 14]",
+      "values": [
+        "[1, 4, 5, 6, 7, 8, 23]",
+        "[9, 12, 28, 33, 45, 69]",
+        "[1, 2, 3, 4, 8, 14]"
+      ]
+    }
+  },
+  {
+    "id": "mbpp_test_0044",
+    "context": "You are solving a deterministic programming task from MBPP.",
+    "query": "Problem:\nWrite a function to find t-nth term of geometric series.\n\nCompute outputs for the following Python function calls and return only the outputs, one per line, in the same order:\ntn_gp(1,5,2)\ntn_gp(1,5,4)\ntn_gp(2,6,3)",
+    "check": {
+      "type": "lines_in_order",
+      "value": "16\n256\n486",
+      "values": [
+        "16",
+        "256",
+        "486"
+      ]
+    }
+  },
+  {
+    "id": "mbpp_test_0045",
+    "context": "You are solving a deterministic programming task from MBPP.",
+    "query": "Problem:\nWrite a python function to check if a given number is one less than twice its reverse.\n\nCompute outputs for the following Python function calls and return only the outputs, one per line, in the same order:\ncheck(70)\ncheck(23)\ncheck(73)",
+    "check": {
+      "type": "lines_in_order",
+      "value": "False\nFalse\nTrue",
+      "values": [
+        "False",
+        "False",
+        "True"
+      ]
+    }
+  },
+  {
+    "id": "mbpp_test_0046",
+    "context": "You are solving a deterministic programming task from MBPP.",
+    "query": "Problem:\nWrite a python function to find the largest number that can be formed with the given digits.\n\nCompute outputs for the following Python function calls and return only the outputs, one per line, in the same order:\nfind_Max_Num([1,2,3],3)\nfind_Max_Num([4,5,6,1],4)\nfind_Max_Num([1,2,3,9],4)",
+    "check": {
+      "type": "lines_in_order",
+      "value": "321\n6541\n9321",
+      "values": [
+        "321",
+        "6541",
+        "9321"
+      ]
+    }
+  },
+  {
+    "id": "mbpp_test_0047",
+    "context": "You are solving a deterministic programming task from MBPP.",
+    "query": "Problem:\nWrite a python function to check whether the given two integers have opposite sign or not.\n\nCompute outputs for the following Python function calls and return only the outputs, one per line, in the same order:\nopposite_Signs(1,-2)\nopposite_Signs(3,2)\nopposite_Signs(-10,-10)",
+    "check": {
+      "type": "lines_in_order",
+      "value": "True\nFalse\nFalse",
+      "values": [
+        "True",
+        "False",
+        "False"
+      ]
+    }
+  },
+  {
+    "id": "mbpp_test_0048",
+    "context": "You are solving a deterministic programming task from MBPP.",
+    "query": "Problem:\nWrite a function to find the nth octagonal number.\n\nCompute outputs for the following Python function calls and return only the outputs, one per line, in the same order:\nis_octagonal(5)\nis_octagonal(10)\nis_octagonal(15)",
+    "check": {
+      "type": "lines_in_order",
+      "value": "65\n280\n645",
+      "values": [
+        "65",
+        "280",
+        "645"
+      ]
+    }
+  },
+  {
+    "id": "mbpp_test_0049",
+    "context": "You are solving a deterministic programming task from MBPP.",
+    "query": "Problem:\nWrite a function to find the maximum length of the subsequence with difference between adjacent elements for the given array.\n\nCompute outputs for the following Python function calls and return only the outputs, one per line, in the same order:\nmax_len_sub([2, 5, 6, 3, 7, 6, 5, 8], 8)\nmax_len_sub([-2, -1, 5, -1, 4, 0, 3], 7)\nmax_len_sub([9, 11, 13, 15, 18], 5)",
+    "check": {
+      "type": "lines_in_order",
+      "value": "5\n4\n1",
+      "values": [
+        "5",
+        "4",
+        "1"
+      ]
+    }
+  },
+  {
+    "id": "mbpp_test_0050",
+    "context": "You are solving a deterministic programming task from MBPP.",
+    "query": "Problem:\nWrite a python function to count number of substrings with the sum of digits equal to their length.\n\nCompute outputs for the following Python function calls and return only the outputs, one per line, in the same order:\ncount_Substrings('112112',6)\ncount_Substrings('111',3)\ncount_Substrings('1101112',7)",
+    "check": {
+      "type": "lines_in_order",
+      "value": "6\n6\n12",
+      "values": [
+        "6",
+        "6",
+        "12"
+      ]
+    }
+  },
+  {
+    "id": "mbpp_test_0051",
+    "context": "You are solving a deterministic programming task from MBPP.",
+    "query": "Problem:\nWrite a python function to find smallest number in a list.\n\nCompute outputs for the following Python function calls and return only the outputs, one per line, in the same order:\nsmallest_num([10, 20, 1, 45, 99])\nsmallest_num([1, 2, 3])\nsmallest_num([45, 46, 50, 60])",
+    "check": {
+      "type": "lines_in_order",
+      "value": "1\n1\n45",
+      "values": [
+        "1",
+        "1",
+        "45"
+      ]
+    }
+  },
+  {
+    "id": "mbpp_test_0052",
+    "context": "You are solving a deterministic programming task from MBPP.",
+    "query": "Problem:\nWrite a function to find the maximum difference between available pairs in the given tuple list.\n\nCompute outputs for the following Python function calls and return only the outputs, one per line, in the same order:\nmax_difference([(3, 5), (1, 7), (10, 3), (1, 2)])\nmax_difference([(4, 6), (2, 17), (9, 13), (11, 12)])\nmax_difference([(12, 35), (21, 27), (13, 23), (41, 22)])",
+    "check": {
+      "type": "lines_in_order",
+      "value": "7\n15\n23",
+      "values": [
+        "7",
+        "15",
+        "23"
+      ]
+    }
+  },
+  {
+    "id": "mbpp_test_0053",
+    "context": "You are solving a deterministic programming task from MBPP.",
+    "query": "Problem:\nWrite a function to sort a list of tuples using lambda.\n\nCompute outputs for the following Python function calls and return only the outputs, one per line, in the same order:\nsubject_marks([('English', 88), ('Science', 90), ('Maths', 97), ('Social sciences', 82)])\nsubject_marks([('Telugu',49),('Hindhi',54),('Social',33)])\nsubject_marks([('Physics',96),('Chemistry',97),('Biology',45)])",
+    "check": {
+      "type": "lines_in_order",
+      "value": "[('Social sciences', 82), ('English', 88), ('Science', 90), ('Maths', 97)]\n[('Social', 33), ('Telugu', 49), ('Hindhi', 54)]\n[('Biology', 45), ('Physics', 96), ('Chemistry', 97)]",
+      "values": [
+        "[('Social sciences', 82), ('English', 88), ('Science', 90), ('Maths', 97)]",
+        "[('Social', 33), ('Telugu', 49), ('Hindhi', 54)]",
+        "[('Biology', 45), ('Physics', 96), ('Chemistry', 97)]"
+      ]
+    }
+  },
+  {
+    "id": "mbpp_test_0054",
+    "context": "You are solving a deterministic programming task from MBPP.",
+    "query": "Problem:\nWrite a function of recursion list sum.\n\nCompute outputs for the following Python function calls and return only the outputs, one per line, in the same order:\nrecursive_list_sum(([1, 2, [3,4],[5,6]]))\nrecursive_list_sum(([7, 10, [15,14],[19,41]]))\nrecursive_list_sum(([10, 20, [30,40],[50,60]]))",
+    "check": {
+      "type": "lines_in_order",
+      "value": "21\n106\n210",
+      "values": [
+        "21",
+        "106",
+        "210"
+      ]
+    }
+  },
+  {
+    "id": "mbpp_test_0055",
+    "context": "You are solving a deterministic programming task from MBPP.",
+    "query": "Problem:\nWrite a python function to count positive numbers in a list.\n\nCompute outputs for the following Python function calls and return only the outputs, one per line, in the same order:\npos_count([1,-2,3,-4])\npos_count([3,4,5,-1])\npos_count([1,2,3,4])",
+    "check": {
+      "type": "lines_in_order",
+      "value": "2\n3\n4",
+      "values": [
+        "2",
+        "3",
+        "4"
+      ]
+    }
+  },
+  {
+    "id": "mbpp_test_0056",
+    "context": "You are solving a deterministic programming task from MBPP.",
+    "query": "Problem:\nWrite a function to find the number of ways to partition a set of bell numbers.\n\nCompute outputs for the following Python function calls and return only the outputs, one per line, in the same order:\nbell_number(2)\nbell_number(10)\nbell_number(56)",
+    "check": {
+      "type": "lines_in_order",
+      "value": "2\n115975\n6775685320645824322581483068371419745979053216268760300",
+      "values": [
+        "2",
+        "115975",
+        "6775685320645824322581483068371419745979053216268760300"
+      ]
+    }
+  },
+  {
+    "id": "mbpp_test_0057",
+    "context": "You are solving a deterministic programming task from MBPP.",
+    "query": "Problem:\nWrite a python function to check whether the given array is monotonic or not.\n\nCompute outputs for the following Python function calls and return only the outputs, one per line, in the same order:\nis_Monotonic([6, 5, 4, 4])\nis_Monotonic([1, 2, 2, 3])\nis_Monotonic([1, 3, 2])",
+    "check": {
+      "type": "lines_in_order",
+      "value": "True\nTrue\nFalse",
+      "values": [
+        "True",
+        "True",
+        "False"
+      ]
+    }
+  },
+  {
+    "id": "mbpp_test_0058",
+    "context": "You are solving a deterministic programming task from MBPP.",
+    "query": "Problem:\nWrite a function to check whether a list contains the given sublist or not.\n\nCompute outputs for the following Python function calls and return only the outputs, one per line, in the same order:\nis_sublist([2,4,3,5,7],[3,7])\nis_sublist([2,4,3,5,7],[4,3])\nis_sublist([2,4,3,5,7],[1,6])",
+    "check": {
+      "type": "lines_in_order",
+      "value": "False\nTrue\nFalse",
+      "values": [
+        "False",
+        "True",
+        "False"
+      ]
+    }
+  },
+  {
+    "id": "mbpp_test_0059",
+    "context": "You are solving a deterministic programming task from MBPP.",
+    "query": "Problem:\nWrite a function to find whether all the given tuples have equal length or not.\n\nCompute outputs for the following Python function calls and return only the outputs, one per line, in the same order:\nget_equal([(11, 22, 33), (44, 55, 66)], 3)\nget_equal([(1, 2, 3), (4, 5, 6, 7)], 3)\nget_equal([(1, 2), (3, 4)], 2)",
+    "check": {
+      "type": "lines_in_order",
+      "value": "All tuples have same length\nAll tuples do not have same length\nAll tuples have same length",
+      "values": [
+        "All tuples have same length",
+        "All tuples do not have same length",
+        "All tuples have same length"
+      ]
+    }
+  },
+  {
+    "id": "mbpp_test_0060",
+    "context": "You are solving a deterministic programming task from MBPP.",
+    "query": "Problem:\nWrite a function to sort a list of elements using comb sort.\n\nCompute outputs for the following Python function calls and return only the outputs, one per line, in the same order:\ncomb_sort([5, 15, 37, 25, 79])\ncomb_sort([41, 32, 15, 19, 22])\ncomb_sort([99, 15, 13, 47])",
+    "check": {
+      "type": "lines_in_order",
+      "value": "[5, 15, 25, 37, 79]\n[15, 19, 22, 32, 41]\n[13, 15, 47, 99]",
+      "values": [
+        "[5, 15, 25, 37, 79]",
+        "[15, 19, 22, 32, 41]",
+        "[13, 15, 47, 99]"
+      ]
+    }
+  },
+  {
+    "id": "mbpp_test_0061",
+    "context": "You are solving a deterministic programming task from MBPP.",
+    "query": "Problem:\nWrite a python function to check whether the given number can be represented as difference of two squares or not.\n\nCompute outputs for the following Python function calls and return only the outputs, one per line, in the same order:\ndif_Square(5)\ndif_Square(10)\ndif_Square(15)",
+    "check": {
+      "type": "lines_in_order",
+      "value": "True\nFalse\nTrue",
+      "values": [
+        "True",
+        "False",
+        "True"
+      ]
+    }
+  },
+  {
+    "id": "mbpp_test_0062",
+    "context": "You are solving a deterministic programming task from MBPP.",
+    "query": "Problem:\nWrite a function to split the given string with multiple delimiters by using regex.\n\nCompute outputs for the following Python function calls and return only the outputs, one per line, in the same order:\nmultiple_split('Forces of the \\ndarkness*are coming into the play.')\nmultiple_split('Mi Box runs on the \\n Latest android*which has google assistance and chromecast.')\nmultiple_split('Certain services\\nare subjected to change*over the seperate subscriptions.')",
+    "check": {
+      "type": "lines_in_order",
+      "value": "['Forces of the ', 'darkness', 'are coming into the play.']\n['Mi Box runs on the ', ' Latest android', 'which has google assistance and chromecast.']\n['Certain services', 'are subjected to change', 'over the seperate subscriptions.']",
+      "values": [
+        "['Forces of the ', 'darkness', 'are coming into the play.']",
+        "['Mi Box runs on the ', ' Latest android', 'which has google assistance and chromecast.']",
+        "['Certain services', 'are subjected to change', 'over the seperate subscriptions.']"
+      ]
+    }
+  },
+  {
+    "id": "mbpp_test_0063",
+    "context": "You are solving a deterministic programming task from MBPP.",
+    "query": "Problem:\nWrite a function to check whether it follows the sequence given in the patterns array.\n\nCompute outputs for the following Python function calls and return only the outputs, one per line, in the same order:\nis_samepatterns([\"red\",\"green\",\"green\"], [\"a\", \"b\", \"b\"])\nis_samepatterns([\"red\",\"green\",\"greenn\"], [\"a\",\"b\",\"b\"])\nis_samepatterns([\"red\",\"green\",\"greenn\"], [\"a\",\"b\"])",
+    "check": {
+      "type": "lines_in_order",
+      "value": "True\nFalse\nFalse",
+      "values": [
+        "True",
+        "False",
+        "False"
+      ]
+    }
+  },
+  {
+    "id": "mbpp_test_0064",
+    "context": "You are solving a deterministic programming task from MBPP.",
+    "query": "Problem:\nWrite a function to find tuples which have all elements divisible by k from the given list of tuples.\n\nCompute outputs for the following Python function calls and return only the outputs, one per line, in the same order:\nfind_tuples([(6, 24, 12), (7, 9, 6), (12, 18, 21)], 6)\nfind_tuples([(5, 25, 30), (4, 2, 3), (7, 8, 9)], 5)\nfind_tuples([(7, 9, 16), (8, 16, 4), (19, 17, 18)], 4)",
+    "check": {
+      "type": "lines_in_order",
+      "value": "[(6, 24, 12)]\n[(5, 25, 30)]\n[(8, 16, 4)]",
+      "values": [
+        "[(6, 24, 12)]",
+        "[(5, 25, 30)]",
+        "[(8, 16, 4)]"
+      ]
+    }
+  },
+  {
+    "id": "mbpp_test_0065",
+    "context": "You are solving a deterministic programming task from MBPP.",
+    "query": "Problem:\nWrite a python function to count the number of squares in a rectangle.\n\nCompute outputs for the following Python function calls and return only the outputs, one per line, in the same order:\ncount_Squares(4,3)\ncount_Squares(2,2)\ncount_Squares(1,1)",
+    "check": {
+      "type": "lines_in_order",
+      "value": "20\n5\n1",
+      "values": [
+        "20",
+        "5",
+        "1"
+      ]
+    }
+  },
+  {
+    "id": "mbpp_test_0066",
+    "context": "You are solving a deterministic programming task from MBPP.",
+    "query": "Problem:\nWrite a python function to find the difference between sum of even and odd digits.\n\nCompute outputs for the following Python function calls and return only the outputs, one per line, in the same order:\nis_Diff (12345)\nis_Diff(1212112)\nis_Diff(1212)",
+    "check": {
+      "type": "lines_in_order",
+      "value": "False\nTrue\nFalse",
+      "values": [
+        "False",
+        "True",
+        "False"
+      ]
+    }
+  },
+  {
+    "id": "mbpp_test_0067",
+    "context": "You are solving a deterministic programming task from MBPP.",
+    "query": "Problem:\nWrite a python function to find number of integers with odd number of set bits.\n\nCompute outputs for the following Python function calls and return only the outputs, one per line, in the same order:\ncount_With_Odd_SetBits(5)\ncount_With_Odd_SetBits(10)\ncount_With_Odd_SetBits(15)",
+    "check": {
+      "type": "lines_in_order",
+      "value": "3\n5\n8",
+      "values": [
+        "3",
+        "5",
+        "8"
+      ]
+    }
+  },
+  {
+    "id": "mbpp_test_0068",
+    "context": "You are solving a deterministic programming task from MBPP.",
+    "query": "Problem:\nWrite a python function to check whether the length of the word is odd or not.\n\nCompute outputs for the following Python function calls and return only the outputs, one per line, in the same order:\nword_len(\"Hadoop\")\nword_len(\"great\")\nword_len(\"structure\")",
+    "check": {
+      "type": "lines_in_order",
+      "value": "False\nTrue\nTrue",
+      "values": [
+        "False",
+        "True",
+        "True"
+      ]
+    }
+  },
+  {
+    "id": "mbpp_test_0069",
+    "context": "You are solving a deterministic programming task from MBPP.",
+    "query": "Problem:\nWrite a function to find the nth tetrahedral number.\n\nCompute outputs for the following Python function calls and return only the outputs, one per line, in the same order:\ntetrahedral_number(5)\ntetrahedral_number(6)\ntetrahedral_number(7)",
+    "check": {
+      "type": "lines_in_order",
+      "value": "35.0\n56.0\n84.0",
+      "values": [
+        "35.0",
+        "56.0",
+        "84.0"
+      ]
+    }
+  },
+  {
+    "id": "mbpp_test_0070",
+    "context": "You are solving a deterministic programming task from MBPP.",
+    "query": "Problem:\nWrite a function to zip the two given tuples.\n\nCompute outputs for the following Python function calls and return only the outputs, one per line, in the same order:\nzip_tuples((7, 8, 4, 5, 9, 10),(1, 5, 6) )\nzip_tuples((8, 9, 5, 6, 10, 11),(2, 6, 7) )\nzip_tuples((9, 10, 6, 7, 11, 12),(3, 7, 8) )",
+    "check": {
+      "type": "lines_in_order",
+      "value": "[(7, 1), (8, 5), (4, 6), (5, 1), (9, 5), (10, 6)]\n[(8, 2), (9, 6), (5, 7), (6, 2), (10, 6), (11, 7)]\n[(9, 3), (10, 7), (6, 8), (7, 3), (11, 7), (12, 8)]",
+      "values": [
+        "[(7, 1), (8, 5), (4, 6), (5, 1), (9, 5), (10, 6)]",
+        "[(8, 2), (9, 6), (5, 7), (6, 2), (10, 6), (11, 7)]",
+        "[(9, 3), (10, 7), (6, 8), (7, 3), (11, 7), (12, 8)]"
+      ]
+    }
+  },
+  {
+    "id": "mbpp_test_0071",
+    "context": "You are solving a deterministic programming task from MBPP.",
+    "query": "Problem:\nWrite a function to find the volume of a sphere.\n\nCompute outputs for the following Python function calls and return only the outputs, one per line, in the same order:\nvolume_sphere(10)\nvolume_sphere(25)\nvolume_sphere(20)",
+    "check": {
+      "type": "lines_in_order",
+      "value": "4188.790204786391\n65449.84694978735\n33510.32163829113",
+      "values": [
+        "4188.790204786391",
+        "65449.84694978735",
+        "33510.32163829113"
+      ]
+    }
+  },
+  {
+    "id": "mbpp_test_0072",
+    "context": "You are solving a deterministic programming task from MBPP.",
+    "query": "Problem:\nWrite a python function to find the character made by adding all the characters of the given string.\n\nCompute outputs for the following Python function calls and return only the outputs, one per line, in the same order:\nget_Char(\"abc\")\nget_Char(\"gfg\")\nget_Char(\"ab\")",
+    "check": {
+      "type": "lines_in_order",
+      "value": "f\nt\nc",
+      "values": [
+        "f",
+        "t",
+        "c"
+      ]
+    }
+  },
+  {
+    "id": "mbpp_test_0073",
+    "context": "You are solving a deterministic programming task from MBPP.",
+    "query": "Problem:\nWrite a function to find the n-th number in newman conway sequence.\n\nCompute outputs for the following Python function calls and return only the outputs, one per line, in the same order:\nsequence(10)\nsequence(2)\nsequence(3)",
+    "check": {
+      "type": "lines_in_order",
+      "value": "6\n1\n2",
+      "values": [
+        "6",
+        "1",
+        "2"
+      ]
+    }
+  },
+  {
+    "id": "mbpp_test_0074",
+    "context": "You are solving a deterministic programming task from MBPP.",
+    "query": "Problem:\nWrite a function to find the surface area of a sphere.\n\nCompute outputs for the following Python function calls and return only the outputs, one per line, in the same order:\nsurfacearea_sphere(10)\nsurfacearea_sphere(15)\nsurfacearea_sphere(20)",
+    "check": {
+      "type": "lines_in_order",
+      "value": "1256.6370614359173\n2827.4333882308138\n5026.548245743669",
+      "values": [
+        "1256.6370614359173",
+        "2827.4333882308138",
+        "5026.548245743669"
+      ]
+    }
+  },
+  {
+    "id": "mbpp_test_0075",
+    "context": "You are solving a deterministic programming task from MBPP.",
+    "query": "Problem:\nWrite a function to find nth centered hexagonal number.\n\nCompute outputs for the following Python function calls and return only the outputs, one per line, in the same order:\ncentered_hexagonal_number(10)\ncentered_hexagonal_number(2)\ncentered_hexagonal_number(9)",
+    "check": {
+      "type": "lines_in_order",
+      "value": "271\n7\n217",
+      "values": [
+        "271",
+        "7",
+        "217"
+      ]
+    }
+  },
+  {
+    "id": "mbpp_test_0076",
+    "context": "You are solving a deterministic programming task from MBPP.",
+    "query": "Problem:\nWrite a function to merge three dictionaries into a single expression.\n\nCompute outputs for the following Python function calls and return only the outputs, one per line, in the same order:\nmerge_dictionaries_three({ \"R\": \"Red\", \"B\": \"Black\", \"P\": \"Pink\" }, { \"G\": \"Green\", \"W\": \"White\" },{ \"O\": \"Orange\", \"W\": \"White\", \"B\": \"Black\" })\nmerge_dictionaries_three({ \"R\": \"Red\", \"B\": \"Black\", \"P\": \"Pink\" }, { \"G\": \"Green\", \"W\": \"White\" },{\"L\":\"lavender\",\"B\":\"Blue\"})\nmerge_dictionaries_three({ \"R\": \"Red\", \"B\": \"Black\", \"P\": \"Pink\" },{\"L\":\"lavender\",\"B\":\"Blue\"},{ \"G\": \"Green\", \"W\": \"White\" })",
+    "check": {
+      "type": "lines_in_order",
+      "value": "{'B': 'Black', 'R': 'Red', 'P': 'Pink', 'G': 'Green', 'W': 'White', 'O': 'Orange'}\n{'W': 'White', 'P': 'Pink', 'B': 'Black', 'R': 'Red', 'G': 'Green', 'L': 'lavender'}\n{'B': 'Black', 'P': 'Pink', 'R': 'Red', 'G': 'Green', 'L': 'lavender', 'W': 'White'}",
+      "values": [
+        "{'B': 'Black', 'R': 'Red', 'P': 'Pink', 'G': 'Green', 'W': 'White', 'O': 'Orange'}",
+        "{'W': 'White', 'P': 'Pink', 'B': 'Black', 'R': 'Red', 'G': 'Green', 'L': 'lavender'}",
+        "{'B': 'Black', 'P': 'Pink', 'R': 'Red', 'G': 'Green', 'L': 'lavender', 'W': 'White'}"
+      ]
+    }
+  },
+  {
+    "id": "mbpp_test_0077",
+    "context": "You are solving a deterministic programming task from MBPP.",
+    "query": "Problem:\nWrite a function to get the frequency of the elements in a list.\n\nCompute outputs for the following Python function calls and return only the outputs, one per line, in the same order:\nfreq_count([10,10,10,10,20,20,20,20,40,40,50,50,30])\nfreq_count([1,2,3,4,3,2,4,1,3,1,4])\nfreq_count([5,6,7,4,9,10,4,5,6,7,9,5])",
+    "check": {
+      "type": "lines_in_order",
+      "value": "{10: 4, 20: 4, 40: 2, 50: 2, 30: 1}\n{1: 3, 2: 2, 3: 3, 4: 3}\n{10: 1, 5: 3, 6: 2, 7: 2, 4: 2, 9: 2}",
+      "values": [
+        "{10: 4, 20: 4, 40: 2, 50: 2, 30: 1}",
+        "{1: 3, 2: 2, 3: 3, 4: 3}",
+        "{10: 1, 5: 3, 6: 2, 7: 2, 4: 2, 9: 2}"
+      ]
+    }
+  },
+  {
+    "id": "mbpp_test_0078",
+    "context": "You are solving a deterministic programming task from MBPP.",
+    "query": "Problem:\nWrite a function to find the closest smaller number than n.\n\nCompute outputs for the following Python function calls and return only the outputs, one per line, in the same order:\nclosest_num(11)\nclosest_num(7)\nclosest_num(12)",
+    "check": {
+      "type": "lines_in_order",
+      "value": "10\n6\n11",
+      "values": [
+        "10",
+        "6",
+        "11"
+      ]
+    }
+  },
+  {
+    "id": "mbpp_test_0079",
+    "context": "You are solving a deterministic programming task from MBPP.",
+    "query": "Problem:\nWrite a python function to find the length of the longest word.\n\nCompute outputs for the following Python function calls and return only the outputs, one per line, in the same order:\nlen_log([\"python\",\"PHP\",\"bigdata\"])\nlen_log([\"a\",\"ab\",\"abc\"])\nlen_log([\"small\",\"big\",\"tall\"])",
+    "check": {
+      "type": "lines_in_order",
+      "value": "7\n3\n5",
+      "values": [
+        "7",
+        "3",
+        "5"
+      ]
+    }
+  },
+  {
+    "id": "mbpp_test_0080",
+    "context": "You are solving a deterministic programming task from MBPP.",
+    "query": "Problem:\nWrite a function to check if a substring is present in a given list of string values.\n\nCompute outputs for the following Python function calls and return only the outputs, one per line, in the same order:\nfind_substring([\"red\", \"black\", \"white\", \"green\", \"orange\"],\"ack\")\nfind_substring([\"red\", \"black\", \"white\", \"green\", \"orange\"],\"abc\")\nfind_substring([\"red\", \"black\", \"white\", \"green\", \"orange\"],\"ange\")",
+    "check": {
+      "type": "lines_in_order",
+      "value": "True\nFalse\nTrue",
+      "values": [
+        "True",
+        "False",
+        "True"
+      ]
+    }
+  },
+  {
+    "id": "mbpp_test_0081",
+    "context": "You are solving a deterministic programming task from MBPP.",
+    "query": "Problem:\nWrite a function to check whether the given number is undulating or not.\n\nCompute outputs for the following Python function calls and return only the outputs, one per line, in the same order:\nis_undulating(\"1212121\")\nis_undulating(\"1991\")\nis_undulating(\"121\")",
+    "check": {
+      "type": "lines_in_order",
+      "value": "True\nFalse\nTrue",
+      "values": [
+        "True",
+        "False",
+        "True"
+      ]
+    }
+  },
+  {
+    "id": "mbpp_test_0082",
+    "context": "You are solving a deterministic programming task from MBPP.",
+    "query": "Problem:\nWrite a function to calculate the value of 'a' to the power 'b'.\n\nCompute outputs for the following Python function calls and return only the outputs, one per line, in the same order:\npower(3,4)\npower(2,3)\npower(5,5)",
+    "check": {
+      "type": "lines_in_order",
+      "value": "81\n8\n3125",
+      "values": [
+        "81",
+        "8",
+        "3125"
+      ]
+    }
+  },
+  {
+    "id": "mbpp_test_0083",
+    "context": "You are solving a deterministic programming task from MBPP.",
+    "query": "Problem:\nWrite a function to extract the index minimum value record from the given tuples.\n\nCompute outputs for the following Python function calls and return only the outputs, one per line, in the same order:\nindex_minimum([('Rash', 143), ('Manjeet', 200), ('Varsha', 100)])\nindex_minimum([('Yash', 185), ('Dawood', 125), ('Sanya', 175)])\nindex_minimum([('Sai', 345), ('Salman', 145), ('Ayesha', 96)])",
+    "check": {
+      "type": "lines_in_order",
+      "value": "Varsha\nDawood\nAyesha",
+      "values": [
+        "Varsha",
+        "Dawood",
+        "Ayesha"
+      ]
+    }
+  },
+  {
+    "id": "mbpp_test_0084",
+    "context": "You are solving a deterministic programming task from MBPP.",
+    "query": "Problem:\nWrite a python function to find the minimum length of sublist.\n\nCompute outputs for the following Python function calls and return only the outputs, one per line, in the same order:\nFind_Min_Length([[1],[1,2]])\nFind_Min_Length([[1,2],[1,2,3],[1,2,3,4]])\nFind_Min_Length([[3,3,3],[4,4,4,4]])",
+    "check": {
+      "type": "lines_in_order",
+      "value": "1\n2\n3",
+      "values": [
+        "1",
+        "2",
+        "3"
+      ]
+    }
+  },
+  {
+    "id": "mbpp_test_0085",
+    "context": "You are solving a deterministic programming task from MBPP.",
+    "query": "Problem:\nWrite a python function to find the number of divisors of a given integer.\n\nCompute outputs for the following Python function calls and return only the outputs, one per line, in the same order:\ndivisor(15)\ndivisor(12)\ndivisor(9)",
+    "check": {
+      "type": "lines_in_order",
+      "value": "4\n6\n3",
+      "values": [
+        "4",
+        "6",
+        "3"
+      ]
+    }
+  },
+  {
+    "id": "mbpp_test_0086",
+    "context": "You are solving a deterministic programming task from MBPP.",
+    "query": "Problem:\nWrite a function to find frequency count of list of lists.\n\nCompute outputs for the following Python function calls and return only the outputs, one per line, in the same order:\nfrequency_lists([[1, 2, 3, 2], [4, 5, 6, 2], [7, 8, 9, 5]])\nfrequency_lists([[1,2,3,4],[5,6,7,8],[9,10,11,12]])\nfrequency_lists([[20,30,40,17],[18,16,14,13],[10,20,30,40]])",
+    "check": {
+      "type": "lines_in_order",
+      "value": "{1: 1, 2: 3, 3: 1, 4: 1, 5: 2, 6: 1, 7: 1, 8: 1, 9: 1}\n{1: 1, 2: 1, 3: 1, 4: 1, 5: 1, 6: 1, 7: 1, 8: 1, 9: 1, 10: 1, 11: 1, 12: 1}\n{20: 2, 30: 2, 40: 2, 17: 1, 18: 1, 16: 1, 14: 1, 13: 1, 10: 1}",
+      "values": [
+        "{1: 1, 2: 3, 3: 1, 4: 1, 5: 2, 6: 1, 7: 1, 8: 1, 9: 1}",
+        "{1: 1, 2: 1, 3: 1, 4: 1, 5: 1, 6: 1, 7: 1, 8: 1, 9: 1, 10: 1, 11: 1, 12: 1}",
+        "{20: 2, 30: 2, 40: 2, 17: 1, 18: 1, 16: 1, 14: 1, 13: 1, 10: 1}"
+      ]
+    }
+  },
+  {
+    "id": "mbpp_test_0087",
+    "context": "You are solving a deterministic programming task from MBPP.",
+    "query": "Problem:\nWrite a function to multiply all the numbers in a list and divide with the length of the list.\n\nCompute outputs for the following Python function calls and return only the outputs, one per line, in the same order:\nmultiply_num((8, 2, 3, -1, 7))\nmultiply_num((-10,-20,-30))\nmultiply_num((19,15,18))",
+    "check": {
+      "type": "lines_in_order",
+      "value": "-67.2\n-2000.0\n1710.0",
+      "values": [
+        "-67.2",
+        "-2000.0",
+        "1710.0"
+      ]
+    }
+  },
+  {
+    "id": "mbpp_test_0088",
+    "context": "You are solving a deterministic programming task from MBPP.",
+    "query": "Problem:\nWrite a function to convert the given decimal number to its binary equivalent.\n\nCompute outputs for the following Python function calls and return only the outputs, one per line, in the same order:\ndecimal_to_binary(8)\ndecimal_to_binary(18)\ndecimal_to_binary(7)",
+    "check": {
+      "type": "lines_in_order",
+      "value": "1000\n10010\n111",
+      "values": [
+        "1000",
+        "10010",
+        "111"
+      ]
+    }
+  },
+  {
+    "id": "mbpp_test_0089",
+    "context": "You are solving a deterministic programming task from MBPP.",
+    "query": "Problem:\nWrite a function to find the next smallest palindrome of a specified number.\n\nCompute outputs for the following Python function calls and return only the outputs, one per line, in the same order:\nnext_smallest_palindrome(99)\nnext_smallest_palindrome(1221)\nnext_smallest_palindrome(120)",
+    "check": {
+      "type": "lines_in_order",
+      "value": "101\n1331\n121",
+      "values": [
+        "101",
+        "1331",
+        "121"
+      ]
+    }
+  },
+  {
+    "id": "mbpp_test_0090",
+    "context": "You are solving a deterministic programming task from MBPP.",
+    "query": "Problem:\nWrite a function to find the kth element in the given array.\n\nCompute outputs for the following Python function calls and return only the outputs, one per line, in the same order:\nkth_element([12,3,5,7,19], 5, 2)\nkth_element([17,24,8,23], 4, 3)\nkth_element([16,21,25,36,4], 5, 4)",
+    "check": {
+      "type": "lines_in_order",
+      "value": "3\n8\n36",
+      "values": [
+        "3",
+        "8",
+        "36"
+      ]
+    }
+  },
+  {
+    "id": "mbpp_test_0091",
+    "context": "You are solving a deterministic programming task from MBPP.",
+    "query": "Problem:\nWrite a function to convert snake case string to camel case string.\n\nCompute outputs for the following Python function calls and return only the outputs, one per line, in the same order:\nsnake_to_camel('python_program')\nsnake_to_camel('python_language')\nsnake_to_camel('programming_language')",
+    "check": {
+      "type": "lines_in_order",
+      "value": "PythonProgram\nPythonLanguage\nProgrammingLanguage",
+      "values": [
+        "PythonProgram",
+        "PythonLanguage",
+        "ProgrammingLanguage"
+      ]
+    }
+  },
+  {
+    "id": "mbpp_test_0092",
+    "context": "You are solving a deterministic programming task from MBPP.",
+    "query": "Problem:\nWrite a function to find eulerian number a(n, m).\n\nCompute outputs for the following Python function calls and return only the outputs, one per line, in the same order:\neulerian_num(3, 1)\neulerian_num(4, 1)\neulerian_num(5, 3)",
+    "check": {
+      "type": "lines_in_order",
+      "value": "4\n11\n26",
+      "values": [
+        "4",
+        "11",
+        "26"
+      ]
+    }
+  },
+  {
+    "id": "mbpp_test_0093",
+    "context": "You are solving a deterministic programming task from MBPP.",
+    "query": "Problem:\nWrite a function to sort each sublist of strings in a given list of lists using lambda function.\n\nCompute outputs for the following Python function calls and return only the outputs, one per line, in the same order:\nsort_sublists(([\"green\", \"orange\"], [\"black\", \"white\"], [\"white\", \"black\", \"orange\"]))\nsort_sublists(([\" red \",\"green\" ],[\"blue \",\" black\"],[\" orange\",\"brown\"]))\nsort_sublists(([\"zilver\",\"gold\"], [\"magnesium\",\"aluminium\"], [\"steel\", \"bronze\"]))",
+    "check": {
+      "type": "lines_in_order",
+      "value": "[['green', 'orange'], ['black', 'white'], ['black', 'orange', 'white']]\n[[' red ', 'green'], [' black', 'blue '], [' orange', 'brown']]\n[['gold', 'zilver'], ['aluminium', 'magnesium'], ['bronze', 'steel']]",
+      "values": [
+        "[['green', 'orange'], ['black', 'white'], ['black', 'orange', 'white']]",
+        "[[' red ', 'green'], [' black', 'blue '], [' orange', 'brown']]",
+        "[['gold', 'zilver'], ['aluminium', 'magnesium'], ['bronze', 'steel']]"
+      ]
+    }
+  },
+  {
+    "id": "mbpp_test_0094",
+    "context": "You are solving a deterministic programming task from MBPP.",
+    "query": "Problem:\nWrite a python function to count true booleans in the given list.\n\nCompute outputs for the following Python function calls and return only the outputs, one per line, in the same order:\ncount([True,False,True])\ncount([False,False])\ncount([True,True,True])",
+    "check": {
+      "type": "lines_in_order",
+      "value": "2\n0\n3",
+      "values": [
+        "2",
+        "0",
+        "3"
+      ]
+    }
+  },
+  {
+    "id": "mbpp_test_0095",
+    "context": "You are solving a deterministic programming task from MBPP.",
+    "query": "Problem:\nWrite a function to add the given list to the given tuples.\n\nCompute outputs for the following Python function calls and return only the outputs, one per line, in the same order:\nadd_lists([5, 6, 7], (9, 10))\nadd_lists([6, 7, 8], (10, 11))\nadd_lists([7, 8, 9], (11, 12))",
+    "check": {
+      "type": "lines_in_order",
+      "value": "(9, 10, 5, 6, 7)\n(10, 11, 6, 7, 8)\n(11, 12, 7, 8, 9)",
+      "values": [
+        "(9, 10, 5, 6, 7)",
+        "(10, 11, 6, 7, 8)",
+        "(11, 12, 7, 8, 9)"
+      ]
+    }
+  },
+  {
+    "id": "mbpp_test_0096",
+    "context": "You are solving a deterministic programming task from MBPP.",
+    "query": "Problem:\nWrite a python function to count hexadecimal numbers for a given range.\n\nCompute outputs for the following Python function calls and return only the outputs, one per line, in the same order:\ncount_Hexadecimal(10,15)\ncount_Hexadecimal(2,4)\ncount_Hexadecimal(15,16)",
+    "check": {
+      "type": "lines_in_order",
+      "value": "6\n0\n1",
+      "values": [
+        "6",
+        "0",
+        "1"
+      ]
+    }
+  },
+  {
+    "id": "mbpp_test_0097",
+    "context": "You are solving a deterministic programming task from MBPP.",
+    "query": "Problem:\nWrite a function to merge multiple sorted inputs into a single sorted iterator using heap queue algorithm.\n\nCompute outputs for the following Python function calls and return only the outputs, one per line, in the same order:\nmerge_sorted_list([25, 24, 15, 4, 5, 29, 110],[19, 20, 11, 56, 25, 233, 154],[24, 26, 54, 48])\nmerge_sorted_list([1, 3, 5, 6, 8, 9], [2, 5, 7, 11], [1, 4, 7, 8, 12])\nmerge_sorted_list([18, 14, 10, 9, 8, 7, 9, 3, 2, 4, 1],[25, 35, 22, 85, 14, 65, 75, 25, 58],[12, 74, 9, 50, 61, 41])",
+    "check": {
+      "type": "lines_in_order",
+      "value": "[4, 5, 11, 15, 19, 20, 24, 24, 25, 25, 26, 29, 48, 54, 56, 110, 154, 233]\n[1, 1, 2, 3, 4, 5, 5, 6, 7, 7, 8, 8, 9, 11, 12]\n[1, 2, 3, 4, 7, 8, 9, 9, 9, 10, 12, 14, 14, 18, 22, 25, 25, 35, 41, 50, 58, 61, 65, 74, 75, 85]",
+      "values": [
+        "[4, 5, 11, 15, 19, 20, 24, 24, 25, 25, 26, 29, 48, 54, 56, 110, 154, 233]",
+        "[1, 1, 2, 3, 4, 5, 5, 6, 7, 7, 8, 8, 9, 11, 12]",
+        "[1, 2, 3, 4, 7, 8, 9, 9, 9, 10, 12, 14, 14, 18, 22, 25, 25, 35, 41, 50, 58, 61, 65, 74, 75, 85]"
+      ]
+    }
+  },
+  {
+    "id": "mbpp_test_0098",
+    "context": "You are solving a deterministic programming task from MBPP.",
+    "query": "Problem:\nWrite a python function to find the count of rotations of a binary string with odd value.\n\nCompute outputs for the following Python function calls and return only the outputs, one per line, in the same order:\nodd_Equivalent(\"011001\",6)\nodd_Equivalent(\"11011\",5)\nodd_Equivalent(\"1010\",4)",
+    "check": {
+      "type": "lines_in_order",
+      "value": "3\n4\n2",
+      "values": [
+        "3",
+        "4",
+        "2"
+      ]
+    }
+  },
+  {
+    "id": "mbpp_test_0099",
+    "context": "You are solving a deterministic programming task from MBPP.",
+    "query": "Problem:\nWrite a function to extract the ranges that are missing from the given list with the given start range and end range values.\n\nCompute outputs for the following Python function calls and return only the outputs, one per line, in the same order:\nextract_missing([(6, 9), (15, 34), (48, 70)], 2, 100)\nextract_missing([(7, 2), (15, 19), (38, 50)], 5, 60)\nextract_missing([(7, 2), (15, 19), (38, 50)], 1, 52)",
+    "check": {
+      "type": "lines_in_order",
+      "value": "[(2, 6), (9, 100), (9, 15), (34, 100), (34, 48), (70, 100)]\n[(5, 7), (2, 60), (2, 15), (19, 60), (19, 38), (50, 60)]\n[(1, 7), (2, 52), (2, 15), (19, 52), (19, 38), (50, 52)]",
+      "values": [
+        "[(2, 6), (9, 100), (9, 15), (34, 100), (34, 48), (70, 100)]",
+        "[(5, 7), (2, 60), (2, 15), (19, 60), (19, 38), (50, 60)]",
+        "[(1, 7), (2, 52), (2, 15), (19, 52), (19, 38), (50, 52)]"
+      ]
+    }
+  }
+]

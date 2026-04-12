@@ -1,0 +1,14 @@
+[hf:MiniMaxAI/MiniMax-M2.5][current-default] ledger_total_sum_n600_s17 run=1 -> FAIL (26.99s)
+[hf:MiniMaxAI/MiniMax-M2.5][current-no-recursion-best-of-3] ledger_total_sum_n600_s17 run=1 -> FAIL (19.19s)
+[hf:MiniMaxAI/MiniMax-M2.5][current-depth6-single-pass] ledger_total_sum_n600_s17 run=1 -> ERROR (14.76s)
+[hf:MiniMaxAI/MiniMax-M2.5][current-depth1-iter3] ledger_total_sum_n600_s17 run=1 -> FAIL (8.90s)
+
+Benchmark summary
+model	sub_model	mode	pass_rate	ok_rate	halluc_rate	avg_cost_usd	composite	readiness
+hf:MiniMaxAI/MiniMax-M2.5	hf:MiniMaxAI/MiniMax-M2.5	current-default	0.0%	100.0%	0.0%	0.001013	57.48	NotProductionReady
+hf:MiniMaxAI/MiniMax-M2.5	hf:MiniMaxAI/MiniMax-M2.5	current-depth1-iter3	0.0%	100.0%	0.0%	0.004972	50.34	NotProductionReady
+hf:MiniMaxAI/MiniMax-M2.5	hf:MiniMaxAI/MiniMax-M2.5	current-depth6-single-pass	0.0%	0.0%	0.0%	0.003029	26.05	NotProductionReady
+hf:MiniMaxAI/MiniMax-M2.5	hf:MiniMaxAI/MiniMax-M2.5	current-no-recursion-best-of-3	0.0%	100.0%	0.0%	0.004593	47.33	NotProductionReady
+
+Wrote report: benchmarks/overall-smoke-parallel/results-information_dense_ledger.json
+Wrote markdown summary: benchmarks/overall-smoke-parallel/summary-information_dense_ledger.md

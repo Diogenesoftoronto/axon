@@ -1,0 +1,153 @@
+[
+  {
+    "id": "books_distractor_compass_700k",
+    "context_gen": {
+      "type": "log_haystack_v1",
+      "size_chars": 700000,
+      "filler": "[ARCHIVE] Generic scanned prose from unrelated novels and editor notes.\\n",
+      "insertions": [
+        {
+          "at": 90000,
+          "text": "[BOOK:Lantern Shore] Chapter 11: By dawn, ANIKA VALE returned the glass compass to the harbormaster.\\n"
+        },
+        {
+          "at": 210000,
+          "text": "[BOOK:Ash Cathedral] Chapter 7: Tomas Reed broke the brass compass and fled inland.\\n"
+        },
+        {
+          "at": 430000,
+          "text": "[BOOK:Lantern Shore] Chapter 15: The compass was later sealed in wax, but the one who returned it was still Anika Vale.\\n"
+        },
+        {
+          "at": 640000,
+          "text": "[BOOK:Rime Cartographer] Chapter 19: Lysa North mapped by starlight with a copper sextant, not a glass compass.\\n"
+        }
+      ]
+    },
+    "query": "Question about Lantern Shore only: who returned the glass compass? Return only the name.",
+    "check": {
+      "type": "regex",
+      "value": "\\bAnika\\s+Vale\\b"
+    }
+  },
+  {
+    "id": "books_distractor_hidden_key_850k",
+    "context_gen": {
+      "type": "log_haystack_v1",
+      "size_chars": 850000,
+      "filler": "[ARCHIVE] Generic scanned prose from unrelated novels and editor notes.\\n",
+      "insertions": [
+        {
+          "at": 100000,
+          "text": "[BOOK:Glass Tides] Chapter 3: In this story, the moon key was hidden under the bell tower.\\n"
+        },
+        {
+          "at": 340000,
+          "text": "[BOOK:Lantern Shore] Chapter 22: The tide key was hidden behind the sixth ledger in the west quay records room.\\n"
+        },
+        {
+          "at": 520000,
+          "text": "[BOOK:Snow Tribunal] Chapter 9: Their court key was hidden beneath the marble stair.\\n"
+        },
+        {
+          "at": 760000,
+          "text": "[BOOK:Lantern Shore] Chapter 28: Confirmed by the keeper, the tide key remained behind the sixth ledger.\\n"
+        }
+      ]
+    },
+    "query": "Lantern Shore question: where was the tide key hidden? Return only the location phrase.",
+    "check": {
+      "type": "regex",
+      "value": "behind\\s+the\\s+sixth\\s+ledger"
+    }
+  },
+  {
+    "id": "books_distractor_truce_signers_950k",
+    "context_gen": {
+      "type": "log_haystack_v1",
+      "size_chars": 950000,
+      "filler": "[ARCHIVE] Generic scanned prose from unrelated novels and editor notes.\\n",
+      "insertions": [
+        {
+          "at": 140000,
+          "text": "[BOOK:Lantern Shore] Chapter 31: The harbor truce was signed by IRIS THANE and ROWAN PIKE.\\n"
+        },
+        {
+          "at": 300000,
+          "text": "[BOOK:Ash Cathedral] Chapter 13: The abbey truce was signed by Mira Solane and Tomas Reed.\\n"
+        },
+        {
+          "at": 570000,
+          "text": "[BOOK:Rime Cartographer] Chapter 21: Survey accord signed by Lysa North and Bren Haldor.\\n"
+        },
+        {
+          "at": 880000,
+          "text": "[BOOK:Lantern Shore] Chapter 36: The same truce signers are Iris Thane and Rowan Pike.\\n"
+        }
+      ]
+    },
+    "query": "Lantern Shore question: name the two people who signed the harbor truce. Return exactly: <name1> and <name2>.",
+    "check": {
+      "type": "regex",
+      "value": "\\bIris\\s+Thane\\s+and\\s+Rowan\\s+Pike\\b"
+    }
+  },
+  {
+    "id": "books_distractor_courier_1m",
+    "context_gen": {
+      "type": "log_haystack_v1",
+      "size_chars": 1000000,
+      "filler": "[ARCHIVE] Generic scanned prose from unrelated novels and editor notes.\\n",
+      "insertions": [
+        {
+          "at": 120000,
+          "text": "[BOOK:Lantern Shore] Chapter 41: The sealed letter reached the lighthouse by courier JONAS QUILL.\\n"
+        },
+        {
+          "at": 360000,
+          "text": "[BOOK:Glass Tides] Chapter 14: A different letter was delivered by Selene March.\\n"
+        },
+        {
+          "at": 650000,
+          "text": "[BOOK:Lantern Shore] Chapter 44: Logbook note confirms Jonas Quill as the courier.\\n"
+        },
+        {
+          "at": 940000,
+          "text": "[BOOK:Snow Tribunal] Chapter 23: Their dispatch courier was Oren Vale.\\n"
+        }
+      ]
+    },
+    "query": "Lantern Shore question: who delivered the sealed letter to the lighthouse? Return only the name.",
+    "check": {
+      "type": "regex",
+      "value": "\\bJonas\\s+Quill\\b"
+    }
+  },
+  {
+    "id": "books_distractor_multihop_page_900k",
+    "context_gen": {
+      "type": "log_haystack_v1",
+      "size_chars": 900000,
+      "filler": "[ARCHIVE] Generic scanned prose from unrelated novels and editor notes.\\n",
+      "insertions": [
+        {
+          "at": 100000,
+          "text": "[BOOK:Lantern Shore] Chapter 12: The cipher page number equals Captain Sera's age.\\n"
+        },
+        {
+          "at": 410000,
+          "text": "[BOOK:Ash Cathedral] Chapter 8: Abbess Nyra's age is 29. This is unrelated to Lantern Shore's cipher.\\n"
+        },
+        {
+          "at": 700000,
+          "text": "[BOOK:Lantern Shore] Chapter 39: Captain Sera was 37 during the winter crossing.\\n"
+        }
+      ]
+    },
+    "query": "Lantern Shore question: what is the cipher page number? Return only the integer.",
+    "check": {
+      "type": "regex",
+      "value": "\\b37\\b"
+    }
+  }
+]

@@ -1,0 +1,57 @@
+[tools]
+python = "3"
+
+[tasks.test]
+description = "Run Rust tests"
+run = "cargo test --all-targets --all-features"
+
+[tasks.build]
+description = "Build release binary"
+run = "cargo build --release"
+
+[tasks.fmt]
+description = "Format Rust code"
+run = "cargo fmt --all"
+
+[tasks.clippy]
+description = "Run clippy with warnings denied"
+run = "cargo clippy --all-targets --all-features -- -D warnings"
+
+[tasks.check]
+description = "Run fmt, tests, clippy, and release build"
+run = [
+  "mise run fmt",
+  "mise run test",
+  "mise run clippy",
+  "mise run build",
+]
+
+[tasks.bench-quick]
+description = "Quick single-model benchmark on mode_profile_targeted (requires SYNTHETIC_API_KEY)"
+run = '''
+env PYTHONUNBUFFERED=1 python3 scripts/benchmark_axon.py \
+  --base-url "https://api.synthetic.new/openai/v1/" \
+  --dataset benchmarks/mode_profile_targeted.json \
+  --model "hf:MiniMaxAI/MiniMax-M2.5" \
+  --pricing-from-models-api \
+  --timeout 120
+'''
+
+[tasks.bench]
+description = "Research-grade benchmark run on mode_profile_targeted (requires SYNTHETIC_API_KEY)"
+run = '''
+env PYTHONUNBUFFERED=1 python3 scripts/benchmark_axon.py \
+  --base-url "https://api.synthetic.new/openai/v1/" \
+  --dataset benchmarks/mode_profile_targeted.json \
+  --runs 3 \
+  --attempts-per-run 3 \
+  --timeout 600
+'''
+
+[tasks.bench-hf]
+description = "Run all HuggingFace benchmarks (requires SYNTHETIC_API_KEY)"
+run = "scripts/run_hf_benchmarks.sh"
+
+[tasks.bench-overall]
+description = "Run full multi-suite benchmark wrapper (requires SYNTHETIC_API_KEY)"
+run = "scripts/run_overall_tests.sh"

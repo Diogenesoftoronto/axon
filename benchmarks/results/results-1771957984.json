@@ -1,0 +1,157 @@
+{
+  "created_at": 1771957984,
+  "dataset": "benchmarks/rlm_challenges.json",
+  "base_url": "https://api.synthetic.new/openai/v1/",
+  "runs": 1,
+  "timeout": 60,
+  "modes": [
+    {
+      "name": "current-default",
+      "binary": "/home/diogenes/Monolith/target/release/axon",
+      "extra_args": [
+        "--max-depth",
+        "2",
+        "--max-iterations",
+        "6"
+      ]
+    },
+    {
+      "name": "current-no-recursion",
+      "binary": "/home/diogenes/Monolith/target/release/axon",
+      "extra_args": [
+        "--max-depth",
+        "0",
+        "--max-iterations",
+        "6"
+      ]
+    },
+    {
+      "name": "current-low-budget",
+      "binary": "/home/diogenes/Monolith/target/release/axon",
+      "extra_args": [
+        "--max-depth",
+        "2",
+        "--max-iterations",
+        "3"
+      ]
+    }
+  ],
+  "summary": [
+    {
+      "mode": "current-default",
+      "total": 3,
+      "ok": 3,
+      "matched": 3,
+      "pass_rate": 100.0,
+      "avg_time_s": 12.84
+    },
+    {
+      "mode": "current-low-budget",
+      "total": 3,
+      "ok": 3,
+      "matched": 2,
+      "pass_rate": 66.67,
+      "avg_time_s": 10.946
+    },
+    {
+      "mode": "current-no-recursion",
+      "total": 3,
+      "ok": 2,
+      "matched": 2,
+      "pass_rate": 66.67,
+      "avg_time_s": 9.184
+    }
+  ],
+  "results": [
+    {
+      "mode": "current-default",
+      "task_id": "hanoi_moves_12",
+      "run_idx": 1,
+      "ok": true,
+      "matched": true,
+      "elapsed_s": 13.900712966918945,
+      "answer": "4095",
+      "error": ""
+    },
+    {
+      "mode": "current-default",
+      "task_id": "hanoi_moves_20",
+      "run_idx": 1,
+      "ok": true,
+      "matched": true,
+      "elapsed_s": 11.286189317703247,
+      "answer": "1048575",
+      "error": ""
+    },
+    {
+      "mode": "current-default",
+      "task_id": "hanoi_recurrence_6",
+      "run_idx": 1,
+      "ok": true,
+      "matched": true,
+      "elapsed_s": 13.332420587539673,
+      "answer": "63",
+      "error": ""
+    },
+    {
+      "mode": "current-no-recursion",
+      "task_id": "hanoi_moves_12",
+      "run_idx": 1,
+      "ok": true,
+      "matched": true,
+      "elapsed_s": 6.827798128128052,
+      "answer": "4095",
+      "error": ""
+    },
+    {
+      "mode": "current-no-recursion",
+      "task_id": "hanoi_moves_20",
+      "run_idx": 1,
+      "ok": true,
+      "matched": true,
+      "elapsed_s": 10.47279953956604,
+      "answer": "1048575",
+      "error": ""
+    },
+    {
+      "mode": "current-no-recursion",
+      "task_id": "hanoi_recurrence_6",
+      "run_idx": 1,
+      "ok": false,
+      "matched": false,
+      "elapsed_s": 10.25167965888977,
+      "answer": "",
+      "error": "Error: Traceback (most recent call last):\n  File \"repl.py\", line 4, in <module>\n    for m in re.finditer(pattern, context):\n             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\nException: invalid regex pattern: Parsing error at position 2: Opening parenthesis without closing parenthesis"
+    },
+    {
+      "mode": "current-low-budget",
+      "task_id": "hanoi_moves_12",
+      "run_idx": 1,
+      "ok": true,
+      "matched": false,
+      "elapsed_s": 11.25452470779419,
+      "answer": "FINAL(4095)",
+      "error": ""
+    },
+    {
+      "mode": "current-low-budget",
+      "task_id": "hanoi_moves_20",
+      "run_idx": 1,
+      "ok": true,
+      "matched": true,
+      "elapsed_s": 10.418126821517944,
+      "answer": "1048575",
+      "error": ""
+    },
+    {
+      "mode": "current-low-budget",
+      "task_id": "hanoi_recurrence_6",
+      "run_idx": 1,
+      "ok": true,
+      "matched": true,
+      "elapsed_s": 11.165886163711548,
+      "answer": "63",
+      "error": ""
+    }
+  ]
+}

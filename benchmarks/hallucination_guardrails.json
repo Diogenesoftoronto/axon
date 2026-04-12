@@ -1,0 +1,38 @@
+[
+  {
+    "id": "missing_owner_field",
+    "context": "Service registry:\n- service: payments-api\n- tier: critical\n- region: us-east-1\n- oncall_rotation: alpha\n",
+    "query": "Who is the owner of payments-api? If not explicitly present, return exactly INSUFFICIENT_INFORMATION.",
+    "check": {"type": "exact", "value": "INSUFFICIENT_INFORMATION"}
+  },
+  {
+    "id": "no_release_date",
+    "context": "Changelog excerpt:\nVersion 1.8.0: Added retry policy\nVersion 1.8.1: Fixed parsing edge case\nVersion 1.9.0: Deprecated old endpoint\n",
+    "query": "What was the release date of version 1.9.0? If not provided, return exactly INSUFFICIENT_INFORMATION.",
+    "check": {"type": "exact", "value": "INSUFFICIENT_INFORMATION"}
+  },
+  {
+    "id": "conflicting_serial_numbers",
+    "context": "Inspection notes:\n- Device A serial appears as SN-7412 in intake sheet.\n- Separate handwritten note says SN-7413 but marked 'unverified'.\n- No authoritative source included.\n",
+    "query": "What is the confirmed serial number of Device A? If not confirmable, return exactly INSUFFICIENT_INFORMATION.",
+    "check": {"type": "exact", "value": "INSUFFICIENT_INFORMATION"}
+  },
+  {
+    "id": "unsupported_causal_claim",
+    "context": "Experiment log:\n- Group X error rate: 3.1%\n- Group Y error rate: 2.9%\n- Sample sizes not recorded\n- Randomization procedure not documented\n",
+    "query": "Can we conclude Y is definitively better than X? Return exactly YES or NO or INSUFFICIENT_INFORMATION. If evidence is insufficient, return INSUFFICIENT_INFORMATION.",
+    "check": {"type": "exact", "value": "INSUFFICIENT_INFORMATION"}
+  },
+  {
+    "id": "entity_not_present",
+    "context": "Project roster:\n- Alice: backend\n- Bob: infra\n- Carol: frontend\n",
+    "query": "What is Dave's role? If Dave is not listed, return exactly INSUFFICIENT_INFORMATION.",
+    "check": {"type": "exact", "value": "INSUFFICIENT_INFORMATION"}
+  },
+  {
+    "id": "grounded_fact_control",
+    "context": "Incident report:\n- incident_id: INC-2041\n- started_at: 2026-02-10T09:13:00Z\n- resolved_at: 2026-02-10T10:01:00Z\n",
+    "query": "What is the incident_id? Return exactly the ID string.",
+    "check": {"type": "exact", "value": "INC-2041"}
+  }
+]
