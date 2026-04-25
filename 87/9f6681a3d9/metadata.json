@@ -1,0 +1,31 @@
+{
+  "cli_version": "dev",
+  "checkpoint_id": "879f6681a3d9",
+  "strategy": "manual-commit",
+  "branch": "main",
+  "checkpoints_count": 5,
+  "files_touched": [
+    "Cargo.lock",
+    "Cargo.toml",
+    "README.md",
+    "src/bin/bench_registry.rs",
+    "src/lib.rs",
+    "src/main.rs",
+    "src/mcp.rs",
+    "src/prompts.rs",
+    "src/rlm.rs",
+    "src/sandbox.rs",
+    "src/service.rs",
+    "src/store.rs",
+    "tests/integration.rs",
+    "website/index.html"
+  ],
+  "sessions": [
+    {
+      "metadata": "/87/9f6681a3d9/0/metadata.json",
+      "transcript": "/87/9f6681a3d9/0/full.jsonl",
+      "content_hash": "/87/9f6681a3d9/0/content_hash.txt",
+      "prompt": "/87/9f6681a3d9/0/prompt.txt"
+    }
+  ]
+}

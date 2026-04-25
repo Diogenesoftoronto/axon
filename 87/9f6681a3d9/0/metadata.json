@@ -1,0 +1,138 @@
+{
+  "cli_version": "dev",
+  "checkpoint_id": "879f6681a3d9",
+  "session_id": "ca3e46db-0479-4da4-9c0b-8e7c129fef87",
+  "strategy": "manual-commit",
+  "created_at": "2026-04-25T05:58:50.992049623Z",
+  "branch": "main",
+  "checkpoints_count": 5,
+  "files_touched": [
+    "Cargo.lock",
+    "Cargo.toml",
+    "README.md",
+    "src/bin/bench_registry.rs",
+    "src/lib.rs",
+    "src/main.rs",
+    "src/mcp.rs",
+    "src/prompts.rs",
+    "src/rlm.rs",
+    "src/sandbox.rs",
+    "src/service.rs",
+    "src/store.rs",
+    "tests/integration.rs",
+    "website/index.html"
+  ],
+  "agent": "Gemini CLI",
+  "model": "gemini-3-flash-preview",
+  "turn_id": "118b22916713",
+  "session_metrics": {
+    "turn_count": 5
+  },
+  "initial_attribution": {
+    "calculated_at": "2026-04-25T05:58:50.904301664Z",
+    "agent_lines": 0,
+    "agent_removed": 3,
+    "human_added": 88,
+    "human_modified": 420,
+    "human_removed": 0,
+    "total_committed": 316,
+    "total_lines_changed": 511,
+    "agent_percentage": 0.5870841487279843,
+    "metric_version": 2
+  },
+  "prompt_attributions": [
+    {
+      "checkpoint_number": 1,
+      "user_lines_added": 2458,
+      "user_lines_removed": 361,
+      "agent_lines_added": 0,
+      "agent_lines_removed": 0,
+      "user_added_per_file": {
+        ".cursor/hooks.json": 40,
+        ".gemini/agents/entire-search.md": 28,
+        ".gemini/settings.json": 141,
+        ".opencode/plugins/entire.ts": 216,
+        "Cargo.lock": 316,
+        "Cargo.toml": 4,
+        "README.md": 43,
+        "src/lib.rs": 2,
+        "src/main.rs": 137,
+        "src/mcp.rs": 426,
+        "src/openai.rs": 578,
+        "src/prompts.rs": 118,
+        "src/rlm.rs": 185,
+        "src/sandbox.rs": 70,
+        "src/store.rs": 1,
+        "src/tools.rs": 153
+      },
+      "user_removed_per_file": {
+        "Cargo.lock": 7,
+        "Cargo.toml": 1,
+        "README.md": 7,
+        "src/main.rs": 6,
+        "src/mcp.rs": 271,
+        "src/prompts.rs": 5,
+        "src/rlm.rs": 14,
+        "src/sandbox.rs": 5,
+        "tests/integration.rs": 45
+      }
+    },
+    {
+      "checkpoint_number": 2,
+      "user_lines_added": 0,
+      "user_lines_removed": 0,
+      "agent_lines_added": 2560,
+      "agent_lines_removed": 385
+    },
+    {
+      "checkpoint_number": 3,
+      "user_lines_added": 0,
+      "user_lines_removed": 0,
+      "agent_lines_added": 2560,
+      "agent_lines_removed": 385
+    },
+    {
+      "checkpoint_number": 4,
+      "user_lines_added": 8,
+      "user_lines_removed": 8,
+      "agent_lines_added": 2580,
+      "agent_lines_removed": 388,
+      "user_added_per_file": {
+        "src/service.rs": 8
+      },
+      "user_removed_per_file": {
+        "src/service.rs": 8
+      }
+    },
+    {
+      "checkpoint_number": 5,
+      "user_lines_added": 238,
+      "user_lines_removed": 15,
+      "agent_lines_added": 2686,
+      "agent_lines_removed": 388,
+      "user_added_per_file": {
+        "src/service.rs": 8,
+        "website/changelog.html": 221,
+        "website/index.html": 9
+      },
+      "user_removed_per_file": {
+        "src/service.rs": 8,
+        "website/index.html": 7
+      }
+    },
+    {
+      "checkpoint_number": 6,
+      "user_lines_added": 229,
+      "user_lines_removed": 8,
+      "agent_lines_added": 2695,
+      "agent_lines_removed": 395,
+      "user_added_per_file": {
+        "src/service.rs": 8,
+        "website/changelog.html": 221
+      },
+      "user_removed_per_file": {
+        "src/service.rs": 8
+      }
+    }
+  ]
+}

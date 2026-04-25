@@ -1,0 +1,329 @@
+hey i was working on two other sessions with agents before this and here they are: ## Current State
+
+Two features have been fully implemented and tested for the Axon RLM project's MCP server:
+
+1. **Model override per query** — `chat_rlm_query` MCP tool now accepts optional `model` and `sub_model` parameters, allowing callers (e.g., Crush) to specify which LLM model to use per invocation instead of being locked to server CLI defaults.
+
+2. **Extensible tool injection for the RLM sandbox** — New `configure_tools` MCP tool lets callers register custom tools that the RLM's Python sandbox can invoke as external functions alongside builtins (`llm_query`, `FINAL`, `VFS_WRITE`, etc.).
+
+Both features are implemented, compiled, and tested with 84 passing tests (up from 40 original), including property-based tests via `proptest`.
+
+## Files & Changes
+
+### Files created:
+- **`/home/diogenes/Projects/axon/src/tools.rs`** — New module with `ToolSpec` (name, description, optional input_schema, derives `Serialize`/`Deserialize`/`schemars::JsonSchema`), `ToolRegistry` (HashMap-backed with `register()`, `get()`, `tool_names()`, `is_empty()`, `tools()`), `SharedToolRegistry` type alias (`Arc<Mutex<ToolRegistry>>`)
+
+### Files modified:
+
+- **`/home/diogenes/Projects/axon/src/lib.rs`** — Added `pub mod tools;` line
+
+- **`/home/diogenes/Projects/axon/src/sandbox.rs`** — Renamed `external_functions()` to `builtin_external_functions()`. Added `all_external_functions(tool_registry: &ToolRegistry) -> Vec<String>` that merges builtins + registry names with dedup. Changed `Sandbox::new()` signature from `new()` to `new(tool_registry: &ToolRegistry)`. Updated both test calls (`Sandbox::new(&empty_registry())`). Added 5 new deterministic tests for function merging, dedup, and sandbox creation with custom tools.
+
+- **`/home/diogenes/Projects/axon/src/rlm.rs`** — Added `use crate::tools::ToolRegistry;`. Added `pub tool_registry: ToolRegistry` field to `RlmConfig`. Changed `Sandbox::new()?` to `Sandbox::new(&self.config.tool_registry)?` at line 161. Changed `prompts::build_system_prompt(self.config.depth)` to `prompts::build_system_prompt(self.config.depth, &self.config.tool_registry)` at line 174. Replaced the `handle_external()` fallback match arm from `Error: unknown function` to a registry lookup that returns a passthrough message for registered tools, falls back to error for unknowns. Added `tool_registry: self.config.tool_registry.clone()` to sub-RLM `RlmConfig` construction in `handle_llm_query`. Updated all test helper functions (`make_test_rlm()`, all `RlmConfig` constructions in test module) to include `tool_registry: empty_registry()`. Changed all test `Sandbox::new()` calls to `Sandbox::new(&empty_registry())`. Added 9 tests (3 `#[tokio::test]` async tests for custom tool dispatch, 4 proptest).
+
+- **`/home/diogenes/Projects/axon/src/prompts.rs`** — Added `use crate::tools::ToolRegistry;`. Changed `build_system_prompt(depth: usize)` to `build_system_prompt(depth: usize, tool_registry: &ToolRegistry)`. When registry is non-empty, appends a "## Custom Tools" section listing each tool as `- \`name(...)\`: description`. Added 9 tests (4 deterministic + 5 proptest).
+
+- **`/home/diogenes/Projects/axon/src/mcp.rs`** — Added `use crate::tools::{ToolRegistry, ToolSpec};`. Added `tool_registry: std::sync::Arc<std::sync::Mutex<ToolRegistry>>` field to `McpServer`. Added `model: Option<String>` and `sub_model: Option<String>` fields to `ChatRlmQueryArgs`. Added `ConfigureToolsArgs` struct with `tools: Vec<ToolSpec>`. Added `run_configure_tools()` method on `McpServer`. In `run_chat_rlm_query()`: model override via `args.model.unwrap_or_else(|| self.model.clone())` and same for `sub_model`; registry cloned via `self.tool_registry.lock().expect(...).clone()` into `RlmConfig`. Added `#[tool] configure_tools()` method that delegates to `run_configure_tools()`. Updated `McpServer::new()` to initialize `tool_registry: Arc::new(Mutex::new(ToolRegistry::new()))`. Added 11 tests (6 deterministic + 5 proptest) covering `configure_tools` flow, model override, registry snapshot isolation, depth mode parsing, tool result/error format invariants, path normalization.
+
+- **`/home/diogenes/Projects/axon/src/main.rs`** — Added `use axon::tools::ToolRegistry;`. Added `tool_registry: ToolRegistry::new()` to `make_rlm()` function's `RlmConfig` construction.
+
+- **`/home/diogenes/Projects/axon/Cargo.toml`** — Added `proptest = "1"` to dev-dependencies.
+
+### Files read/analyzed (unchanged):
+- `/home/diogenes/Projects/axon/src/policy.rs` — `PolicyCatalog`, `RuntimePolicy`, `DepthEnforcementMode` definitions
+- `/home/diogenes/Projects/axon/src/llm.rs` — `LlmClient::new(client, &model)` constructor
+- `/home/diogenes/Projects/axon/src/store.rs` — `ContextStore` (file-based)
+- `/home/diogenes/Projects/axon/tests/integration.rs` — Store integration tests
+
+## Technical Context
+
+### Architecture:
+- **rmcp proc-macro MCP pattern**: `#[tool_router]` on `impl McpServer` auto-generates tool routing. New tools added via `#[tool]` methods. Each takes `Parameters(args): Parameters<SomeArgs>` where `SomeArgs: Deserialize + JsonSchema`. `#[tool_handler]` on `impl ServerHandler for McpServer` wires everything.
+- **Ouros sandbox initialization timing**: External function names must be registered at `SessionManager::new()` / `create_session()` time via `mgr.reset(None, funcs.clone())?` and `mgr.create_session(MAIN_SESSION_ID, funcs)?`. Custom tool names are fed in at this point via `all_external_functions()`, which merges builtins + registry names with dedup.
+- **Interior mutability pattern**: `McpServer` derives `Clone` and holds `tool_registry: Arc<Mutex<ToolRegistry>>`. The `configure_tools` MCP tool mutates the shared registry; `run_chat_rlm_query` clones it into `RlmConfig` before the RLM run. This ensures the registry snapshot is consistent for the duration of a query.
+- **Custom tool dispatch**: `handle_external()` in `rlm.rs` has a large `match` block for builtins. The fallback arm (`other =>`) now checks `self.config.tool_registry.get(other)`. If found, returns a passthrough message `"Tool '{}' called with args: [...] — no handler registered on server side"`. If not found, returns the original `"Error: unknown function '{}'"`.
+
+### Key decisions:
+- **Passthrough handler model for custom tools**: Currently, custom tool calls in the sandbox return an informational string rather than executing a real handler. This is the initial "registration + prompt injection" phase. Actual handler execution (e.g., MCP callback to the caller) would be a future extension.
+- **Registry is cloned into RlmConfig per query**: This avoids lifetime/shared-reference issues and ensures the sandbox sees a consistent tool list even if `configure_tools` is called concurrently.
+- **Custom tool names are deduped against builtins**: `all_external_functions()` skips adding a name if it already exists in the builtin list, so registering a tool named `"FINAL"` won't create a duplicate entry in the external functions list.
+
+### Dependencies:
+- `rmcp = "=1.4.0"` (MCP protocol with proc macros)
+- `ouros` (sandboxed Python runtime, git dependency)
+- `genai = "0.5"` (multi-provider LLM)
+- `proptest = "1"` (property testing, dev-dependency)
+- `serde`, `serde_json`, `clap`, `regex`, `anyhow`, `axum`, `tokio`
+
+### Commands that worked:
+- `cargo build` — clean compilation
+- `cargo test` — 84 tests pass (74 lib + 5 main + 5 integration)
+- `cargo build --release` — clean release build
+
+### Bug found by proptest:
+The `test_find_final_works_with_arbitrary_content` proptest discovered that `find_final_answer` applies `.trim()` to extracted content, so whitespace at edges (like `\t`) is stripped. This is correct behavior (the production code calls `.trim()` on the extracted parens content), but the test initially asserted `extracted == content` when it should have asserted `extracted == content.trim()`. This edge case was never caught by deterministic tests.
+
+## Strategy & Approach
+
+### Feature 1: Model override per query
+Added optional `model` and `sub_model` fields to `ChatRlmQueryArgs`. In `run_chat_rlm_query()`, resolved via `args.model.unwrap_or_else(|| self.model.clone())`. Passed directly to `RlmConfig`, so `LlmClient` is constructed with the overridden model. Minimal change — no modifications to `RlmConfig` or `LlmClient` needed beyond the call site.
+
+### Feature 2: Extensible tool injection
+Created `tools` module with `ToolSpec`/`ToolRegistry`. Threaded `ToolRegistry` through `McpServer` → `RlmConfig` → `Sandbox::new()` / `prompts::build_system_prompt()` / `handle_external()`. Used `Arc<Mutex<ToolRegistry>>` in `McpServer` for interior mutability across MCP tool calls. Custom tools are registered via a new `configure_tools` MCP tool that accepts `Vec<ToolSpec>`. The sandbox registers custom function names at initialization time. The system prompt appends a "Custom Tools" section for registered tools. The `handle_external()` fallback arm dispatches to registered tools.
+
+## Todo List Status
+
+All 8 tasks are completed:
+1. ~~Create tools.rs module with ToolDefinition, ToolRegistry types~~ — DONE
+2. ~~Add pub mod tools to lib.rs~~ — DONE
+3. ~~Modify sandbox.rs to accept ToolRegistry and merge custom tool names~~ — DONE
+4. ~~Modify rlm.rs: add tool_registry to RlmConfig, dispatch custom tools in handle_external, pass registry to Sandbox/prompt~~ — DONE
+5. ~~Modify prompts.rs to accept ToolRegistry and append custom tool descriptions~~ — DONE
+6. ~~Modify mcp.rs: add model/sub_model override params, add configure_tools tool, add Arc<Mutex<ToolRegistry>>~~ — DONE
+7. ~~Update main.rs for any McpServer::new() signature changes~~ — DONE
+8. ~~Build and test~~ — DONE (84 tests pass, release build clean)
+
+The resuming assistant should use the `todos` tool to track any future tasks. All items above are completed; new tasks would be things like implementing actual handler execution for custom tools (currently passthrough), adding MCP integration tests, or any new features the user requests. ___ and the second one is here: how would i make the rlm the primary way that an agent communicates? for example if i basically copied a completions/responsescompatible endpoint but it uses rlms under the hood instead
+
+1:13:57 AM
+
+cont
+
+
+1:14:15 AM
+
+I’ll ground this in the Axon code so the answer maps to the existing RLM shape, then I’ll lay out the endpoint/agent protocol design rather than hand-wave at “wrap it in an API.”
+
+1:14:24 AM • 8.9s
+
+Ran command - rtk find "*.rs"
+
+Ran command - rtk ls
+
+Ran command - rtk rg -n \"struct .*Rlm|RLM|llm_query|chat|completion|responses|server|axum|warp|rocket|openai|genai\" src Cargo.toml README* . --glob '"'!target'"'
+
+The repo already has the two pieces you’d want to exploit: rlm.completion(...) as the core execution path and an MCP server in src/mcp.rs. I’m checking the exact types now so the proposed API boundary can reuse them instead of becoming a second engine.
+
+1:14:31 AM • 6.8s
+
+Tool calls (8)
+
+Show 2 more
+Ran command - rtk read src/mcp.rs
+
+Ran command - rtk read src/llm.rs
+
+Ran command - rtk read src/lib.rs
+
+Ran command - rtk read src/store.rs
+
+Ran command - rtk read src/tools.rs
+
+Ran command - rtk read Cargo.toml
+
+The important distinction is transport versus control loop. An OpenAI-compatible endpoint can make Axon look like a model, but if you want the RLM to be the agent’s main communication channel, session state and tool semantics need to move behind that endpoint too.
+
+1:14:52 AM • 21s
+
+You’d make Axon the agent’s “model provider,” not just a tool.
+
+The clean shape is:
+
+
+agent
+  -> OpenAI-compatible /v1/chat/completions or /v1/responses
+      -> Axon HTTP adapter
+          -> ContextStore thread
+          -> Rlm::completion(query, context)
+              -> recursive llm_query(...)
+              -> sandbox/tool execution
+          -> OpenAI-shaped response
+  <- assistant message
+In this repo, the core call already exists: 
+rlm.rs
+ exposes Rlm::completion(query, context). The MCP server in 
+mcp.rs
+ already does most of the orchestration: read a thread from ContextStore, build RlmConfig, run the RLM, append USER/ASSISTANT back into memory.
+
+So I would add a new HTTP mode beside MCP, probably serve-openai, with routes like:
+
+
+POST /v1/chat/completions
+POST /v1/responses
+GET  /v1/models
+The first version should support the smallest useful OpenAI subset:
+
+
+{
+  "model": "axon-rlm",
+  "messages": [
+    {"role": "system", "content": "..."},
+    {"role": "user", "content": "..."}
+  ],
+  "stream": false,
+  "metadata": {
+    "thread_id": "repo-axon"
+  }
+}
+Map it internally like this:
+
+
+let thread_id = req.metadata.thread_id.unwrap_or(hash_of_messages_or_default());
+let stored_context = store.read_context(&thread_id);
+
+let query = extract_latest_user_message(&req.messages);
+let request_context = render_prior_messages_and_system(req.messages);
+let context = format!("{stored_context}\n\n[CURRENT REQUEST]\n{request_context}");
+
+let answer = rlm.completion(&query, &context).await?;
+
+store.append_context(
+    &thread_id,
+    &format!("\nUSER: {}\nASSISTANT: {}\n", query, answer),
+)?;
+Return something shaped like Chat Completions:
+
+
+{
+  "id": "chatcmpl-...",
+  "object": "chat.completion",
+  "created": 1777130000,
+  "model": "axon-rlm",
+  "choices": [
+    {
+      "index": 0,
+      "message": {
+        "role": "assistant",
+        "content": "..."
+      },
+      "finish_reason": "stop"
+    }
+  ]
+}
+For responses, do the same thing but wrap the answer as output text. I would not try to perfectly implement every OpenAI Responses feature at first. Agents usually need basic text compatibility, model listing, errors, and maybe streaming.
+
+The key design choice: make thread_id explicit. OpenAI requests are often stateless, but RLM wants durable context. Put thread_id in one or more places:
+
+
+metadata.thread_id
+user field
+header: X-Axon-Thread
+fallback: default
+For an agent, this is the big win. Every model call becomes communication with the shared RLM memory, not an isolated prompt.
+
+Streaming is tricky. Axon currently returns only the final String from Rlm::completion. You can fake OpenAI SSE by waiting for the full answer, then streaming chunks, but that only helps client compatibility. True useful streaming would require changing 
+rlm.rs
+ to emit events:
+
+
+rlm.started
+llm.iteration_started
+sandbox.code_executed
+rlm.child_started
+rlm.child_finished
+message.delta
+message.completed
+For agents, I’d start non-streaming. RLM calls are recursive and higher-latency anyway; pretending it is a normal token-streaming model may hide what makes it valuable.
+
+Tool calls need a hard decision. Normal OpenAI agent loops expect:
+
+
+model requests tool call
+agent executes tool
+agent sends tool result back
+model continues
+Axon’s model is different:
+
+
+RLM emits repl code
+sandbox executes code
+sandbox may call llm_query or registered tools
+RLM continues internally
+So for “RLM as primary communicator,” I’d let Axon own tool use internally. The OpenAI-compatible endpoint should mostly return final assistant text. Later, you can translate OpenAI tools from the request into Axon’s ToolRegistry, but the agent must understand that tool execution may happen inside Axon rather than in the outer client loop.
+
+Implementation-wise, I’d factor the duplicated MCP logic into an RlmService:
+
+
+pub struct RlmService {
+    client: Client,
+    model: String,
+    sub_model: String,
+    max_iterations: usize,
+    max_depth: usize,
+    store: ContextStore,
+    policy_catalog: PolicyCatalog,
+    default_runtime_policy: RuntimePolicy,
+    tool_registry: SharedToolRegistry,
+}
+
+impl RlmService {
+    pub async fn query(&self, req: RlmQueryRequest) -> Result<RlmQueryResponse> {
+        // read context, build policy, create Rlm, call completion, append transcript
+    }
+}
+Then MCP and OpenAI HTTP both call the same service. That avoids two subtly different Axon runtimes.
+
+The minimum viable path:
+
+Add src/openai.rs with request/response structs and Axum routes.
+Add Commands::ServeOpenAi { bind } in 
+main.rs
+.
+Extract the shared “read context -> run RLM -> append context” logic out of 
+mcp.rs
+.
+Implement /v1/chat/completions first.
+Add /v1/models.
+Add fake SSE only if the target agent refuses non-streaming responses.
+Add /v1/responses after chat completions works.
+The core idea: don’t make the RLM “another tool” the agent sometimes calls. Make it the base URL the agent talks to. The agent thinks it is calling a model; Axon turns every model call into a persistent recursive reasoning session.
+
+Changed files (2)•+29/-2
+
+Collapse all
+View diff
+
+src
++29/-2
+
+
+main.rs
++2/-0
+
+
+mcp.rs
++27/-2
+1:15:15 AM • 23s
+
+
+yes this is really cool and thn you can use the cli to start the server which you can then plop in an agentic tool like opencode or even codex
+
+1:17:51 AM
+
+I’ll turn that into a concrete implementation path in this repo: add an OpenAI-compatible server mode that agents can point at with base_url, while reusing the existing RLM run path and thread store.
+
+1:17:56 AM • 5.1s
+
+Using vet because this will be a code change; I’ll run the repo’s verification after each logical edit set.
+
+1:17:58 AM • 1.9s
+
+---
+
+there's a lot of lock code, wouldn't that possibly be slower than possibly making it lock free, think through and give me a reply before editing. I want to understand your thinking process here.
+
+---
+
+move to arc swap, it maybe that we really have a ton of people using it
+
+---
+
+try running a benchmark on the difference to see if we could simimulate a bunch of users.
+
+---
+
+now i want you to update the site with everything that has changed, adding a little blog post page for the changelog if there isn't one already. don't use emdashes. also report all the findings the new features. the commit and push
+
+---
+
+once you push i want the site deployed via railway with the den cli
