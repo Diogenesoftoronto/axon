@@ -3,6 +3,7 @@ use std::fs;
 use std::io::Write;
 use std::path::{Path, PathBuf};
 
+#[derive(Clone, Debug)]
 pub struct ContextStore {
     base_dir: PathBuf,
 }

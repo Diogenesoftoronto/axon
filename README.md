@@ -13,7 +13,7 @@ Axon uses **ouros** (a sandboxed Python runtime in Rust) for safe code execution
 ```
 Claude Code / User
   │
-  └─ MCP (stdio) or CLI
+  └─ MCP (stdio or streamable HTTP) or CLI
       │
       ▼
 Axon RLM Engine (Rust)
@@ -81,10 +81,30 @@ cargo run -- store transcript.txt --thread myproject
 cat session.txt | cargo run -- store - --thread myproject
 ```
 
-**Run as MCP server (for Claude Code):**
+**Run as MCP server over stdio (for Claude Code):**
 ```bash
 cargo run -- serve
 ```
+
+**Run as MCP server over streamable HTTP:**
+```bash
+cargo run -- serve --transport streamable-http --bind 127.0.0.1:3000 --path /mcp
+```
+
+**Run as an OpenAI-compatible server for agent `base_url` integrations:**
+```bash
+cargo run -- serve-openai --bind 127.0.0.1:3000
+```
+
+Then point an OpenAI-compatible agent at:
+
+```text
+http://127.0.0.1:3000/v1
+```
+
+Axon supports `POST /v1/chat/completions`, `POST /v1/responses`, and
+`GET /v1/models`. Persistent RLM memory uses `metadata.thread_id`,
+`X-Axon-Thread`, or the OpenAI `user` field, falling back to `default`.
 
 ### Claude Code Integration
 
@@ -120,7 +140,23 @@ Commands:
   query   One-shot query against a context file
   chat    Interactive chat with persistent thread context
   store   Append text to a thread's context store
-  serve   Run as an MCP stdio server
+  serve   Run as an MCP server over stdio or streamable HTTP
+  serve-openai
+          Run an OpenAI-compatible HTTP server for agent base_url integrations
+```
+
+`serve` options:
+
+```text
+  --transport <stdio|streamable-http>  MCP transport [default: stdio]
+  --bind <HOST:PORT>                   Bind address for HTTP transport [default: 127.0.0.1:3000]
+  --path <PATH>                        Route path for HTTP transport [default: /mcp]
+```
+
+`serve-openai` options:
+
+```text
+  --bind <HOST:PORT>                   Bind address [default: 127.0.0.1:3000]
 ```
 
 ## Multi-Provider Support
@@ -165,7 +201,7 @@ Upload a transcript to persistent memory.
 |-------|------|-------------|
 | `transcript` | string | Full transcript text |
 | `session_id` | string | Session identifier |
-| `thread_id` | string | Thread to store under (default: `transcripts`) |
+| `thread_id` | string (optional) | Thread to store under (default: `transcripts`) |
 
 ## Project Structure
 
@@ -180,7 +216,7 @@ axon/
 │   ├── llm.rs         # genai-backed LLM client
 │   ├── prompts.rs     # System prompts for root/sub RLMs
 │   ├── store.rs       # Local filesystem context store
-│   └── mcp.rs         # MCP stdio server
+│   └── mcp.rs         # rmcp-backed MCP server and transport wiring
 ├── tests/
 │   └── integration.rs # Integration tests
 └── data/              # Persistent context (created at runtime)
@@ -203,8 +239,8 @@ Common extension patterns:
 - Add a sandbox external function. Decide whether it should be callable from prompts and document it.
 - Add a new CLI command. Extend the `Commands` enum in `src/main.rs`.
 - Add a new CLI command. Implement the command branch in `main()`.
-- Add a new MCP tool. Add schema in the `tools/list` response in `src/mcp.rs`.
-- Add a new MCP tool. Implement logic in `handle_tool_call()` and return `tool_result(...)` or `tool_error(...)`.
+- Add a new MCP tool. Add a typed params struct and an `#[tool]` method in `src/mcp.rs`.
+- Add a new MCP tool. Return `CallToolResult::success(...)` or `CallToolResult::error(...)` from the tool implementation.
 
 Potential feature design docs:
 

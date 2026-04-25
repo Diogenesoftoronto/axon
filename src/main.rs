@@ -1,3 +1,4 @@
+use std::net::SocketAddr;
 use std::path::PathBuf;
 
 use anyhow::{bail, Result};
@@ -7,11 +8,13 @@ use genai::resolver::{AuthData, Endpoint, ServiceTargetResolver};
 use genai::{Client, ModelIden, ServiceTarget};
 
 use axon::mcp::McpServer;
+use axon::openai::OpenAiServer;
 use axon::policy::{DepthEnforcementMode, PolicyCatalog, RuntimePolicy};
 use axon::rlm::{Rlm, RlmConfig};
 use axon::store::ContextStore;
+use axon::tools::ToolRegistry;
 
-#[derive(Parser)]
+#[derive(Debug, Parser)]
 #[command(
     name = "axon",
     about = "Recursive Language Model engine - one context, run everywhere"
@@ -85,7 +88,7 @@ struct Cli {
     command: Commands,
 }
 
-#[derive(Subcommand)]
+#[derive(Debug, Subcommand)]
 enum Commands {
     /// One-shot query against a context file
     Query {
@@ -118,8 +121,34 @@ enum Commands {
         thread: String,
     },
 
-    /// Run as an MCP stdio server
-    Serve,
+    /// Run as an MCP server over stdio or streamable HTTP
+    Serve {
+        /// MCP transport to serve
+        #[arg(long, value_enum, default_value_t = McpTransport::Stdio)]
+        transport: McpTransport,
+
+        /// Address to bind for HTTP transport
+        #[arg(long, default_value = "127.0.0.1:3000")]
+        bind: SocketAddr,
+
+        /// Route path for HTTP transport
+        #[arg(long, default_value = "/mcp")]
+        path: String,
+    },
+
+    /// Run an OpenAI-compatible HTTP server for agent base_url integrations
+    #[command(name = "serve-openai", alias = "serve-open-ai")]
+    ServeOpenAi {
+        /// Address to bind for the OpenAI-compatible HTTP server
+        #[arg(long, default_value = "127.0.0.1:3000")]
+        bind: SocketAddr,
+    },
+}
+
+#[derive(Clone, Copy, Debug, PartialEq, Eq, clap::ValueEnum)]
+enum McpTransport {
+    Stdio,
+    StreamableHttp,
 }
 
 fn build_client(base_url: Option<&str>, api_key: Option<&str>) -> Client {
@@ -239,7 +268,11 @@ async fn main() -> Result<()> {
             eprintln!("Appended {} chars to thread '{}'.", text.len(), thread);
         }
 
-        Commands::Serve => {
+        Commands::Serve {
+            transport,
+            ref path,
+            bind,
+        } => {
             let server = McpServer::new(
                 client,
                 cli.model.clone(),
@@ -252,7 +285,27 @@ async fn main() -> Result<()> {
                 policy_catalog,
                 default_runtime_policy,
             );
-            server.run().await?;
+            match transport {
+                McpTransport::Stdio => server.serve_stdio().await?,
+                McpTransport::StreamableHttp => server.serve_http(bind, path).await?,
+            }
+        }
+
+        Commands::ServeOpenAi { bind } => {
+            let server = OpenAiServer::new(
+                client,
+                cli.model.clone(),
+                cli.sub_model.clone(),
+                cli.max_iterations,
+                cli.max_depth,
+                store,
+                cli.verbose,
+                cli.trace_sandbox,
+                policy_catalog,
+                default_runtime_policy,
+            );
+            eprintln!("Axon OpenAI-compatible server listening on http://{bind}/v1");
+            server.serve(bind).await?;
         }
     }
 
@@ -270,5 +323,84 @@ fn make_rlm(client: &Client, cli: &Cli, depth: usize, runtime_policy: RuntimePol
         verbose: cli.verbose,
         trace_sandbox: cli.trace_sandbox,
         runtime_policy,
+        tool_registry: std::sync::Arc::new(ToolRegistry::new()),
     })
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use clap::Parser;
+
+    #[test]
+    fn test_serve_defaults_to_stdio() {
+        let cli = Cli::parse_from(["axon", "serve"]);
+        let Commands::Serve {
+            transport,
+            bind,
+            path,
+        } = cli.command
+        else {
+            panic!("expected serve command");
+        };
+
+        assert_eq!(transport, McpTransport::Stdio);
+        assert_eq!(bind, "127.0.0.1:3000".parse::<SocketAddr>().unwrap());
+        assert_eq!(path, "/mcp");
+    }
+
+    #[test]
+    fn test_serve_accepts_streamable_http_flags() {
+        let cli = Cli::parse_from([
+            "axon",
+            "--model",
+            "hf:MiniMaxAI/MiniMax-M2.5",
+            "serve",
+            "--transport",
+            "streamable-http",
+            "--bind",
+            "0.0.0.0:8080",
+            "--path",
+            "/custom",
+        ]);
+
+        let Commands::Serve {
+            transport,
+            bind,
+            path,
+        } = cli.command
+        else {
+            panic!("expected serve command");
+        };
+
+        assert_eq!(transport, McpTransport::StreamableHttp);
+        assert_eq!(bind, "0.0.0.0:8080".parse::<SocketAddr>().unwrap());
+        assert_eq!(path, "/custom");
+    }
+
+    #[test]
+    fn test_invalid_transport_fails() {
+        let err = Cli::try_parse_from(["axon", "serve", "--transport", "bogus"]).unwrap_err();
+        assert!(err.to_string().contains("possible values"));
+    }
+
+    #[test]
+    fn test_serve_openai_default_bind() {
+        let cli = Cli::parse_from(["axon", "serve-openai"]);
+        let Commands::ServeOpenAi { bind } = cli.command else {
+            panic!("expected serve-openai command");
+        };
+
+        assert_eq!(bind, "127.0.0.1:3000".parse::<SocketAddr>().unwrap());
+    }
+
+    #[test]
+    fn test_serve_open_ai_alias() {
+        let cli = Cli::parse_from(["axon", "serve-open-ai"]);
+        let Commands::ServeOpenAi { bind } = cli.command else {
+            panic!("expected serve-open-ai alias");
+        };
+
+        assert_eq!(bind, "127.0.0.1:3000".parse::<SocketAddr>().unwrap());
+    }
 }

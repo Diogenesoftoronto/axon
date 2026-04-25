@@ -1,4 +1,5 @@
 use crate::llm::Message;
+use crate::tools::ToolRegistry;
 
 pub const ROOT_SYSTEM_PROMPT: &str = r#"You are tasked with answering a query with associated context. You can access, transform, and analyze this context interactively in a sandboxed Python REPL that supports recursive sub-LLM calls. You will be queried iteratively until you provide a final answer.
 
@@ -93,13 +94,25 @@ Analyze the context and provide your answer. You can use code in ```repl``` bloc
 
 When done, use FINAL(your answer) or FINAL_VAR(variable_name)."#;
 
-pub fn build_system_prompt(depth: usize) -> Vec<Message> {
-    let prompt = if depth == 0 {
-        ROOT_SYSTEM_PROMPT
+pub fn build_system_prompt(depth: usize, tool_registry: &ToolRegistry) -> Vec<Message> {
+    let mut prompt = if depth == 0 {
+        ROOT_SYSTEM_PROMPT.to_string()
     } else {
-        SUB_RLM_SYSTEM_PROMPT
+        SUB_RLM_SYSTEM_PROMPT.to_string()
     };
-    vec![Message::system(prompt)]
+
+    if !tool_registry.is_empty() {
+        let mut custom_section =
+            "\n\n## Custom Tools\n\nThe following custom tools are also available in the REPL:\n"
+                .to_string();
+        for spec in tool_registry.tools().values() {
+            custom_section.push_str(&format!("- `{}(...)`: {}\n", spec.name, spec.description));
+        }
+        custom_section.push_str("Call these functions directly by name, passing arguments as you would any Python function.\n");
+        prompt.push_str(&custom_section);
+    }
+
+    vec![Message::system(&prompt)]
 }
 
 const USER_PROMPT_ITER0: &str = r#"Start with Phase 1 - inspect the `context` variable: check its size, identify the format and natural chunk boundaries.
@@ -125,4 +138,104 @@ pub fn next_action_prompt(query: &str, iteration: usize, force_final: bool) -> M
         USER_PROMPT_CONTINUE.replace("{query}", query)
     };
     Message::user(&content)
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::tools::{ToolRegistry, ToolSpec};
+    use proptest::prelude::*;
+
+    #[test]
+    fn test_build_system_prompt_empty_registry_root() {
+        let msgs = build_system_prompt(0, &ToolRegistry::new());
+        assert_eq!(msgs.len(), 1);
+        assert_eq!(msgs[0].role, "system");
+        assert!(msgs[0].content.contains("llm_query"));
+        assert!(!msgs[0].content.contains("Custom Tools"));
+    }
+
+    #[test]
+    fn test_build_system_prompt_empty_registry_sub() {
+        let msgs = build_system_prompt(1, &ToolRegistry::new());
+        assert_eq!(msgs.len(), 1);
+        assert!(msgs[0].content.contains("sub-RLM"));
+        assert!(!msgs[0].content.contains("Custom Tools"));
+    }
+
+    #[test]
+    fn test_build_system_prompt_with_custom_tool() {
+        let mut reg = ToolRegistry::new();
+        reg.register(ToolSpec {
+            name: "SEARCH".to_string(),
+            description: "search things".to_string(),
+            input_schema: None,
+        });
+        let msgs = build_system_prompt(0, &reg);
+        assert!(msgs[0].content.contains("## Custom Tools"));
+        assert!(msgs[0].content.contains("`SEARCH(...)`"));
+        assert!(msgs[0].content.contains("search things"));
+    }
+
+    #[test]
+    fn test_build_system_prompt_custom_tool_in_both_depths() {
+        let mut reg = ToolRegistry::new();
+        reg.register(ToolSpec {
+            name: "TOOL_A".to_string(),
+            description: "tool a desc".to_string(),
+            input_schema: None,
+        });
+        let root = build_system_prompt(0, &reg);
+        let sub = build_system_prompt(1, &reg);
+        assert!(root[0].content.contains("TOOL_A"));
+        assert!(sub[0].content.contains("TOOL_A"));
+    }
+
+    proptest! {
+        #[test]
+        fn test_next_action_prompt_force_final_always_same(query in ".*") {
+            let msg = next_action_prompt(&query, 42, true);
+            assert_eq!(msg.role, "user");
+            assert_eq!(msg.content, USER_PROMPT_FINAL);
+        }
+
+        #[test]
+        fn test_next_action_prompt_iter0_contains_query(query in "[^{}]{0,50}") {
+            let msg = next_action_prompt(&query, 0, false);
+            assert!(msg.content.contains(&query), "iter0 prompt should contain the query");
+        }
+
+        #[test]
+        fn test_next_action_prompt_continue_contains_query(query in "[^{}]{0,50}") {
+            let msg = next_action_prompt(&query, 5, false);
+            assert!(msg.content.contains(&query), "continue prompt should contain the query");
+        }
+
+        #[test]
+        fn test_build_prompt_custom_tools_appear_in_output(
+            names in proptest::collection::vec("[a-zA-Z_][a-zA-Z0-9_]{0,9}", 1..5),
+            desc in ".*"
+        ) {
+            let mut reg = ToolRegistry::new();
+            for name in &names {
+                reg.register(ToolSpec {
+                    name: name.clone(),
+                    description: desc.clone(),
+                    input_schema: None,
+                });
+            }
+            let msgs = build_system_prompt(0, &reg);
+            let content = &msgs[0].content;
+            assert!(content.contains("## Custom Tools"));
+            for name in &names {
+                assert!(content.contains(&format!("`{}(...)`", name)), "should contain tool '{}' in prompt", name);
+            }
+        }
+
+        #[test]
+        fn test_build_prompt_empty_registry_no_custom_section(depth in 0usize..2) {
+            let msgs = build_system_prompt(depth, &ToolRegistry::new());
+            assert!(!msgs[0].content.contains("## Custom Tools"));
+        }
+    }
 }

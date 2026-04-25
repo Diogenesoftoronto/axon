@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Axon Changelog | What's New</title>
+  <meta name="description" content="Latest updates, features, and performance improvements for the Axon RLM engine." />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:ital,wght@0,400;0,500;0,700;1,400&display=swap" rel="stylesheet" />
+
+  <style>
+    :root {
+      --bg:         #080808;
+      --surface:    #111111;
+      --surface-2:  #191919;
+      --border:     #242424;
+      --border-hi:  #3a3a3a;
+      --text:       #f0ece2;
+      --muted:      #666666;
+      --muted-2:    #444444;
+      --amber:      #f5a623;
+      --amber-dim:  #c4831a;
+      --cyan:       #00bfff;
+      --rust:       #c65b2b;
+      --green:      #4caf74;
+      --font-sans:  'Space Grotesk', system-ui, sans-serif;
+      --font-mono:  'JetBrains Mono', 'Courier New', monospace;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font-sans);
+      line-height: 1.65;
+      overflow-x: hidden;
+    }
+    a { color: inherit; text-decoration: none; transition: color 0.15s; }
+    a:hover { color: var(--amber); }
+
+    nav {
+      position: sticky;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 2.5rem;
+      height: 60px;
+      border-bottom: 1px solid var(--border);
+      background: rgba(8, 8, 8, 0.92);
+      backdrop-filter: blur(8px);
+    }
+    .nav-logo {
+      font-family: var(--font-mono);
+      font-weight: 700;
+      font-size: 1.15rem;
+      color: var(--amber);
+      letter-spacing: -0.02em;
+    }
+
+    main {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 6rem 2.5rem;
+    }
+
+    header { margin-bottom: 5rem; }
+    h1 { font-size: 3.5rem; font-weight: 700; letter-spacing: -0.03em; margin-bottom: 1rem; }
+    .tagline { font-family: var(--font-mono); color: var(--muted); font-size: 1rem; }
+
+    .entry {
+      margin-bottom: 6rem;
+      position: relative;
+    }
+    .entry-date {
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      color: var(--amber);
+      margin-bottom: 1rem;
+      display: block;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+    .entry-title {
+      font-size: 2rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      margin-bottom: 1.5rem;
+      line-height: 1.2;
+    }
+    .entry-content { color: var(--muted); font-size: 1.05rem; }
+    .entry-content p { margin-bottom: 1.5rem; }
+    .entry-content ul { list-style: none; margin-bottom: 1.5rem; }
+    .entry-content li { 
+      position: relative; 
+      padding-left: 1.5rem; 
+      margin-bottom: 0.75rem; 
+    }
+    .entry-content li::before {
+      content: '→';
+      position: absolute;
+      left: 0;
+      color: var(--amber);
+    }
+    .entry-content strong { color: var(--text); }
+    .entry-content code {
+      font-family: var(--font-mono);
+      font-size: 0.9rem;
+      background: var(--surface);
+      padding: 0.1rem 0.4rem;
+      border: 1px solid var(--border);
+      color: var(--cyan);
+    }
+
+    .finding-box {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      padding: 1.5rem;
+      margin-top: 2rem;
+    }
+    .finding-title {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      color: var(--amber);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-bottom: 1rem;
+      display: block;
+    }
+    .finding-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+    }
+    .finding-item {}
+    .finding-val { font-family: var(--font-mono); font-size: 1.25rem; color: var(--text); font-weight: 700; }
+    .finding-label { font-size: 0.8rem; color: var(--muted); margin-top: 0.25rem; }
+
+    footer {
+      padding: 3rem 2.5rem;
+      border-top: 1px solid var(--border);
+      text-align: center;
+      font-size: 0.8rem;
+      color: var(--muted-2);
+    }
+
+    @media (max-width: 600px) {
+      h1 { font-size: 2.5rem; }
+      .finding-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-logo">axon</a>
+  <a href="index.html" style="font-size: 0.875rem; font-weight: 500; color: var(--muted);">Back to Home</a>
+</nav>
+
+<main>
+  <header>
+    <h1>Changelog</h1>
+    <p class="tagline">// Tracking the evolution of recursive reasoning.</p>
+  </header>
+
+  <article class="entry">
+    <span class="entry-date">April 25, 2026</span>
+    <h2 class="entry-title">OpenAI-Compatible Server and Lock-Free Registry</h2>
+    <div class="entry-content">
+      <p>
+        Today we are shipping a major architectural upgrade that makes Axon a drop-in replacement for standard LLM providers. By exposing an OpenAI-compatible API, you can now point your favorite agentic tools (like OpenCode or Codex) directly at an Axon instance.
+      </p>
+      
+      <ul>
+        <li><strong>OpenAI-Compatible Server:</strong> New <code>serve-openai</code> command starts an HTTP server supporting <code>/v1/chat/completions</code> and <code>/v1/responses</code>.</li>
+        <li><strong>Lock-Free Tool Registry:</strong> Migrated from standard Mutex locks to an <code>ArcSwap</code> pattern for tool lookups. This allows high-concurrency environments to read the toolset without any contention.</li>
+        <li><strong>Extensible Tool Injection:</strong> Use the <code>configure_tools</code> MCP tool or API to register custom functions that the RLM sandbox can invoke during reasoning.</li>
+        <li><strong>RlmService Refactoring:</strong> Unified the core reasoning engine into a standalone service, ensuring consistent behavior across CLI, MCP, and HTTP interfaces.</li>
+        <li><strong>Model Overrides:</strong> Specify the model and sub-model per-query rather than being locked to global defaults.</li>
+      </ul>
+
+      <div class="finding-box">
+        <span class="finding-title">Performance Benchmark Results</span>
+        <p style="font-size: 0.9rem; margin-bottom: 1rem;">Testing registry read latency under load (100 concurrent users, 1,000 reads each):</p>
+        <div class="finding-grid">
+          <div class="finding-item">
+            <div class="finding-val">113.8ms</div>
+            <div class="finding-label">Standard Mutex Locking</div>
+          </div>
+          <div class="finding-item">
+            <div class="finding-val" style="color: var(--green);">18.3ms</div>
+            <div class="finding-label">Lock-Free ArcSwap</div>
+          </div>
+        </div>
+        <p style="font-size: 0.8rem; color: var(--muted); margin-top: 1rem; font-style: italic;">
+          Finding: The move to lock-free reads resulted in a 6x speedup for high-concurrency tool lookups.
+        </p>
+      </div>
+    </div>
+  </article>
+
+  <article class="entry">
+    <span class="entry-date">March 1, 2026</span>
+    <h2 class="entry-title">Initial Release</h2>
+    <div class="entry-content">
+      <p>
+        Axon RLM engine is officially open source. Featuring recursive depth management, sandboxed Python REPLs, and a persistent context store.
+      </p>
+    </div>
+  </article>
+</main>
+
+<footer>
+  &copy; 2026 Axon Project · Recursive reasoning for everyone.
+</footer>
+
+</body>
+</html>

@@ -1,7 +1,10 @@
 pub mod llm;
 pub mod mcp;
+pub mod openai;
 pub mod policy;
 pub mod prompts;
 pub mod rlm;
 pub mod sandbox;
+pub mod service;
 pub mod store;
+pub mod tools;

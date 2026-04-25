@@ -1,3 +1,4 @@
+use std::sync::Arc;
 use anyhow::Result;
 use genai::Client;
 use ouros::{Object, ReplProgress};
@@ -8,6 +9,7 @@ use crate::llm::{LlmClient, Message};
 use crate::policy::{DepthEnforcementMode, RuntimePolicy};
 use crate::prompts;
 use crate::sandbox::{Sandbox, MAIN_SESSION_ID};
+use crate::tools::ToolRegistry;
 
 pub struct RlmConfig {
     pub client: Client,
@@ -19,6 +21,7 @@ pub struct RlmConfig {
     pub verbose: bool,
     pub trace_sandbox: bool,
     pub runtime_policy: RuntimePolicy,
+    pub tool_registry: Arc<ToolRegistry>,
 }
 
 pub struct Rlm {
@@ -156,7 +159,7 @@ impl Rlm {
         context: &str,
     ) -> Result<(String, DepthTelemetry)> {
         self.validate_depth_policy_feasibility()?;
-        let mut sandbox = Sandbox::new()?;
+        let mut sandbox = Sandbox::new(&self.config.tool_registry)?;
         let mut runtime = RuntimeState::new(context);
         let mut telemetry = DepthTelemetry::new(self.config.depth);
 
@@ -169,7 +172,8 @@ impl Rlm {
             sandbox.set_variable("context", Object::String(effective_context))?;
         }
 
-        let mut messages = prompts::build_system_prompt(self.config.depth);
+        let mut messages =
+            prompts::build_system_prompt(self.config.depth, &self.config.tool_registry);
         if let Some(policy_block) = self.config.runtime_policy.prompt_instruction_block() {
             messages.push(Message::system(&policy_block));
         }
@@ -754,10 +758,24 @@ impl Rlm {
                 }
                 Ok(Object::String(lines.join("\n")))
             }
-            other => Ok(Object::String(format!(
-                "Error: unknown function '{}'",
-                other
-            ))),
+            other => {
+                if let Some(tool_spec) = self.config.tool_registry.get(other) {
+                    let args_str = args
+                        .iter()
+                        .map(|a| a.to_string())
+                        .collect::<Vec<_>>()
+                        .join(", ");
+                    Ok(Object::String(format!(
+                        "Tool '{}' called with args: [{}] — no handler registered on server side",
+                        tool_spec.name, args_str
+                    )))
+                } else {
+                    Ok(Object::String(format!(
+                        "Error: unknown function '{}'",
+                        other
+                    )))
+                }
+            }
         }
     }
 
@@ -785,6 +803,7 @@ impl Rlm {
                 verbose: self.config.verbose,
                 trace_sandbox: self.config.trace_sandbox,
                 runtime_policy: self.config.runtime_policy.for_sub_rlm(),
+                tool_registry: self.config.tool_registry.clone(),
             });
             let (result, child_telemetry) = Box::pin(sub.completion_with_telemetry(
                 "Analyze the context and answer the question within it.",
@@ -987,7 +1006,12 @@ fn normalize_vfs_prefix(path: &str) -> String {
 mod tests {
     use super::*;
     use crate::policy::{DepthEnforcementMode, RuntimePolicy};
+    use crate::tools::ToolRegistry;
     use genai::Client;
+
+    fn empty_registry() -> Arc<ToolRegistry> {
+        Arc::new(ToolRegistry::new())
+    }
 
     fn make_test_rlm() -> Rlm {
         let client = Client::builder().build();
@@ -1001,6 +1025,7 @@ mod tests {
             verbose: false,
             trace_sandbox: false,
             runtime_policy: RuntimePolicy::default(),
+            tool_registry: empty_registry(),
         })
     }
 
@@ -1124,6 +1149,7 @@ mod tests {
                 require_min_depth: Some(2),
                 require_min_recursive_calls: None,
             },
+            tool_registry: empty_registry(),
         });
         let telemetry = DepthTelemetry::new(0);
         let reason = rlm.depth_policy_unmet_reason(&telemetry);
@@ -1151,6 +1177,7 @@ mod tests {
                 require_min_depth: None,
                 require_min_recursive_calls: Some(1),
             },
+            tool_registry: empty_registry(),
         });
         let telemetry = DepthTelemetry::new(0);
         let reason = rlm.depth_policy_unmet_reason(&telemetry);
@@ -1178,6 +1205,7 @@ mod tests {
                 require_min_depth: Some(3),
                 require_min_recursive_calls: None,
             },
+            tool_registry: empty_registry(),
         });
         let err = rlm.validate_depth_policy_feasibility().unwrap_err();
         assert!(
@@ -1208,6 +1236,7 @@ mod tests {
                 require_min_depth: None,
                 require_min_recursive_calls: Some(1),
             },
+            tool_registry: empty_registry(),
         });
         let err = rlm.validate_depth_policy_feasibility().unwrap_err();
         assert!(
@@ -1221,7 +1250,7 @@ mod tests {
     fn test_checkpoint_restore_restores_sandbox_state() {
         let rt = tokio::runtime::Runtime::new().unwrap();
         let rlm = make_test_rlm();
-        let mut sandbox = Sandbox::new().unwrap();
+        let mut sandbox = Sandbox::new(&empty_registry()).unwrap();
         let mut runtime = RuntimeState::new("");
 
         exec_block(
@@ -1248,7 +1277,7 @@ mod tests {
     fn test_fork_switch_restores_sandbox_state() {
         let rt = tokio::runtime::Runtime::new().unwrap();
         let rlm = make_test_rlm();
-        let mut sandbox = Sandbox::new().unwrap();
+        let mut sandbox = Sandbox::new(&empty_registry()).unwrap();
         let mut runtime = RuntimeState::new("");
 
         exec_block(
@@ -1281,7 +1310,7 @@ mod tests {
     fn test_fork_create_uses_checkpoint_vfs_snapshot() {
         let rt = tokio::runtime::Runtime::new().unwrap();
         let rlm = make_test_rlm();
-        let mut sandbox = Sandbox::new().unwrap();
+        let mut sandbox = Sandbox::new(&empty_registry()).unwrap();
         let mut runtime = RuntimeState::new("");
 
         exec_block(
@@ -1332,7 +1361,7 @@ mod tests {
         // The repl block must execute so FINAL_VAR can resolve.
         let rt = tokio::runtime::Runtime::new().unwrap();
         let rlm = make_test_rlm();
-        let mut sandbox = Sandbox::new().unwrap();
+        let mut sandbox = Sandbox::new(&empty_registry()).unwrap();
         let mut runtime = RuntimeState::new("");
 
         let fallback_response = "Let me compute:\n```repl\nanswer = 5\n```\nFINAL_VAR(answer)";
@@ -1355,7 +1384,7 @@ mod tests {
         // The repl should execute (side effects), and FINAL() should extract directly.
         let rt = tokio::runtime::Runtime::new().unwrap();
         let rlm = make_test_rlm();
-        let mut sandbox = Sandbox::new().unwrap();
+        let mut sandbox = Sandbox::new(&empty_registry()).unwrap();
         let mut runtime = RuntimeState::new("");
 
         let fallback_response = "```repl\nx = 42\n```\nFINAL(5)";
@@ -1379,7 +1408,7 @@ mod tests {
         let code_blocks = find_code_blocks(fallback_response);
         assert!(code_blocks.is_empty());
 
-        let sandbox = Sandbox::new().unwrap();
+        let sandbox = Sandbox::new(&empty_registry()).unwrap();
         let answer = check_final_answer(fallback_response, &sandbox);
         assert!(answer.is_none());
 
@@ -1390,7 +1419,9 @@ mod tests {
     #[test]
     fn test_strip_hallucinated_tool_calls() {
         assert_eq!(
-            strip_hallucinated_tool_calls("Hello <minimax:tool_call>stuff\nhere</minimax:tool_call> world"),
+            strip_hallucinated_tool_calls(
+                "Hello <minimax:tool_call>stuff\nhere</minimax:tool_call> world"
+            ),
             "Hello  world"
         );
         assert_eq!(
@@ -1401,7 +1432,10 @@ mod tests {
             strip_hallucinated_tool_calls("Result <invoke name=\"bar\">body</invoke> done"),
             "Result  done"
         );
-        assert_eq!(strip_hallucinated_tool_calls("no junk here"), "no junk here");
+        assert_eq!(
+            strip_hallucinated_tool_calls("no junk here"),
+            "no junk here"
+        );
     }
 
     #[test]
@@ -1422,5 +1456,143 @@ mod tests {
         let long_output = "x".repeat(MAX_OUTPUT_CHARS + 1000);
         let result = format_exec_result("code", &long_output);
         assert!(result.contains("TRUNCATED"));
+    }
+
+    // --- Property tests for custom tool dispatch ---
+
+    fn make_rlm_with_registry(tool_registry: Arc<ToolRegistry>) -> Rlm {
+        let client = Client::builder().build();
+        Rlm::new(RlmConfig {
+            client,
+            model: "test-model".to_string(),
+            sub_model: "test-sub-model".to_string(),
+            max_iterations: 1,
+            depth: 0,
+            max_depth: 0,
+            verbose: false,
+            trace_sandbox: false,
+            runtime_policy: RuntimePolicy::default(),
+            tool_registry,
+        })
+    }
+
+    #[tokio::test]
+    async fn test_handle_external_custom_tool_returns_passthrough() {
+        let mut reg = ToolRegistry::new();
+        reg.register(crate::tools::ToolSpec {
+            name: "MY_SEARCH".to_string(),
+            description: "searches things".to_string(),
+            input_schema: None,
+        });
+        let rlm = make_rlm_with_registry(Arc::new(reg));
+        let mut sandbox = Sandbox::new(&rlm.config.tool_registry).unwrap();
+        let mut runtime = RuntimeState::new("");
+        let mut telemetry = DepthTelemetry::new(0);
+
+        let result = rlm
+            .handle_external(&mut sandbox, "MY_SEARCH", &[Object::String("query".to_string())], &mut runtime, &mut telemetry)
+            .await
+            .unwrap();
+        match result {
+            Object::String(s) => {
+                assert!(s.contains("MY_SEARCH"), "should contain tool name, got: {}", s);
+                assert!(s.contains("query"), "should contain args, got: {}", s);
+                assert!(!s.contains("Error: unknown function"), "should not be unknown function error, got: {}", s);
+            }
+            other => panic!("expected Object::String, got: {:?}", other),
+        }
+    }
+
+    #[tokio::test]
+    async fn test_handle_external_unknown_function_returns_error() {
+        let rlm = make_test_rlm();
+        let mut sandbox = Sandbox::new(&empty_registry()).unwrap();
+        let mut runtime = RuntimeState::new("");
+        let mut telemetry = DepthTelemetry::new(0);
+
+        let result = rlm
+            .handle_external(&mut sandbox, "NONEXISTENT_TOOL", &[], &mut runtime, &mut telemetry)
+            .await
+            .unwrap();
+        match result {
+            Object::String(s) => {
+                assert!(s.contains("Error: unknown function 'NONEXISTENT_TOOL'"), "got: {}", s);
+            }
+            other => panic!("expected Object::String, got: {:?}", other),
+        }
+    }
+
+    #[tokio::test]
+    async fn test_handle_external_registered_tool_shadows_unknown() {
+        let mut reg = ToolRegistry::new();
+        reg.register(crate::tools::ToolSpec {
+            name: "CUSTOM".to_string(),
+            description: "custom tool".to_string(),
+            input_schema: None,
+        });
+        let rlm = make_rlm_with_registry(Arc::new(reg));
+        let mut sandbox = Sandbox::new(&rlm.config.tool_registry).unwrap();
+        let mut runtime = RuntimeState::new("");
+        let mut telemetry = DepthTelemetry::new(0);
+
+        let result = rlm
+            .handle_external(&mut sandbox, "CUSTOM", &[], &mut runtime, &mut telemetry)
+            .await
+            .unwrap();
+        match result {
+            Object::String(s) => {
+                assert!(!s.contains("Error: unknown function"), "registered tool should not produce unknown function error, got: {}", s);
+            }
+            other => panic!("expected Object::String, got: {:?}", other),
+        }
+    }
+
+    use proptest::prelude::*;
+
+    proptest! {
+        #[test]
+        fn test_handle_external_builtin_always_dispatches(
+            func_name in Just("FINAL"), args_str in ".*"
+        ) {
+            let rt = tokio::runtime::Runtime::new().unwrap();
+            let rlm = make_test_rlm();
+            let mut sandbox = Sandbox::new(&empty_registry()).unwrap();
+            let mut runtime = RuntimeState::new("");
+            let mut telemetry = DepthTelemetry::new(0);
+
+            let result = rt.block_on(rlm.handle_external(
+                &mut sandbox,
+                func_name,
+                &[Object::String(args_str.clone())],
+                &mut runtime,
+                &mut telemetry,
+            )).unwrap();
+
+            match result {
+                Object::String(s) => assert_eq!(s, args_str),
+                other => panic!("FINAL should return string, got: {:?}", other),
+            }
+        }
+
+        #[test]
+        fn test_find_final_works_with_arbitrary_content(content in "[^()]{0,50}") {
+            let text = format!("FINAL({})", content);
+            let (kind, extracted) = find_final_answer(&text).unwrap();
+            assert!(matches!(kind, FinalType::Direct));
+            assert_eq!(extracted, content.trim());
+        }
+
+        #[test]
+        fn test_strip_final_wrapper_idempotent_for_non_final(text in "[^F]{0,100}") {
+            let result1 = strip_final_wrapper(&text);
+            let result2 = strip_final_wrapper(&result1);
+            assert_eq!(result1, result2);
+        }
+
+        #[test]
+        fn test_normalize_vfs_path_always_starts_with_slash(path in "[a-zA-Z0-9_/]{0,30}") {
+            let normalized = normalize_vfs_path(&path);
+            assert!(normalized.starts_with('/'), "path '{}' normalized to '{}' which doesn't start with /", path, normalized);
+        }
     }
 }
