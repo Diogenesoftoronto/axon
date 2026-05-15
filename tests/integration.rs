@@ -1,4 +1,4 @@
-use axon::store::ContextStore;
+use altum::store::ContextStore;
 
 #[test]
 fn test_store_read_empty() {

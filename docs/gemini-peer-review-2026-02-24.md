@@ -1,6 +1,6 @@
 # Gemini Peer Review (2026-02-24)
 
-This note captures a one-shot review of the Axon paper draft and benchmarking plan, generated using Gemini CLI with `gemini-3-pro-preview`.
+This note captures a one-shot review of the Altum paper draft and benchmarking plan, generated using Gemini CLI with `gemini-3-pro-preview`.
 
 Command used:
 
@@ -10,17 +10,17 @@ cat /tmp/gemini_peer_review_prompt.txt | gemini -m gemini-3-pro-preview -p "Foll
 
 ## Output
 
-Here is the peer review feedback and actionable benchmark expansion plan for Axon.
+Here is the peer review feedback and actionable benchmark expansion plan for Altum.
 
 ### A. Paper Peer Review
 
 **General Assessment:**
-The paper presents a solid systems engineering contribution (Axon) but currently fails as an empirical research paper due to critically small sample sizes ($N=2$) and lack of variance quantification. It frames itself as an evaluation of RLM physics (scaling, density), but the "Preliminary Ablations" are too thin to support the claims.
+The paper presents a solid systems engineering contribution (Altum) but currently fails as an empirical research paper due to critically small sample sizes ($N=2$) and lack of variance quantification. It frames itself as an evaluation of RLM physics (scaling, density), but the "Preliminary Ablations" are too thin to support the claims.
 
 **Specific Recommendations:**
 
 1.  **Reframing Contributions:**
-    *   **Shift focus from "Science" to "Systems":** The strongest contribution is the open-source Rust engine with isolated sandboxing and telemetry. Frame Axon as a **platform** for RLM research rather than just a reproduction study.
+    *   **Shift focus from "Science" to "Systems":** The strongest contribution is the open-source Rust engine with isolated sandboxing and telemetry. Frame Altum as a **platform** for RLM research rather than just a reproduction study.
     *   **Clarify "True Recursion":** The distinction between "context-stuffing" and "recursive spawning" is your moat. Explicitly define the state separation: does the child RLM inherit the parent's sandbox variables, or is it a fresh environment? (Code suggests fresh; Paper should justify this design choice regarding state isolation vs. context overhead).
 
 2.  **Experimental Rigor (Critical):**
@@ -96,13 +96,13 @@ I recommend adapting **GSM8K** (Math) and **MBPP** (Coding) for deterministic RL
 - Check: Extract the number after `####` in the `answer` field. Use `regex` check.
 
 **2. MBPP (Sanitized)**
-*Why:* Python coding problems. Axon uses a Python REPL, so it's a native fit.
+*Why:* Python coding problems. Altum uses a Python REPL, so it's a native fit.
 *Adapter Logic:*
 - Download `mbpp` (sanitized).
 - Query: `prompt` + "Write a function to solve this. Return ONLY the code."
-- Check: This is tricky. Axon harness supports `rust_exec_exact`.
+- Check: This is tricky. Altum harness supports `rust_exec_exact`.
     *   *Modification:* Add `python_exec_check` to harness (runs code + test cases from dataset).
-    *   *Workaround:* Ask Axon to translate the Python problem to Rust. Use `test_list` field to generate a Rust `main` function that asserts the logic.
+    *   *Workaround:* Ask Altum to translate the Python problem to Rust. Use `test_list` field to generate a Rust `main` function that asserts the logic.
     *   *Check Type:* `rust_exec_exact` (Harness compiles the translation + test runner).
 
 **Script snippet for GSM8K adaptation:**
@@ -146,7 +146,7 @@ Run the benchmark across these three tiers to test RLM vs. Raw Intelligence vs. 
 **Harness Modifications:**
 
 1.  **Grid Search Support:**
-    Update `benchmark_axon.py` to accept a `--model-list` file.
+    Update `benchmark_altum.py` to accept a `--model-list` file.
     ```python
     # In argument parsing
     parser.add_argument(\"--model-list\", type=Path, help=\"File with one model per line\")

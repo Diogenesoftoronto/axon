@@ -1,5 +1,5 @@
-# Axon
-This is the repo for Axon, a project using RLMs as a tool for coding agents. RLMs are an inference scaffold for language models that allow them to scale to millions of tokens input size almost for free. So instead of all devs having separate agent chat histories, why not just have a shared context like an unstructured growing dev log. Then whenever necessary the coding agent can use the RLM as a tool call to pull useful context about what other devs have worked on or even from your own previous sessions.
+# Altum
+This is the repo for Altum, a project using RLMs as a tool for coding agents. RLMs are an inference scaffold for language models that allow them to scale to millions of tokens input size almost for free. So instead of all devs having separate agent chat histories, why not just have a shared context like an unstructured growing dev log. Then whenever necessary the coding agent can use the RLM as a tool call to pull useful context about what other devs have worked on or even from your own previous sessions.
 
 # Overall Rules and Background
 The RLM engine is implemented in Rust using ouros (https://github.com/parcadei/ouros) for sandboxed Python execution and genai (https://github.com/jeremychone/rust-genai) for multi-provider LLM access. Each RLM level has its own ouros sandbox; when llm_query() is called at depth < max_depth, a full sub-RLM with its own sandbox is spawned (true recursive RLM).

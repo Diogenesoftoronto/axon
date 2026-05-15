@@ -235,7 +235,7 @@ impl McpServer {
 }
 
 #[tool_handler(
-    name = "axon",
+    name = "altum",
     version = "0.1.0",
     instructions = "Recursive language model MCP server."
 )]
@@ -348,7 +348,7 @@ mod tests {
             "default-sub-model".to_string(),
             5,
             1,
-            ContextStore::new(&PathBuf::from("/tmp/axon-test-store")),
+            ContextStore::new(&PathBuf::from("/tmp/altum-test-store")),
             false,
             false,
             PolicyCatalog::builtin(),

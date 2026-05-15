@@ -1,10 +1,10 @@
-# Axon vs. Recursive Language Models (RLM) Paper: Result Comparison
+# Altum vs. Recursive Language Models (RLM) Paper: Result Comparison
 
 Reference paper in README: [Recursive Language Models](https://arxiv.org/abs/2512.24601v1).
 
 ## Scope
 
-This note compares what our Axon benchmark results currently show against the key empirical claims in the RLM paper. It is a research comparison, not a replication. Our runs use different models, task sets, and infrastructure.
+This note compares what our Altum benchmark results currently show against the key empirical claims in the RLM paper. It is a research comparison, not a replication. Our runs use different models, task sets, and infrastructure.
 
 ## Paper Claims We Can Compare
 

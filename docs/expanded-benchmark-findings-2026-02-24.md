@@ -12,7 +12,7 @@ This note summarizes the post-review benchmark expansion focused on:
 2. Added deterministic generated context types in the harness:
    - `log_haystack_v1` with insertions and distributed markers
    - `ledger_v1` for dense aggregation tasks
-3. Added model-grid execution to `scripts/benchmark_axon.py`:
+3. Added model-grid execution to `scripts/benchmark_altum.py`:
    - `--models`, `--model-list`
    - `/models` pricing fetch via `--pricing-from-models-api`
    - Wilson 95% confidence intervals in summaries

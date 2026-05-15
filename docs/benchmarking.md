@@ -1,6 +1,6 @@
-# Benchmarking Axon Against Alternatives and Previous Code
+# Benchmarking Altum Against Alternatives and Previous Code
 
-This benchmark harness runs hard reasoning and algorithmic tasks (including Tower of Hanoi style tasks) across multiple Axon configurations and optionally a previous git ref.
+This benchmark harness runs hard reasoning and algorithmic tasks (including Tower of Hanoi style tasks) across multiple Altum configurations and optionally a previous git ref.
 
 ## Marimo Workflows (Recommended)
 
@@ -27,17 +27,17 @@ uv run --python .venv/bin/python marimo edit notebooks/benchmark_run_workflow.py
 uv run --python .venv/bin/python marimo edit notebooks/benchmark_results_analysis.py
 ```
 
-- PlanCraft workflow (Axon mode profiling inside PlanCraft text environment):
+- PlanCraft workflow (Altum mode profiling inside PlanCraft text environment):
 
 ```bash
-uv run --python .venv/bin/python marimo edit notebooks/plancraft_axon_benchmark.py
+uv run --python .venv/bin/python marimo edit notebooks/plancraft_altum_benchmark.py
 ```
 
 The notebooks emit JSON/CSV/Markdown artifacts under `benchmarks/` so paper tables and figures can be regenerated from dataframes.
 
 ## What It Compares
 
-Default modes in `scripts/benchmark_axon.py`:
+Default modes in `scripts/benchmark_altum.py`:
 
 - `current-default`: current binary, `--max-depth 0 --max-iterations 1`
 - `current-no-recursion-best-of-3`: current binary, `--max-depth 0 --max-iterations 3`
@@ -88,7 +88,7 @@ Set your API key and run:
 
 ```bash
 export SYNTHETIC_API_KEY=...
-python3 scripts/benchmark_axon.py \
+python3 scripts/benchmark_altum.py \
   --base-url "https://api.synthetic.new/openai/v1/" \
   --dataset benchmarks/rlm_hard_coding_planning.json \
   --runs 3 \
@@ -123,7 +123,7 @@ uv pip install --python .venv/bin/python datasets matplotlib marimo plancraft
 Run across multiple models (root and sub-model default to the same id):
 
 ```bash
-python3 scripts/benchmark_axon.py \
+python3 scripts/benchmark_altum.py \
   --base-url "https://api.synthetic.new/openai/v1/" \
   --dataset benchmarks/long_context_books_distractor.json \
   --model-list benchmarks/models_synthetic_mix.txt \
@@ -139,7 +139,7 @@ python3 scripts/benchmark_axon.py \
 Compare with previous code:
 
 ```bash
-python3 scripts/benchmark_axon.py \
+python3 scripts/benchmark_altum.py \
   --base-url "https://api.synthetic.new/openai/v1/" \
   --prev-ref 76265b0 \
   --runs 3 \
@@ -153,7 +153,7 @@ Retry controls:
 - `--attempts-per-run`: retries transient provider/transport failures while preserving one logical sample per run.
 - `--retry-backoff-s`: linear backoff base between retry attempts.
 
-Policy/depth controls forwarded to Axon:
+Policy/depth controls forwarded to Altum:
 
 - `--policy-profile`
 - `--inject-policy-into-context`
@@ -215,7 +215,7 @@ Use this to compare strategy variants and regressions over time.
 Optional markdown table output:
 
 ```bash
-python3 scripts/benchmark_axon.py ... --summary-md benchmarks/summary.md
+python3 scripts/benchmark_altum.py ... --summary-md benchmarks/summary.md
 ```
 
 For stable comparisons, avoid single-shot (`runs=1`) reports. Use `--runs 3` or higher and include CI bounds.
@@ -223,7 +223,7 @@ Use `--timeout 600` or higher to avoid undercounting slow but valid completions.
 
 ## Hugging Face Adapters
 
-Adapter scripts to generate deterministic Axon task JSON from HF datasets:
+Adapter scripts to generate deterministic Altum task JSON from HF datasets:
 
 - `scripts/adapt_hf_gsm8k.py`
 - `scripts/adapt_hf_mbpp_calls.py`
@@ -274,13 +274,13 @@ Interactive analysis with marimo:
 .venv/bin/marimo edit notebooks/benchmark_results_analysis.py
 ```
 
-Failure taxonomy analysis:
+Failure taltumomy analysis:
 
 ```bash
-.venv/bin/python scripts/failure_taxonomy.py \
+.venv/bin/python scripts/failure_taltumomy.py \
   benchmarks/overall-20260228-165727 \
-  --out-md benchmarks/overall-20260228-165727/failure-taxonomy.md \
-  --out-csv benchmarks/overall-20260228-165727/failure-taxonomy.csv
+  --out-md benchmarks/overall-20260228-165727/failure-taltumomy.md \
+  --out-csv benchmarks/overall-20260228-165727/failure-taltumomy.csv
 ```
 
 This writes a per-failure flat CSV and a Markdown report with:
@@ -302,7 +302,7 @@ Prompt-policy optimization:
 
 This harness is closest to a reasoning and planning benchmark with deterministic scoring. It is useful for:
 
-- comparing recursive vs non-recursive Axon modes,
+- comparing recursive vs non-recursive Altum modes,
 - measuring token/cost tradeoffs,
 - testing long-horizon state tracking and planning behavior.
 
@@ -316,7 +316,7 @@ It is not yet a full SWE-bench style patch benchmark. SWE-bench style evaluation
 Recommended next step for SWE-bench alignment:
 
 1. Add task adapters that provide a codebase snapshot in context.
-2. Ask Axon for patch output in unified diff format.
+2. Ask Altum for patch output in unified diff format.
 3. Apply patch in sandbox clone.
 4. Run project tests and score pass/fail.
 

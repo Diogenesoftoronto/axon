@@ -4,40 +4,40 @@ use std::path::PathBuf;
 use anyhow::{bail, Result};
 use clap::{Parser, Subcommand};
 use genai::adapter::AdapterKind;
-use genai::resolver::{AuthData, Endpoint, ServiceTargetResolver};
+use genai::resolver::{AuthData, AuthResolver, Endpoint, ServiceTargetResolver};
 use genai::{Client, ModelIden, ServiceTarget};
 
-use axon::mcp::McpServer;
-use axon::openai::OpenAiServer;
-use axon::policy::{DepthEnforcementMode, PolicyCatalog, RuntimePolicy};
-use axon::rlm::{Rlm, RlmConfig};
-use axon::store::ContextStore;
-use axon::tools::ToolRegistry;
+use altum::mcp::McpServer;
+use altum::openai::OpenAiServer;
+use altum::policy::{DepthEnforcementMode, PolicyCatalog, RuntimePolicy};
+use altum::rlm::{Rlm, RlmConfig};
+use altum::store::ContextStore;
+use altum::tools::ToolRegistry;
 
 #[derive(Debug, Parser)]
 #[command(
-    name = "axon",
+    name = "altum",
     about = "Recursive Language Model engine - one context, run everywhere"
 )]
 struct Cli {
     /// Root LLM model
-    #[arg(long, default_value = "hf:MiniMaxAI/MiniMax-M2.5")]
+    #[arg(long, default_value = "anthropic/claude-opus-4-6")]
     model: String,
 
     /// Sub-RLM model (used for recursive calls)
-    #[arg(long, default_value = "hf:MiniMaxAI/MiniMax-M2.5")]
+    #[arg(long, default_value = "anthropic/claude-opus-4-6")]
     sub_model: String,
 
-    /// Custom provider base URL (e.g. for Synthetic/MiniMax)
+    /// OpenAI-compatible provider base URL
     #[arg(
         long,
-        env = "AXON_BASE_URL",
-        default_value = "https://api.synthetic.new/openai/v1/"
+        env = "ALTUM_BASE_URL",
+        default_value = "https://bifrost.dio.computer/v1/"
     )]
     base_url: Option<String>,
 
     /// API key (overrides env var auto-detection)
-    #[arg(long, env = "AXON_API_KEY", hide_env_values = true)]
+    #[arg(long, env = "ALTUM_API_KEY", hide_env_values = true)]
     api_key: Option<String>,
 
     /// Max iterations per RLM level
@@ -142,6 +142,10 @@ enum Commands {
         /// Address to bind for the OpenAI-compatible HTTP server
         #[arg(long, default_value = "127.0.0.1:3000")]
         bind: SocketAddr,
+
+        /// OpenAI-compatible models endpoint to expose from /v1/models
+        #[arg(long, env = "ALTUM_MODELS_URL")]
+        models_url: Option<String>,
     },
 }
 
@@ -158,17 +162,29 @@ fn build_client(base_url: Option<&str>, api_key: Option<&str>) -> Client {
         let url = url.to_string();
         let key = api_key.map(|k| k.to_string());
 
-        let resolver = ServiceTargetResolver::from_resolver_fn(move |target: ServiceTarget| {
-            Ok(ServiceTarget {
-                endpoint: Endpoint::from_owned(url.clone()),
-                auth: key
-                    .as_ref()
-                    .map(|k| AuthData::from_single(k.clone()))
-                    .unwrap_or(target.auth),
-                model: ModelIden::new(AdapterKind::OpenAI, target.model.model_name),
+        let auth_resolver = key.as_ref().map(|k| {
+            let k = k.clone();
+            AuthResolver::from_resolver_fn(move |_model: ModelIden| {
+                Ok(Some(AuthData::from_single(k.clone())))
             })
         });
-        builder = builder.with_service_target_resolver(resolver);
+
+        let target_resolver =
+            ServiceTargetResolver::from_resolver_fn(move |target: ServiceTarget| {
+                Ok(ServiceTarget {
+                    endpoint: Endpoint::from_owned(url.clone()),
+                    auth: key
+                        .as_ref()
+                        .map(|k| AuthData::from_single(k.clone()))
+                        .unwrap_or(target.auth),
+                    model: ModelIden::new(AdapterKind::OpenAI, target.model.model_name),
+                })
+            });
+
+        if let Some(ar) = auth_resolver {
+            builder = builder.with_auth_resolver(ar);
+        }
+        builder = builder.with_service_target_resolver(target_resolver);
     } else if let Some(key) = api_key {
         let key = key.to_string();
         let resolver = ServiceTargetResolver::from_resolver_fn(move |mut target: ServiceTarget| {
@@ -214,7 +230,7 @@ async fn main() -> Result<()> {
         }
 
         Commands::Chat { ref thread } => {
-            eprintln!("Axon RLM - thread '{}'. Type 'exit' to quit.", thread);
+            eprintln!("Altum RLM - thread '{}'. Type 'exit' to quit.", thread);
             let stdin = std::io::stdin();
             loop {
                 eprint!("You: ");
@@ -291,7 +307,9 @@ async fn main() -> Result<()> {
             }
         }
 
-        Commands::ServeOpenAi { bind } => {
+        Commands::ServeOpenAi { bind, models_url } => {
+            let models_url =
+                models_url.or_else(|| cli.base_url.as_deref().map(models_url_for_base_url));
             let server = OpenAiServer::new(
                 client,
                 cli.model.clone(),
@@ -303,8 +321,9 @@ async fn main() -> Result<()> {
                 cli.trace_sandbox,
                 policy_catalog,
                 default_runtime_policy,
+                models_url,
             );
-            eprintln!("Axon OpenAI-compatible server listening on http://{bind}/v1");
+            eprintln!("Altum OpenAI-compatible server listening on http://{bind}/v1");
             server.serve(bind).await?;
         }
     }
@@ -327,6 +346,11 @@ fn make_rlm(client: &Client, cli: &Cli, depth: usize, runtime_policy: RuntimePol
     })
 }
 
+fn models_url_for_base_url(base_url: &str) -> String {
+    let trimmed = base_url.trim_end_matches('/');
+    format!("{trimmed}/models")
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -334,7 +358,7 @@ mod tests {
 
     #[test]
     fn test_serve_defaults_to_stdio() {
-        let cli = Cli::parse_from(["axon", "serve"]);
+        let cli = Cli::parse_from(["altum", "serve"]);
         let Commands::Serve {
             transport,
             bind,
@@ -352,7 +376,7 @@ mod tests {
     #[test]
     fn test_serve_accepts_streamable_http_flags() {
         let cli = Cli::parse_from([
-            "axon",
+            "altum",
             "--model",
             "hf:MiniMaxAI/MiniMax-M2.5",
             "serve",
@@ -380,27 +404,36 @@ mod tests {
 
     #[test]
     fn test_invalid_transport_fails() {
-        let err = Cli::try_parse_from(["axon", "serve", "--transport", "bogus"]).unwrap_err();
+        let err = Cli::try_parse_from(["altum", "serve", "--transport", "bogus"]).unwrap_err();
         assert!(err.to_string().contains("possible values"));
     }
 
     #[test]
     fn test_serve_openai_default_bind() {
-        let cli = Cli::parse_from(["axon", "serve-openai"]);
-        let Commands::ServeOpenAi { bind } = cli.command else {
+        let cli = Cli::parse_from(["altum", "serve-openai"]);
+        let Commands::ServeOpenAi { bind, models_url } = cli.command else {
             panic!("expected serve-openai command");
+        };
+
+        assert_eq!(bind, "127.0.0.1:3000".parse::<SocketAddr>().unwrap());
+        assert_eq!(models_url, None);
+    }
+
+    #[test]
+    fn test_serve_open_ai_alias() {
+        let cli = Cli::parse_from(["altum", "serve-open-ai"]);
+        let Commands::ServeOpenAi { bind, .. } = cli.command else {
+            panic!("expected serve-open-ai alias");
         };
 
         assert_eq!(bind, "127.0.0.1:3000".parse::<SocketAddr>().unwrap());
     }
 
     #[test]
-    fn test_serve_open_ai_alias() {
-        let cli = Cli::parse_from(["axon", "serve-open-ai"]);
-        let Commands::ServeOpenAi { bind } = cli.command else {
-            panic!("expected serve-open-ai alias");
-        };
-
-        assert_eq!(bind, "127.0.0.1:3000".parse::<SocketAddr>().unwrap());
+    fn test_models_url_for_base_url() {
+        assert_eq!(
+            models_url_for_base_url("https://bifrost.dio.computer/v1/"),
+            "https://bifrost.dio.computer/v1/models"
+        );
     }
 }

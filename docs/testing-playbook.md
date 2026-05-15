@@ -1,6 +1,6 @@
 # Testing Playbook
 
-This document lists the standard scripts and commands used to test Axon locally.
+This document lists the standard scripts and commands used to test Altum locally.
 
 ## 1) Core Build and Checks
 
@@ -16,7 +16,7 @@ cargo build --release -q
 ## 2) Functional Smoke Test (Synthetic)
 
 ```bash
-timeout 120 ./target/release/axon \
+timeout 120 ./target/release/altum \
   --base-url "https://api.synthetic.new/openai/v1/" \
   --api-key "$SYNTHETIC_API_KEY" \
   --max-depth 0 \
@@ -31,7 +31,7 @@ timeout 120 ./target/release/axon \
 Main script:
 
 ```bash
-python3 scripts/benchmark_axon.py --help
+python3 scripts/benchmark_altum.py --help
 ```
 
 Overall multi-suite wrapper:
@@ -43,7 +43,7 @@ scripts/run_overall_tests.sh
 Standard run:
 
 ```bash
-python3 scripts/benchmark_axon.py \
+python3 scripts/benchmark_altum.py \
   --base-url "https://api.synthetic.new/openai/v1/" \
   --runs 3 \
   --attempts-per-run 3 \
@@ -53,7 +53,7 @@ python3 scripts/benchmark_axon.py \
 Multi-model run (Synthetic model grid):
 
 ```bash
-python3 scripts/benchmark_axon.py \
+python3 scripts/benchmark_altum.py \
   --base-url "https://api.synthetic.new/openai/v1/" \
   --model-list benchmarks/models_synthetic_mix.txt \
   --pricing-from-models-api \
@@ -65,7 +65,7 @@ python3 scripts/benchmark_axon.py \
 With cost estimation:
 
 ```bash
-python3 scripts/benchmark_axon.py \
+python3 scripts/benchmark_altum.py \
   --base-url "https://api.synthetic.new/openai/v1/" \
   --prompt-cost-per-1m 0.30 \
   --completion-cost-per-1m 1.20 \
@@ -78,7 +78,7 @@ python3 scripts/benchmark_axon.py \
 ### Algorithmic set
 
 ```bash
-python3 scripts/benchmark_axon.py \
+python3 scripts/benchmark_altum.py \
   --base-url "https://api.synthetic.new/openai/v1/" \
   --dataset benchmarks/rlm_challenges.json \
   --runs 3 \
@@ -88,7 +88,7 @@ python3 scripts/benchmark_axon.py \
 ### Hard coding/planning set
 
 ```bash
-python3 scripts/benchmark_axon.py \
+python3 scripts/benchmark_altum.py \
   --base-url "https://api.synthetic.new/openai/v1/" \
   --dataset benchmarks/rlm_hard_coding_planning.json \
   --runs 3 \
@@ -98,7 +98,7 @@ python3 scripts/benchmark_axon.py \
 ### Long-horizon subset
 
 ```bash
-python3 scripts/benchmark_axon.py \
+python3 scripts/benchmark_altum.py \
   --base-url "https://api.synthetic.new/openai/v1/" \
   --dataset benchmarks/rlm_hard_coding_planning.json \
   --task-id long_horizon_incident_state \
@@ -110,7 +110,7 @@ python3 scripts/benchmark_axon.py \
 ### Hallucination guardrail set
 
 ```bash
-python3 scripts/benchmark_axon.py \
+python3 scripts/benchmark_altum.py \
   --base-url "https://api.synthetic.new/openai/v1/" \
   --dataset benchmarks/hallucination_guardrails.json \
   --runs 5 \
@@ -120,7 +120,7 @@ python3 scripts/benchmark_axon.py \
 ### Hard Codeforces-style set (Rust-only judging)
 
 ```bash
-python3 scripts/benchmark_axon.py \
+python3 scripts/benchmark_altum.py \
   --base-url "https://api.synthetic.new/openai/v1/" \
   --dataset benchmarks/codeforces_hard_like.json \
   --runs 3 \
@@ -130,7 +130,7 @@ python3 scripts/benchmark_axon.py \
 ### Long-context S-NIAH-style set
 
 ```bash
-python3 scripts/benchmark_axon.py \
+python3 scripts/benchmark_altum.py \
   --base-url "https://api.synthetic.new/openai/v1/" \
   --dataset benchmarks/long_context_sniah_xl.json \
   --runs 3 \
@@ -141,7 +141,7 @@ python3 scripts/benchmark_axon.py \
 ### Long-context books + distractor QA
 
 ```bash
-python3 scripts/benchmark_axon.py \
+python3 scripts/benchmark_altum.py \
   --base-url "https://api.synthetic.new/openai/v1/" \
   --dataset benchmarks/long_context_books_distractor.json \
   --model-list benchmarks/models_synthetic_mix.txt \
@@ -154,7 +154,7 @@ python3 scripts/benchmark_axon.py \
 ### Information-dense ledger aggregation
 
 ```bash
-python3 scripts/benchmark_axon.py \
+python3 scripts/benchmark_altum.py \
   --base-url "https://api.synthetic.new/openai/v1/" \
   --dataset benchmarks/information_dense_ledger.json \
   --model-list benchmarks/models_synthetic_mix.txt \
@@ -167,7 +167,7 @@ python3 scripts/benchmark_axon.py \
 ### Mode-profile targeted suite (Gemini-designed)
 
 ```bash
-python3 scripts/benchmark_axon.py \
+python3 scripts/benchmark_altum.py \
   --base-url "https://api.synthetic.new/openai/v1/" \
   --dataset benchmarks/mode_profile_targeted.json \
   --runs 3 \
@@ -180,7 +180,7 @@ python3 scripts/benchmark_axon.py \
 Compare current code against an earlier git ref:
 
 ```bash
-python3 scripts/benchmark_axon.py \
+python3 scripts/benchmark_altum.py \
   --base-url "https://api.synthetic.new/openai/v1/" \
   --prev-ref 76265b0 \
   --runs 3 \
@@ -196,13 +196,13 @@ Benchmark outputs are written to:
 Or use explicit output path:
 
 ```bash
-python3 scripts/benchmark_axon.py ... --out benchmarks/results/results-custom.json
+python3 scripts/benchmark_altum.py ... --out benchmarks/results/results-custom.json
 ```
 
 Write markdown summary table too:
 
 ```bash
-python3 scripts/benchmark_axon.py ... \
+python3 scripts/benchmark_altum.py ... \
   --out benchmarks/results/results-custom.json \
   --summary-md benchmarks/results/summary-custom.md
 ```
@@ -224,7 +224,7 @@ export SYNTHETIC_API_KEY=...
 - For long suites, prefer `PYTHONUNBUFFERED=1` to stream progress:
 
 ```bash
-env PYTHONUNBUFFERED=1 python3 scripts/benchmark_axon.py ...
+env PYTHONUNBUFFERED=1 python3 scripts/benchmark_altum.py ...
 ```
 
 - Use at least `--timeout 600` (10 minutes) for research-grade runs; shorter values can bias mode comparisons.
@@ -242,7 +242,7 @@ MAX_PARALLEL=3 RUN_NON_CI_TASKS=1 scripts/run_overall_tests.sh
 
 ## 8) Hugging Face Dataset Adaptation
 
-Generate deterministic Axon JSON tasks from HF datasets:
+Generate deterministic Altum JSON tasks from HF datasets:
 
 ```bash
 python3 scripts/adapt_hf_gsm8k.py --split test --limit 100 --out benchmarks/hf_gsm8k_100.json

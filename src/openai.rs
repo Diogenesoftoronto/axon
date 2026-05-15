@@ -21,11 +21,13 @@ use crate::store::ContextStore;
 #[derive(Clone)]
 pub struct OpenAiServer {
     service: RlmService,
+    models_url: Option<String>,
 }
 
 #[derive(Clone)]
 struct OpenAiState {
     service: RlmService,
+    models_url: Option<String>,
 }
 
 #[derive(Debug, Deserialize)]
@@ -81,20 +83,6 @@ enum ResponseInput {
     Messages(Vec<OpenAiMessage>),
 }
 
-#[derive(Debug, Serialize)]
-struct ModelsResponse {
-    object: &'static str,
-    data: Vec<ModelInfo>,
-}
-
-#[derive(Debug, Serialize)]
-struct ModelInfo {
-    id: String,
-    object: &'static str,
-    created: u64,
-    owned_by: &'static str,
-}
-
 impl OpenAiServer {
     #[allow(clippy::too_many_arguments)]
     pub fn new(
@@ -108,6 +96,7 @@ impl OpenAiServer {
         trace_sandbox: bool,
         policy_catalog: crate::policy::PolicyCatalog,
         default_runtime_policy: RuntimePolicy,
+        models_url: Option<String>,
     ) -> Self {
         Self {
             service: RlmService::new(
@@ -122,12 +111,14 @@ impl OpenAiServer {
                 policy_catalog,
                 default_runtime_policy,
             ),
+            models_url,
         }
     }
 
     pub async fn serve(self, bind_addr: SocketAddr) -> Result<()> {
         let state = Arc::new(OpenAiState {
             service: self.service,
+            models_url: self.models_url,
         });
         let app = Router::new()
             .route("/v1/models", get(list_models))
@@ -142,18 +133,17 @@ impl OpenAiServer {
 
 async fn list_models(State(state): State<Arc<OpenAiState>>) -> Response {
     let created = unix_timestamp();
-    json_response(
-        StatusCode::OK,
-        &ModelsResponse {
-            object: "list",
-            data: vec![ModelInfo {
-                id: state.service.model.clone(),
-                object: "model",
-                created,
-                owned_by: "axon",
-            }],
-        },
-    )
+    if let Some(url) = state.models_url.as_deref() {
+        match fetch_models(url, created).await {
+            Ok(models) => return json_response(StatusCode::OK, &models),
+            Err(err) if state.service.verbose => {
+                eprintln!("failed to fetch models from {url}: {err}");
+            }
+            Err(_) => {}
+        }
+    }
+
+    json_response(StatusCode::OK, &fallback_models(&state.service, created))
 }
 
 async fn chat_completions(
@@ -295,7 +285,7 @@ fn thread_id(
     headers: &HeaderMap,
 ) -> String {
     if let Some(value) = headers
-        .get("x-axon-thread")
+        .get("x-altum-thread")
         .and_then(|value| value.to_str().ok())
         .filter(|value| !value.trim().is_empty())
     {
@@ -312,6 +302,60 @@ fn thread_id(
         .unwrap_or("default")
         .trim()
         .to_string()
+}
+
+async fn fetch_models(url: &str, fallback_created: u64) -> Result<Value> {
+    let value = reqwest::get(url).await?.error_for_status()?.json().await?;
+    normalize_models_response(value, fallback_created)
+}
+
+fn normalize_models_response(mut value: Value, fallback_created: u64) -> Result<Value> {
+    let Some(data) = value.get_mut("data").and_then(Value::as_array_mut) else {
+        anyhow::bail!("models response missing data array");
+    };
+
+    for model in data {
+        if let Some(object) = model.as_object_mut() {
+            object
+                .entry("object".to_string())
+                .or_insert_with(|| Value::String("model".to_string()));
+            object
+                .entry("created".to_string())
+                .or_insert_with(|| Value::Number(fallback_created.into()));
+            object
+                .entry("owned_by".to_string())
+                .or_insert_with(|| Value::String("bifrost".to_string()));
+        }
+    }
+
+    if let Some(object) = value.as_object_mut() {
+        object
+            .entry("object".to_string())
+            .or_insert_with(|| Value::String("list".to_string()));
+    }
+
+    Ok(value)
+}
+
+fn fallback_models(service: &RlmService, created: u64) -> Value {
+    let mut ids = vec![service.model.clone()];
+    if service.sub_model != service.model {
+        ids.push(service.sub_model.clone());
+    }
+    ids.sort();
+    ids.dedup();
+
+    json!({
+        "object": "list",
+        "data": ids.into_iter().map(|id| {
+            json!({
+                "id": id,
+                "object": "model",
+                "created": created,
+                "owned_by": "altum"
+            })
+        }).collect::<Vec<_>>()
+    })
 }
 
 fn chat_json_response(state: &OpenAiState, request_model: Option<&str>, answer: &str) -> Response {
@@ -517,7 +561,7 @@ mod tests {
     #[test]
     fn thread_id_prefers_header_then_metadata_then_user() {
         let mut headers = HeaderMap::new();
-        headers.insert("x-axon-thread", "header-thread".parse().unwrap());
+        headers.insert("x-altum-thread", "header-thread".parse().unwrap());
         let mut metadata = HashMap::new();
         metadata.insert(
             "thread_id".to_string(),
@@ -550,5 +594,22 @@ mod tests {
         ];
 
         assert_eq!(render_messages(&messages), "SYSTEM: be terse\nUSER: hello");
+    }
+
+    #[test]
+    fn normalize_models_response_adds_openai_model_fields() {
+        let value = json!({
+            "data": [{
+                "id": "anthropic/claude-sonnet-4-6",
+                "name": "Claude Sonnet 4.6"
+            }]
+        });
+
+        let normalized = normalize_models_response(value, 123).unwrap();
+        assert_eq!(normalized["object"], "list");
+        assert_eq!(normalized["data"][0]["id"], "anthropic/claude-sonnet-4-6");
+        assert_eq!(normalized["data"][0]["object"], "model");
+        assert_eq!(normalized["data"][0]["created"], 123);
+        assert_eq!(normalized["data"][0]["owned_by"], "bifrost");
     }
 }

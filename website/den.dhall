@@ -1,11 +1,11 @@
--- Axon website — static site served via Python http.server on port 8080
+-- Altum website — static site served via Python http.server on port 8080
 
 let Types = /home/diogenes/Projects/den/dhall/Types.dhall
 
 let Defaults = /home/diogenes/Projects/den/dhall/default.dhall
 
-in  { name = "axon"
-    , backend = Types.Backend.Nix
+in  { name = "den-altum"
+    , backend = Types.Backend.Railway
     , dockerfile = None Text
     , restartPolicy = Some Types.RestartPolicy.Always
     , healthcheck = None Types.Healthcheck
@@ -26,8 +26,8 @@ in  { name = "axon"
       , extraConfig = None Text
       }
     , environment =
-        [ { mapKey = "DEN_NAME",    mapValue = "den-axon" }
-        , { mapKey = "DEN_BACKEND", mapValue = "nix" }
+        [ { mapKey = "DEN_NAME",    mapValue = "den-altum" }
+        , { mapKey = "DEN_BACKEND", mapValue = "railway" }
         ]
     , domains = [] : List Text
     }

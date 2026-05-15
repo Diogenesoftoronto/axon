@@ -50,8 +50,8 @@ jobs:
         shell: bash
         run: |
           mkdir -p release-assets
-          src="target/${{ matrix.target }}/release/axon${{ matrix.bin_ext }}"
-          dst="release-assets/axon-${{ github.ref_name }}-${{ matrix.target }}${{ matrix.bin_ext }}"
+          src="target/${{ matrix.target }}/release/altum${{ matrix.bin_ext }}"
+          dst="release-assets/altum-${{ github.ref_name }}-${{ matrix.target }}${{ matrix.bin_ext }}"
           cp "$src" "$dst"
 
       - name: Upload artifact

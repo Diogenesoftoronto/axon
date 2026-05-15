@@ -123,7 +123,7 @@ impl RuntimePolicy {
             return context.to_string();
         }
         format!(
-            "[[AXON_POLICY_BEGIN]]\n{}\n[[AXON_POLICY_END]]\n\n{}",
+            "[[ALTUM_POLICY_BEGIN]]\n{}\n[[ALTUM_POLICY_END]]\n\n{}",
             policy_text.trim(),
             context
         )

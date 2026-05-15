@@ -3,30 +3,30 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Axon: Your LLM's LLM</title>
-  <meta name="description" content="Axon is a Recursive Language Model engine built in Rust. When your LLM runs out of context, it spawns a child. That child can spawn another. Turtles all the way down." />
+  <title>Altum: Your LLM's LLM</title>
+  <meta name="description" content="Altum is a Recursive Language Model engine built in Rust. When your LLM runs out of context, it spawns a child. That child can spawn another. Turtles all the way down." />
 
   <!-- Canonical -->
-  <link rel="canonical" href="https://axon.dio.computer" />
+  <link rel="canonical" href="https://altum.dio.computer" />
 
   <!-- Open Graph (Facebook, Discord, LinkedIn, Slack) -->
   <meta property="og:type"        content="website" />
-  <meta property="og:url"         content="https://axon.dio.computer" />
-  <meta property="og:site_name"   content="Axon" />
-  <meta property="og:title"       content="Axon: Your LLM's LLM" />
+  <meta property="og:url"         content="https://altum.dio.computer" />
+  <meta property="og:site_name"   content="Altum" />
+  <meta property="og:title"       content="Altum: Your LLM's LLM" />
   <meta property="og:description" content="A Recursive Language Model engine built in Rust. When your LLM runs out of context, it spawns a child agent with its own sandbox. That child can spawn another. Turtles all the way down." />
-  <meta property="og:image"       content="https://axon.dio.computer/og-image.png" />
+  <meta property="og:image"       content="https://altum.dio.computer/og-image.png" />
   <meta property="og:image:type"  content="image/png" />
   <meta property="og:image:width" content="1200" />
   <meta property="og:image:height" content="630" />
-  <meta property="og:image:alt"   content="Axon: We need to go deeper. Your LLM's LLM." />
+  <meta property="og:image:alt"   content="Altum: We need to go deeper. Your LLM's LLM." />
 
   <!-- Twitter / X Card -->
   <meta name="twitter:card"        content="summary_large_image" />
-  <meta name="twitter:title"       content="Axon: Your LLM's LLM" />
+  <meta name="twitter:title"       content="Altum: Your LLM's LLM" />
   <meta name="twitter:description" content="A Recursive Language Model engine built in Rust. Sandboxed Python REPL at every depth. Multi-provider. Open source." />
-  <meta name="twitter:image"       content="https://axon.dio.computer/og-image.png" />
-  <meta name="twitter:image:alt"   content="Axon: We need to go deeper. Your LLM's LLM." />
+  <meta name="twitter:image"       content="https://altum.dio.computer/og-image.png" />
+  <meta name="twitter:image:alt"   content="Altum: We need to go deeper. Your LLM's LLM." />
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -964,7 +964,7 @@
 <nav>
   <a href="#" class="nav-logo">
     <span class="nav-logo-dot"></span>
-    axon
+    altum
   </a>
   <ul class="nav-links">
     <li><a href="#how">How it works</a></li>
@@ -974,7 +974,7 @@
     <li><a href="changelog.html">Changelog</a></li>
     <li><a href="/paper.pdf" target="_blank">Paper</a></li>
   </ul>
-  <a href="https://github.com/Diogenesoftoronto/axon" class="nav-cta">GitHub ↗</a>
+  <a href="https://github.com/Diogenesoftoronto/altum" class="nav-cta">GitHub ↗</a>
 </nav>
 
 
@@ -987,7 +987,7 @@
       <h1 class="hero-h1">We need to<br><span>go deeper.</span></h1>
       <p class="hero-tagline">// Your LLM's LLM.</p>
       <p class="hero-desc">
-        Axon is a <strong>Recursive Language Model engine</strong>. When your LLM runs out of context,
+        Altum is a <strong>Recursive Language Model engine</strong>. When your LLM runs out of context,
         it spawns a child agent with its own isolated sandbox. That child can spawn another.
         <strong>It is turtles all the way down until you have your answer.</strong>
       </p>
@@ -1020,7 +1020,7 @@
         <span class="terminal-dot dot-red"></span>
         <span class="terminal-dot dot-amber"></span>
         <span class="terminal-dot dot-green"></span>
-        <span class="terminal-title">axon · depth=3 · claude-sonnet-4</span>
+        <span class="terminal-title">altum · depth=3 · claude-sonnet-4</span>
       </div>
       <div class="terminal-body" id="terminal-body">
         <span class="cursor" id="terminal-cursor"></span>
@@ -1046,7 +1046,7 @@
           the parts that didn't fit. The model runs out of brain.
         </p>
         <p>
-          Axon gives it more. When context overflows, the model calls <code>llm_query()</code>
+          Altum gives it more. When context overflows, the model calls <code>llm_query()</code>
           and a fresh sub-agent spawns with its own workspace. Divide. Delegate. Conquer.
         </p>
       </div>
@@ -1064,7 +1064,7 @@
             </div>
             <div class="context-bar-label" style="color: var(--red)">⚠ truncated · quality collapse · hallucination risk</div>
 
-            <div style="margin-top: 1.5rem;" class="context-bar-label">With Axon using recursive delegation</div>
+            <div style="margin-top: 1.5rem;" class="context-bar-label">With Altum using recursive delegation</div>
             <div class="context-bar">
               <div class="context-bar-fill bar-green" style="width:28%" id="bar-rec-root"></div>
               <span class="context-bar-text" style="color:var(--bg)">depth:0 · 35K</span>
@@ -1107,7 +1107,7 @@
       <span class="label">Architecture</span>
       <h2>Strange loops,<br>all the way down.</h2>
       <p>
-        Axon implements true recursive LLM execution. Each depth level is a complete agent
+        Altum implements true recursive LLM execution. Each depth level is a complete agent
         with its own Python sandbox. This is a full sub-brain rather than a simple prompt chain or tool call.
       </p>
     </div>
@@ -1126,7 +1126,7 @@
           <div class="step-content">
             <h3>Delegate to a sub-agent</h3>
             <p>When the model needs deeper reasoning, it calls <code>llm_query(chunk)</code>.
-            Axon spawns a <strong>full child RLM at depth:1</strong> with an isolated sandbox.
+            Altum spawns a <strong>full child RLM at depth:1</strong> with an isolated sandbox.
             The parent waits. The child thinks.</p>
           </div>
         </div>
@@ -1281,7 +1281,7 @@
         <h3>MCP Integration</h3>
         <p>
           Native <strong>Model Context Protocol</strong> server.
-          Use Axon as a tool inside Claude Code, any MCP-compatible agent,
+          Use Altum as a tool inside Claude Code, any MCP-compatible agent,
           or your own agentic workflow. Recursive reasoning as a service.
         </p>
         <span class="feature-tag">mcp · claude-code</span>
@@ -1409,7 +1409,7 @@
         We show confidence intervals because <strong>n=15 is a hypothesis rather than a proof</strong>.
         Codeforces-hard tasks still show 0% across all modes. We report that too.
         <br><br>
-        <a href="https://github.com/Diogenesoftoronto/axon/tree/main/benchmarks" style="color: var(--amber); font-family: var(--font-mono); font-size: 0.8rem;">
+        <a href="https://github.com/Diogenesoftoronto/altum/tree/main/benchmarks" style="color: var(--amber); font-family: var(--font-mono); font-size: 0.8rem;">
           View full benchmark suite →
         </a>
       </div>
@@ -1471,7 +1471,7 @@
         <h2>Up and running<br>in 60 seconds.</h2>
         <p>
           Build from source with Cargo. Set your API key. Pick a model.
-          Axon handles recursion, sandboxing, and context management.
+          Altum handles recursion, sandboxing, and context management.
         </p>
         <p>
           Need Claude Code integration? The MCP server is built in.
@@ -1499,8 +1499,8 @@
               <button class="code-block-copy" onclick="copyCode('install')">copy</button>
             </div>
             <pre id="code-install"><span class="cmt"># clone and build</span>
-git clone https://github.com/Diogenesoftoronto/axon
-cd axon
+git clone https://github.com/Diogenesoftoronto/altum
+cd altum
 cargo build --release
 
 <span class="cmt"># set your API key</span>
@@ -1516,18 +1516,18 @@ export GEMINI_API_KEY=<span class="str">"AIza..."</span></pre>
               <button class="code-block-copy" onclick="copyCode('basic')">copy</button>
             </div>
             <pre id="code-basic"><span class="cmt"># run a one-shot query with recursion depth 2</span>
-./target/release/axon run \
+./target/release/altum run \
   <span class="flag">--model</span> <span class="val">claude-sonnet-4</span> \
   <span class="flag">--max-depth</span> <span class="val">2</span> \
   <span class="flag">--query</span> <span class="str">"Analyze this document..."</span>
 
 <span class="cmt"># interactive chat mode with thread persistence</span>
-./target/release/axon chat \
+./target/release/altum chat \
   <span class="flag">--model</span> <span class="val">gemini-2.0-flash</span> \
   <span class="flag">--thread</span> <span class="val">my-project</span>
 
 <span class="cmt"># upload context from file</span>
-./target/release/axon upload \
+./target/release/altum upload \
   <span class="flag">--thread</span> <span class="val">my-project</span> \
   <span class="flag">--file</span> <span class="val">big-doc.txt</span></pre>
           </div>
@@ -1537,7 +1537,7 @@ export GEMINI_API_KEY=<span class="str">"AIza..."</span></pre>
               <button class="code-block-copy" onclick="copyCode('advanced')">copy</button>
             </div>
             <pre id="code-advanced"><span class="cmt"># deep recursion with strict depth enforcement</span>
-axon run \
+altum run \
   <span class="flag">--model</span> <span class="val">gpt-4o</span> \
   <span class="flag">--max-depth</span> <span class="val">4</span> \
   <span class="flag">--depth-enforcement</span> <span class="val">strict</span> \
@@ -1545,7 +1545,7 @@ axon run \
   <span class="flag">--query</span> <span class="str">"..."</span>
 
 <span class="cmt"># enable checkpoints, forks, and VFS</span>
-axon run \
+altum run \
   <span class="flag">--enable-checkpoints</span> \
   <span class="flag">--enable-forks</span> \
   <span class="flag">--enable-vfs</span> \
@@ -1554,7 +1554,7 @@ axon run \
   <span class="flag">--query</span> <span class="str">"..."</span>
 
 <span class="cmt"># verbose mode to see every thought</span>
-axon run <span class="flag">--verbose</span> <span class="flag">--model</span> <span class="val">gemini-flash</span> <span class="flag">--query</span> <span class="str">"..."</span></pre>
+altum run <span class="flag">--verbose</span> <span class="flag">--model</span> <span class="val">gemini-flash</span> <span class="flag">--query</span> <span class="str">"..."</span></pre>
           </div>
           <div class="code-pane" id="pane-mcp">
             <div class="code-block-header">
@@ -1564,8 +1564,8 @@ axon run <span class="flag">--verbose</span> <span class="flag">--model</span> <
             <pre id="code-mcp"><span class="cmt">// .claude/settings.json for Claude Code integration</span>
 {
   <span class="kw">"mcpServers"</span>: {
-    <span class="kw">"axon"</span>: {
-      <span class="kw">"command"</span>: <span class="str">"/path/to/axon"</span>,
+    <span class="kw">"altum"</span>: {
+      <span class="kw">"command"</span>: <span class="str">"/path/to/altum"</span>,
       <span class="kw">"args"</span>: [<span class="str">"mcp"</span>],
       <span class="kw">"env"</span>: {
         <span class="kw">"ANTHROPIC_API_KEY"</span>: <span class="str">"sk-ant-..."</span>
@@ -1588,7 +1588,7 @@ axon run <span class="flag">--verbose</span> <span class="flag">--model</span> <
       "The system knows itself. The loop is <em>strange</em>. The answer emerges."
     </div>
     <div class="quote-attr reveal reveal-delay-1">
-      Inspired by Douglas Hofstadter, <em>Gödel, Escher, Bach</em> (1979) · and now, Axon (2025)
+      Inspired by Douglas Hofstadter, <em>Gödel, Escher, Bach</em> (1979) · and now, Altum (2025)
     </div>
   </div>
 </section>
@@ -1598,15 +1598,15 @@ axon run <span class="flag">--verbose</span> <span class="flag">--model</span> <
 <footer>
   <div class="footer-inner">
     <div>
-      <div class="footer-logo">axon</div>
+      <div class="footer-logo">altum</div>
       <div class="footer-byline">Recursive Language Model Engine · Open Source</div>
     </div>
     <ul class="footer-links">
-      <li><a href="https://github.com/Diogenesoftoronto/axon">GitHub</a></li>
+      <li><a href="https://github.com/Diogenesoftoronto/altum">GitHub</a></li>
       <li><a href="changelog.html">Changelog</a></li>
-      <li><a href="https://github.com/Diogenesoftoronto/axon/tree/main/docs">Docs</a></li>
-      <li><a href="https://github.com/Diogenesoftoronto/axon/tree/main/benchmarks">Benchmarks</a></li>
-      <li><a href="https://github.com/Diogenesoftoronto/axon/blob/main/README.md">README</a></li>
+      <li><a href="https://github.com/Diogenesoftoronto/altum/tree/main/docs">Docs</a></li>
+      <li><a href="https://github.com/Diogenesoftoronto/altum/tree/main/benchmarks">Benchmarks</a></li>
+      <li><a href="https://github.com/Diogenesoftoronto/altum/blob/main/README.md">README</a></li>
       <li><a href="/paper.pdf">Paper</a></li>
     </ul>
     <div class="footer-rust">
@@ -1620,7 +1620,7 @@ axon run <span class="flag">--verbose</span> <span class="flag">--model</span> <
 <script>
   /* ─── Terminal animation ────────────────────────────────── */
   const lines = [
-    { text: '$ axon run --model claude-sonnet-4 --max-depth 3 \\', cls: 't-cmd' },
+    { text: '$ altum run --model claude-sonnet-4 --max-depth 3 \\', cls: 't-cmd' },
     { text: '    --query "trace the causal chain across this corpus"', cls: 't-cmd' },
     { text: '', cls: 't-blank' },
     { text: '[depth:0] Context received. 47,293 tokens.', cls: 't-d0' },

@@ -1,6 +1,6 @@
 # Fork, Checkpoint, and VFS Extension (Potential Feature)
 
-This document proposes a workflow extension for Axon where the agent can:
+This document proposes a workflow extension for Altum where the agent can:
 
 1. Fork reasoning into multiple candidate paths.
 2. Checkpoint state at meaningful milestones.
@@ -13,7 +13,7 @@ The goal is to improve reliability on hard tasks without forcing one linear chai
 
 Current flow is iteration-based and mostly linear. If the model picks a weak strategy early, recovery is expensive.
 
-A fork and checkpoint flow allows Axon to:
+A fork and checkpoint flow allows Altum to:
 
 - explore alternatives in parallel or sequence,
 - compare outcomes using explicit criteria,

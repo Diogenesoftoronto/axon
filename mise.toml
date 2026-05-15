@@ -29,7 +29,7 @@ run = [
 [tasks.bench-quick]
 description = "Quick single-model benchmark on mode_profile_targeted (requires SYNTHETIC_API_KEY)"
 run = '''
-env PYTHONUNBUFFERED=1 python3 scripts/benchmark_axon.py \
+env PYTHONUNBUFFERED=1 python3 scripts/benchmark_altum.py \
   --base-url "https://api.synthetic.new/openai/v1/" \
   --dataset benchmarks/mode_profile_targeted.json \
   --model "hf:MiniMaxAI/MiniMax-M2.5" \
@@ -40,7 +40,7 @@ env PYTHONUNBUFFERED=1 python3 scripts/benchmark_axon.py \
 [tasks.bench]
 description = "Research-grade benchmark run on mode_profile_targeted (requires SYNTHETIC_API_KEY)"
 run = '''
-env PYTHONUNBUFFERED=1 python3 scripts/benchmark_axon.py \
+env PYTHONUNBUFFERED=1 python3 scripts/benchmark_altum.py \
   --base-url "https://api.synthetic.new/openai/v1/" \
   --dataset benchmarks/mode_profile_targeted.json \
   --runs 3 \

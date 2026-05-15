@@ -1,7 +1,8 @@
 [package]
-name = "axon"
+name = "altum"
 version = "0.1.0"
 edition = "2021"
+rust-version = "1.95"
 
 [dependencies]
 ouros = { git = "https://github.com/parcadei/ouros" }
@@ -14,6 +15,7 @@ regex = "1"
 anyhow = "1"
 arc-swap = "1.7"
 axum = { version = "0.8", default-features = false, features = ["http1", "json", "tokio"] }
+reqwest = { version = "0.13", default-features = false, features = ["json", "rustls"] }
 rmcp = { version = "=1.4.0", features = ["schemars", "server", "transport-io", "transport-streamable-http-server", "transport-streamable-http-server-session"] }
 
 [dev-dependencies]

@@ -1,4 +1,4 @@
-# Axon
+# Altum
 
 ***One context, run everywhere.***
 
@@ -6,7 +6,7 @@
 
 Built on the [Recursive Language Model](https://arxiv.org/abs/2512.24601v1) framework where LLMs offload context into a REPL environment and recursively call sub-LLMs to decompose complex tasks.
 
-Axon uses **ouros** (a sandboxed Python runtime in Rust) for safe code execution and **genai** for unified access to OpenAI, Anthropic, Gemini, Ollama, and custom providers. When the RLM calls `llm_query()`, it spawns a **full sub-RLM at the next depth level** - each with its own sandbox - enabling true recursive reasoning.
+Altum uses **ouros** (a sandboxed Python runtime in Rust) for safe code execution and **genai** for unified access to OpenAI, Anthropic, Gemini, Ollama, and custom providers. When the RLM calls `llm_query()`, it spawns a **full sub-RLM at the next depth level** - each with its own sandbox - enabling true recursive reasoning.
 
 ## Architecture
 
@@ -16,7 +16,7 @@ Claude Code / User
   └─ MCP (stdio or streamable HTTP) or CLI
       │
       ▼
-Axon RLM Engine (Rust)
+Altum RLM Engine (Rust)
   │
   ├─ chat_rlm_query(query, thread_id)
   │     ├─ reads context from local filesystem: data/{thread_id}/context.txt
@@ -49,51 +49,78 @@ Axon RLM Engine (Rust)
 cargo build --release
 ```
 
+### Install From crates.io
+
+Once Altum is published to crates.io:
+
+```bash
+cargo install altum
+```
+
+Then use the installed `altum` binary directly:
+
+```bash
+altum --help
+```
+
 ### Install From GitHub Releases
 
 Download a prebuilt binary from the latest release:
 
 ```bash
-gh release download --repo Diogenesoftoronto/axon --pattern "axon-*" --dir .
+gh release download --repo Diogenesoftoronto/altum --pattern "altum-*" --dir .
 ```
 
 You can also download a specific version:
 
 ```bash
-gh release download v0.1.0 --repo Diogenesoftoronto/axon --pattern "axon-*"
+gh release download v0.1.0 --repo Diogenesoftoronto/altum --pattern "altum-*"
 ```
 
 ### Usage
 
 **One-shot query against a context file:**
 ```bash
-cargo run -- --base-url https://api.synthetic.com/v1 query "What is the magic number?" --context path/to/context.txt
+cargo run -- query "What is the magic number?" --context path/to/context.txt
+# After publishing/installing:
+altum query "What is the magic number?" --context path/to/context.txt
 ```
 
 **Interactive chat with persistent thread context:**
 ```bash
 cargo run -- chat --thread myproject
+# After publishing/installing:
+altum chat --thread myproject
 ```
 
 **Store context for later queries:**
 ```bash
 cargo run -- store transcript.txt --thread myproject
 cat session.txt | cargo run -- store - --thread myproject
+# After publishing/installing:
+altum store transcript.txt --thread myproject
+cat session.txt | altum store - --thread myproject
 ```
 
 **Run as MCP server over stdio (for Claude Code):**
 ```bash
 cargo run -- serve
+# After publishing/installing:
+altum serve
 ```
 
 **Run as MCP server over streamable HTTP:**
 ```bash
 cargo run -- serve --transport streamable-http --bind 127.0.0.1:3000 --path /mcp
+# After publishing/installing:
+altum serve --transport streamable-http --bind 127.0.0.1:3000 --path /mcp
 ```
 
 **Run as an OpenAI-compatible server for agent `base_url` integrations:**
 ```bash
 cargo run -- serve-openai --bind 127.0.0.1:3000
+# After publishing/installing:
+altum serve-openai --bind 127.0.0.1:3000
 ```
 
 Then point an OpenAI-compatible agent at:
@@ -102,26 +129,32 @@ Then point an OpenAI-compatible agent at:
 http://127.0.0.1:3000/v1
 ```
 
-Axon supports `POST /v1/chat/completions`, `POST /v1/responses`, and
+Altum supports `POST /v1/chat/completions`, `POST /v1/responses`, and
 `GET /v1/models`. Persistent RLM memory uses `metadata.thread_id`,
-`X-Axon-Thread`, or the OpenAI `user` field, falling back to `default`.
+`X-Altum-Thread`, or the OpenAI `user` field, falling back to `default`.
+
+By default, Altum connects to the Railway-hosted Bifrost gateway at
+`https://bifrost.dio.computer/v1/` and mirrors
+`https://bifrost.dio.computer/v1/models` from its own `/v1/models` endpoint.
+Override this with `--base-url` and `--models-url` if you want to point Altum at
+another OpenAI-compatible provider.
 
 ### Claude Code Integration
 
 ```bash
-claude mcp add axon --transport stdio -- /path/to/target/release/axon serve
+claude mcp add altum --transport stdio -- /path/to/target/release/altum serve
 ```
 
 ## CLI Reference
 
 ```
-axon [OPTIONS] <COMMAND>
+altum [OPTIONS] <COMMAND>
 
 Options:
-  --model <MODEL>           Root LLM model [default: hf:minimax/minimax-m2.5]
-  --sub-model <MODEL>       Sub-RLM model [default: hf:minimax/minimax-m2.5]
-  --base-url <URL>          Custom provider base URL (for Synthetic/MiniMax/etc.)
-  --api-key <KEY>           API key (or set AXON_API_KEY env var)
+  --model <MODEL>           Root LLM model [default: anthropic/claude-sonnet-4-6]
+  --sub-model <MODEL>       Sub-RLM model [default: anthropic/claude-haiku-4-5-20251001]
+  --base-url <URL>          OpenAI-compatible provider base URL [default: https://bifrost.dio.computer/v1/]
+  --api-key <KEY>           API key (or set ALTUM_API_KEY env var)
   --max-iterations <N>      Max iterations per RLM level [default: 10]
   --max-depth <N>           Max recursion depth [default: 2]
   --policy-profile <NAME>   Prompt policy profile [default: baseline]
@@ -157,11 +190,12 @@ Commands:
 
 ```text
   --bind <HOST:PORT>                   Bind address [default: 127.0.0.1:3000]
+  --models-url <URL>                   Models endpoint to expose from /v1/models
 ```
 
 ## Multi-Provider Support
 
-Axon uses the [genai](https://github.com/jeremychone/rust-genai) crate for LLM access. Providers are auto-detected from model names:
+Altum uses the [genai](https://github.com/jeremychone/rust-genai) crate for LLM access. Providers are auto-detected from model names:
 
 | Model prefix | Provider | Env var |
 |---|---|---|
@@ -171,10 +205,27 @@ Axon uses the [genai](https://github.com/jeremychone/rust-genai) crate for LLM a
 | `grok*` | xAI | `XAI_API_KEY` |
 | Custom/unknown | Ollama (local) | - |
 
-For custom providers (like Synthetic), use `--base-url` to set the endpoint:
+The default endpoint is the Railway-hosted Bifrost gateway:
+
 ```bash
-export AXON_API_KEY=sk-...
-axon --base-url https://api.synthetic.com/v1 --model minimax query "hello"
+export ALTUM_API_KEY=sk-...
+altum query "hello"
+```
+
+For another OpenAI-compatible provider, use `--base-url` to set the endpoint:
+
+```bash
+export ALTUM_API_KEY=sk-...
+altum --base-url https://api.synthetic.com/v1 --model minimax query "hello"
+```
+
+When serving Altum as an OpenAI-compatible endpoint, the models list is fetched
+from `<base-url>/models` by default:
+
+```bash
+altum serve-openai \
+  --bind 127.0.0.1:3000 \
+  --models-url https://bifrost.dio.computer/v1/models
 ```
 
 ## MCP Tools
@@ -206,7 +257,7 @@ Upload a transcript to persistent memory.
 ## Project Structure
 
 ```text
-axon/
+altum/
 ├── Cargo.toml
 ├── src/
 │   ├── main.rs        # CLI entry point (query, chat, store, serve)
@@ -222,7 +273,7 @@ axon/
 └── data/              # Persistent context (created at runtime)
 ```
 
-## Extending Axon
+## Extending Altum
 
 This project is small and intentionally modular. If you want to add features, use this path:
 
@@ -269,8 +320,8 @@ With `gh`:
 ```bash
 git tag v0.1.0
 git push origin v0.1.0
-gh run list --repo Diogenesoftoronto/axon --workflow release.yml
-gh release view v0.1.0 --repo Diogenesoftoronto/axon
+gh run list --repo Diogenesoftoronto/altum --workflow release.yml
+gh release view v0.1.0 --repo Diogenesoftoronto/altum
 ```
 
 ## Benchmarking
@@ -291,14 +342,14 @@ The benchmark suite (`benchmarks/mode_profile_targeted.json`) contains 12 tasks 
 export SYNTHETIC_API_KEY=...
 
 # Quick single-model run
-python3 scripts/benchmark_axon.py \
+python3 scripts/benchmark_altum.py \
   --dataset benchmarks/mode_profile_targeted.json \
   --model "hf:MiniMaxAI/MiniMax-M2.5" \
   --pricing-from-models-api \
   --timeout 120
 
 # Multi-model Pareto analysis (7 models × 5 modes × 12 tasks)
-python3 scripts/benchmark_axon.py \
+python3 scripts/benchmark_altum.py \
   --dataset benchmarks/mode_profile_targeted.json \
   --model-list benchmarks/models_pareto_live.txt \
   --pricing-from-models-api \
