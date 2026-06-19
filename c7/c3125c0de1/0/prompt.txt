@@ -1,0 +1,5 @@
+does this support remote file systems for vfs? and does it make sense to stick with python here if the ouros package is kind of abandanone? might it make sense to move to a different language for running things, say steel? just to make sure that things are actually working? This also has possible tighter integration into rust, and it is typed. I would not mind a branch with the steel instead of python so that we could compare what performance looks like (also you could more easily do some parsing repairs i think, async stuff might still be a bit hard but i think that it makes sense.
+
+---
+
+for the remote  think of adding sosmething like r2 or another s3-like bin to this that i coculd use for memory.

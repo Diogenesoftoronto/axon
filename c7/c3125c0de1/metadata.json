@@ -1,0 +1,59 @@
+{
+  "cli_version": "0.7.7",
+  "checkpoint_id": "c7c3125c0de1",
+  "strategy": "manual-commit",
+  "branch": "main",
+  "checkpoints_count": 1,
+  "files_touched": [
+    ".gitignore",
+    "CHANGELOG.md",
+    "Cargo.lock",
+    "docs/fork-checkpoint-vfs.md",
+    "docs/gemini-peer-review-2026-02-24.md",
+    "notebooks/benchmark_results_analysis.py",
+    "notebooks/benchmark_run_workflow.py",
+    "notebooks/plancraft_altum_benchmark.py",
+    "notebooks/plancraft_axon_benchmark.py",
+    "paper/README.md",
+    "paper/main.tex",
+    "scripts/adapt_hf_arc_mcq.py",
+    "scripts/adapt_hf_boolq.py",
+    "scripts/adapt_hf_commonsenseqa.py",
+    "scripts/adapt_hf_gsm8k.py",
+    "scripts/adapt_hf_hellaswag.py",
+    "scripts/adapt_hf_mbpp_calls.py",
+    "scripts/adapt_hf_mmlu.py",
+    "scripts/adapt_hf_truthfulqa.py",
+    "scripts/adapt_hf_winogrande.py",
+    "scripts/analyze_bayesian.py",
+    "scripts/benchmark_altum.py",
+    "scripts/benchmark_axon.py",
+    "scripts/failure_taxonomy.py",
+    "scripts/plot_benchmark_findings.py",
+    "scripts/run_hf_benchmarks.sh",
+    "scripts/run_overall_tests.sh",
+    "src/export.rs",
+    "src/lib.rs",
+    "src/llm.rs",
+    "src/main.rs",
+    "src/rlm.rs",
+    "src/service.rs",
+    "src/store.rs",
+    "src/trajectory.rs"
+  ],
+  "sessions": [
+    {
+      "metadata": "/c7/c3125c0de1/0/metadata.json",
+      "transcript": "/c7/c3125c0de1/0/full.jsonl",
+      "content_hash": "/c7/c3125c0de1/0/content_hash.txt",
+      "prompt": "/c7/c3125c0de1/0/prompt.txt"
+    }
+  ],
+  "token_usage": {
+    "input_tokens": 288830,
+    "cache_creation_tokens": 0,
+    "cache_read_tokens": 8678656,
+    "output_tokens": 15793,
+    "api_call_count": 83
+  }
+}
