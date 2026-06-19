@@ -14,7 +14,7 @@ def normalize_question(question: str) -> str:
 
 def main() -> int:
     parser = argparse.ArgumentParser(
-        description="Adapt Hugging Face BoolQ into Axon deterministic yes/no tasks"
+        description="Adapt Hugging Face BoolQ into Altum deterministic yes/no tasks"
     )
     parser.add_argument("--split", default="validation")
     parser.add_argument("--limit", type=int, default=100)

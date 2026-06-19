@@ -213,7 +213,7 @@ def extract_rust_code(answer: str) -> Optional[str]:
 
 
 def run_rust_program(code: str, timeout_s: int = 10) -> Optional[str]:
-    with tempfile.TemporaryDirectory(prefix="axon-rust-check-") as td:
+    with tempfile.TemporaryDirectory(prefix="altum-rust-check-") as td:
         tdp = Path(td)
         src = tdp / "main.rs"
         binp = tdp / "prog"
@@ -505,7 +505,7 @@ def run_one(
     timeout_s: int,
     prompt_cost_per_1m: float,
     completion_cost_per_1m: float,
-    axon_verbose: bool,
+    altum_verbose: bool,
     is_hallucination_probe: bool,
     pricing: Optional[Dict[str, Dict[str, float]]] = None,
     policy_profile: Optional[str] = None,
@@ -532,7 +532,7 @@ def run_one(
         cmd += ["--model", model]
     if sub_model:
         cmd += ["--sub-model", sub_model]
-    if axon_verbose:
+    if altum_verbose:
         cmd += ["-v"]
     cmd += mode.extra_args + [
         "query",
@@ -656,22 +656,22 @@ def run_one(
 
 def ensure_release_binary(repo_dir: Path) -> Path:
     subprocess.run(["cargo", "build", "--release", "-q"], cwd=repo_dir, check=True)
-    bin_path = repo_dir / "target" / "release" / "axon"
+    bin_path = repo_dir / "target" / "release" / "altum"
     if not bin_path.exists():
         raise FileNotFoundError(f"Binary not found: {bin_path}")
     return bin_path
 
 
 def build_previous_binary(repo_dir: Path, ref: str) -> Path:
-    temp_root = Path(tempfile.mkdtemp(prefix="axon-prev-"))
+    temp_root = Path(tempfile.mkdtemp(prefix="altum-prev-"))
     worktree_dir = temp_root / "worktree"
     subprocess.run(["git", "worktree", "add", str(worktree_dir), ref], cwd=repo_dir, check=True)
     try:
         subprocess.run(["cargo", "build", "--release", "-q"], cwd=worktree_dir, check=True)
-        prev_bin = worktree_dir / "target" / "release" / "axon"
+        prev_bin = worktree_dir / "target" / "release" / "altum"
         if not prev_bin.exists():
             raise FileNotFoundError(f"Previous binary not found: {prev_bin}")
-        copied = temp_root / "axon-prev"
+        copied = temp_root / "altum-prev"
         shutil.copy2(prev_bin, copied)
     finally:
         subprocess.run(["git", "worktree", "remove", "--force", str(worktree_dir)], cwd=repo_dir, check=False)
@@ -814,7 +814,7 @@ def write_summary_markdown(summary: List[Dict[str, Any]], path: Path) -> None:
 
 
 def main() -> int:
-    parser = argparse.ArgumentParser(description="Benchmark Axon modes on hard reasoning tasks")
+    parser = argparse.ArgumentParser(description="Benchmark Altum modes on hard reasoning tasks")
     parser.add_argument("--dataset", default="benchmarks/rlm_challenges.json")
     parser.add_argument("--base-url", default="https://api.synthetic.new/openai/v1/")
     parser.add_argument("--api-key-env", default="SYNTHETIC_API_KEY")
@@ -847,18 +847,18 @@ def main() -> int:
         help="Fetch /models and compute cost using per-token pricing when available",
     )
     parser.add_argument("--summary-md", default=None, help="Optional markdown summary output path")
-    parser.add_argument("--no-axon-verbose", action="store_true", help="Disable -v on axon runs")
-    parser.add_argument("--policy-profile", default=None, help="Optional axon policy profile name")
+    parser.add_argument("--no-altum-verbose", action="store_true", help="Disable -v on altum runs")
+    parser.add_argument("--policy-profile", default=None, help="Optional altum policy profile name")
     parser.add_argument(
         "--inject-policy-into-context",
         action="store_true",
-        help="Enable axon policy preamble injection into runtime context",
+        help="Enable altum policy preamble injection into runtime context",
     )
     parser.add_argument(
         "--depth-enforcement",
         choices=["off", "soft", "strict"],
         default=None,
-        help="Optional axon depth enforcement mode",
+        help="Optional altum depth enforcement mode",
     )
     parser.add_argument("--require-min-depth", type=int, default=None)
     parser.add_argument("--require-min-recursive-calls", type=int, default=None)
@@ -900,7 +900,7 @@ def main() -> int:
     if not models and args.model:
         models = [args.model]
     if not models:
-        # Empty string means: do not pass --model/--sub-model and let Axon defaults apply.
+        # Empty string means: do not pass --model/--sub-model and let Altum defaults apply.
         models = [""]
 
     pricing = None
@@ -1029,7 +1029,7 @@ def main() -> int:
                             timeout_s=args.timeout,
                             prompt_cost_per_1m=args.prompt_cost_per_1m,
                             completion_cost_per_1m=args.completion_cost_per_1m,
-                            axon_verbose=not args.no_axon_verbose,
+                            altum_verbose=not args.no_altum_verbose,
                             is_hallucination_probe=(
                                 normalize_text(task.get("check", {}).get("value", ""))
                                 == "insufficient_information"

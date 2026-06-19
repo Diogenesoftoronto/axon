@@ -7,7 +7,7 @@ app = marimo.App(width="full")
 @app.cell
 def _(mo):
     mo.md(r"""
-    # Axon Benchmark Analysis (Marimo Workflow)
+    # Altum Benchmark Analysis (Marimo Workflow)
 
     This notebook loads benchmark result artifacts, keeps the analysis dataframe-first,
     and generates publication-ready tables/plots with explicit filtering for evidence,

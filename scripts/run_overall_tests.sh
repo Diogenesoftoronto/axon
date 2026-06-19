@@ -61,7 +61,7 @@ run_dataset() {
   local log_path="${OUT_DIR}/log-${name}.txt"
 
   local cmd=(
-    python3 scripts/benchmark_axon.py
+    python3 scripts/benchmark_altum.py
     --dataset "${dataset}"
     --base-url "${BASE_URL}"
     --api-key-env "${API_KEY_ENV}"

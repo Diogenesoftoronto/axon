@@ -22,7 +22,7 @@ def parse_test_assert(assert_line: str) -> Tuple[str, str]:
 
 def main() -> int:
     parser = argparse.ArgumentParser(
-        description="Adapt HF MBPP into deterministic call-output Axon tasks"
+        description="Adapt HF MBPP into deterministic call-output Altum tasks"
     )
     parser.add_argument("--split", default="test")
     parser.add_argument("--limit", type=int, default=100)

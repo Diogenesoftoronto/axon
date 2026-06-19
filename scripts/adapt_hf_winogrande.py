@@ -7,7 +7,7 @@ from typing import Any, Dict, List
 
 def main() -> int:
     parser = argparse.ArgumentParser(
-        description="Adapt Hugging Face WinoGrande into Axon deterministic choice tasks"
+        description="Adapt Hugging Face WinoGrande into Altum deterministic choice tasks"
     )
     parser.add_argument("--split", default="validation")
     parser.add_argument("--limit", type=int, default=100)

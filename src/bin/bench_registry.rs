@@ -1,8 +1,8 @@
+use arc_swap::ArcSwap;
+use std::collections::HashMap;
 use std::sync::{Arc, Mutex};
 use std::time::Instant;
 use tokio::sync::Mutex as AsyncMutex;
-use arc_swap::ArcSwap;
-use std::collections::HashMap;
 
 // Minimal representation of ToolRegistry for benchmarking
 #[derive(Clone, Default)]
@@ -95,8 +95,11 @@ async fn main() {
     let iterations = 1000;
     let updates = 10;
 
-    println!("Simulating {} users, {} reads each, {} updates total...", users, iterations, updates);
-    
+    println!(
+        "Simulating {} users, {} reads each, {} updates total...",
+        users, iterations, updates
+    );
+
     // Warm up
     bench_mutex(1, 10, 0).await;
     bench_arc_swap(1, 10, 0).await;

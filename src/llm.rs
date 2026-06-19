@@ -1,10 +1,11 @@
 use anyhow::Result;
 use genai::chat::{ChatMessage, ChatRequest, Usage};
 use genai::Client;
+use serde::{Deserialize, Serialize};
 use std::time::Duration;
 use tokio::time::sleep;
 
-#[derive(Clone, Debug)]
+#[derive(Clone, Debug, Serialize, Deserialize)]
 pub struct Message {
     pub role: String,
     pub content: String,

@@ -35,7 +35,7 @@ DATASETS=(
 for dataset in "${DATASETS[@]}"; do
   name="$(basename "$dataset" .json)"
   echo "=== Running $name ==="
-  python3 scripts/benchmark_axon.py \
+  python3 scripts/benchmark_altum.py \
     --dataset "$dataset" \
     --base-url "$BASE_URL" \
     --api-key-env "$API_KEY_ENV" \

@@ -7,7 +7,7 @@ from typing import Any, Dict, List
 
 def main() -> int:
     parser = argparse.ArgumentParser(
-        description="Adapt Hugging Face CommonsenseQA into Axon deterministic MCQ tasks"
+        description="Adapt Hugging Face CommonsenseQA into Altum deterministic MCQ tasks"
     )
     parser.add_argument("--split", default="validation")
     parser.add_argument("--limit", type=int, default=100)

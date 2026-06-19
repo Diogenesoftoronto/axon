@@ -1,3 +1,4 @@
+pub mod export;
 pub mod llm;
 pub mod mcp;
 pub mod openai;
@@ -8,3 +9,4 @@ pub mod sandbox;
 pub mod service;
 pub mod store;
 pub mod tools;
+pub mod trajectory;

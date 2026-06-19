@@ -8,15 +8,15 @@ app = marimo.App(width="full")
 def __(mo):
     mo.md(
         r"""
-        # PlanCraft + Axon Benchmark (Marimo)
+        # PlanCraft + Altum Benchmark (Marimo)
 
-        This notebook evaluates Axon mode profiles on the PlanCraft benchmark by running
-        Axon as the policy in the PlanCraft text environment.
+        This notebook evaluates Altum mode profiles on the PlanCraft benchmark by running
+        Altum as the policy in the PlanCraft text environment.
 
         Run with:
 
         ```bash
-        uv run --python .venv/bin/python marimo edit notebooks/plancraft_axon_benchmark.py
+        uv run --python .venv/bin/python marimo edit notebooks/plancraft_altum_benchmark.py
         ```
         """
     )
@@ -57,14 +57,14 @@ def __():
 
 @app.cell
 def __(Path):
-    AXON_BIN = str(Path("target/release/axon").resolve())
+    ALTUM_BIN = str(Path("target/release/altum").resolve())
     MODE_PRESETS = {
         "d0-i1": ["--max-depth", "0", "--max-iterations", "1"],
         "d0-i3": ["--max-depth", "0", "--max-iterations", "3"],
         "d6-i1": ["--max-depth", "6", "--max-iterations", "1"],
         "d1-i3": ["--max-depth", "1", "--max-iterations", "3"],
     }
-    return AXON_BIN, MODE_PRESETS
+    return ALTUM_BIN, MODE_PRESETS
 
 
 @app.cell
@@ -166,7 +166,7 @@ def __(controls, mo):
 
 @app.cell
 def __(
-    AXON_BIN,
+    ALTUM_BIN,
     MODE_PRESETS,
     PlancraftGymWrapper,
     api_key_env,
@@ -197,7 +197,7 @@ def __(
             "Do not output code blocks or extra text."
         )
 
-    def run_axon_step(mode_name: str, observation_text: str, timeout_sec: int) -> dict:
+    def run_altum_step(mode_name: str, observation_text: str, timeout_sec: int) -> dict:
         api_key = os.environ.get(api_key_env.value, "")
         if not api_key:
             return {
@@ -213,7 +213,7 @@ def __(
             context_path = f.name
 
         cmd = [
-            AXON_BIN,
+            ALTUM_BIN,
             "--base-url",
             base_url.value,
             "--api-key",
@@ -286,7 +286,7 @@ def __(
                 steps_taken = 0
 
                 while not terminated and not truncated:
-                    step_result = run_axon_step(mode_name, obs.get("text", ""), int(timeout_s.value))
+                    step_result = run_altum_step(mode_name, obs.get("text", ""), int(timeout_s.value))
                     total_elapsed += step_result["elapsed_s"]
                     total_calls += step_result["metrics"]["llm_calls"]
                     total_tokens += step_result["metrics"]["total_tokens"]

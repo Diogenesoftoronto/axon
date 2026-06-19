@@ -1,15 +1,18 @@
-use std::sync::Arc;
 use anyhow::Result;
 use genai::Client;
 use ouros::{Object, ReplProgress};
 use regex::Regex;
 use std::collections::{BTreeMap, HashMap};
+use std::sync::{Arc, Mutex};
 
 use crate::llm::{LlmClient, Message};
 use crate::policy::{DepthEnforcementMode, RuntimePolicy};
 use crate::prompts;
 use crate::sandbox::{Sandbox, MAIN_SESSION_ID};
 use crate::tools::ToolRegistry;
+use crate::trajectory::{
+    new_trace_id, rfc3339_now, Trajectory, TrajectoryRecorder, TrajectoryTelemetry, TrajectoryUsage,
+};
 
 pub struct RlmConfig {
     pub client: Client,
@@ -22,11 +25,13 @@ pub struct RlmConfig {
     pub trace_sandbox: bool,
     pub runtime_policy: RuntimePolicy,
     pub tool_registry: Arc<ToolRegistry>,
+    pub trace_sink: Option<Arc<TrajectoryRecorder>>,
 }
 
 pub struct Rlm {
     config: RlmConfig,
     llm: LlmClient,
+    usage: Mutex<TrajectoryUsage>,
 }
 
 #[derive(Clone, Default)]
@@ -80,14 +85,14 @@ struct RuntimeState {
 }
 
 #[derive(Clone, Debug)]
-struct DepthTelemetry {
-    max_depth_reached: usize,
-    recursive_call_count: usize,
-    recursive_calls_by_depth: BTreeMap<usize, usize>,
+pub struct DepthTelemetry {
+    pub max_depth_reached: usize,
+    pub recursive_call_count: usize,
+    pub recursive_calls_by_depth: BTreeMap<usize, usize>,
 }
 
 impl DepthTelemetry {
-    fn new(current_depth: usize) -> Self {
+    pub fn new(current_depth: usize) -> Self {
         Self {
             max_depth_reached: current_depth,
             recursive_call_count: 0,
@@ -95,7 +100,7 @@ impl DepthTelemetry {
         }
     }
 
-    fn record_spawn(&mut self, child_depth: usize) {
+    pub(crate) fn record_spawn(&mut self, child_depth: usize) {
         self.recursive_call_count += 1;
         self.max_depth_reached = self.max_depth_reached.max(child_depth);
         *self
@@ -145,12 +150,56 @@ impl RuntimeState {
 impl Rlm {
     pub fn new(config: RlmConfig) -> Self {
         let llm = LlmClient::new(config.client.clone(), &config.model);
-        Self { config, llm }
+        Self {
+            config,
+            llm,
+            usage: Mutex::new(TrajectoryUsage::default()),
+        }
     }
 
     pub async fn completion(&self, query: &str, context: &str) -> Result<String> {
         let (answer, _) = self.completion_with_telemetry(query, context).await?;
         Ok(answer)
+    }
+
+    fn record_trajectory(
+        &self,
+        query: &str,
+        context: &str,
+        messages: &[Message],
+        telemetry: &DepthTelemetry,
+        final_answer: &str,
+    ) {
+        if let Some(sink) = self.config.trace_sink.as_ref() {
+            let usage = self.usage.lock().map(|g| g.clone()).unwrap_or_default();
+            let traj = Trajectory {
+                trace_id: new_trace_id(),
+                timestamp: rfc3339_now(),
+                query: query.to_string(),
+                context_chars: context.chars().count(),
+                model: self.config.model.clone(),
+                sub_model: self.config.sub_model.clone(),
+                depth: self.config.depth,
+                max_depth: self.config.max_depth,
+                max_iterations: self.config.max_iterations,
+                policy_profile: self.config.runtime_policy.profile_name.clone(),
+                final_answer: final_answer.to_string(),
+                messages: messages.to_vec(),
+                telemetry: TrajectoryTelemetry::from(telemetry),
+                usage,
+            };
+            if let Err(e) = sink.record(&traj) {
+                if self.config.verbose {
+                    eprintln!("[altum] trajectory record failed: {}", e);
+                }
+            }
+        }
+    }
+
+    fn accumulate_usage(&self, prompt: Option<i32>, completion: Option<i32>, total: Option<i32>) {
+        if let Ok(mut g) = self.usage.lock() {
+            g.add(prompt, completion, total);
+        }
     }
 
     async fn completion_with_telemetry(
@@ -183,6 +232,11 @@ impl Rlm {
 
             let prompt_chars: usize = messages.iter().map(|m| m.content.len()).sum();
             let completion = self.llm.completion(&messages).await?;
+            self.accumulate_usage(
+                completion.usage.prompt_tokens,
+                completion.usage.completion_tokens,
+                completion.usage.total_tokens,
+            );
             let response = completion.text;
 
             if self.config.verbose {
@@ -252,7 +306,9 @@ impl Rlm {
                         &answer[..answer.len().min(120)]
                     );
                 }
-                return Ok((strip_final_wrapper(&answer), telemetry));
+                let answer = strip_final_wrapper(&answer);
+                self.record_trajectory(query, context, &messages, &telemetry, &answer);
+                return Ok((answer, telemetry));
             }
         }
 
@@ -262,30 +318,43 @@ impl Rlm {
             true,
         ));
         let completion = self.llm.completion(&messages).await?;
-        let response = &completion.text;
+        self.accumulate_usage(
+            completion.usage.prompt_tokens,
+            completion.usage.completion_tokens,
+            completion.usage.total_tokens,
+        );
+        let response = completion.text;
+        messages.push(Message::assistant(&response));
 
         // Execute any repl code blocks in the fallback response before extracting.
-        let fallback_code_blocks = find_code_blocks(response);
+        let fallback_code_blocks = find_code_blocks(&response);
         for code in &fallback_code_blocks {
-            let _ = self
+            if let Ok(result) = self
                 .execute_in_sandbox(&mut sandbox, code, &mut runtime, &mut telemetry)
-                .await;
+                .await
+            {
+                messages.push(Message::user(&format_exec_result(code, &result)));
+            }
         }
 
-        if let Some(answer) = check_final_answer(response, &sandbox) {
+        if let Some(answer) = check_final_answer(&response, &sandbox) {
             if let Some(reason) = self.depth_policy_unmet_reason(&telemetry) {
                 if self.config.runtime_policy.depth_enforcement == DepthEnforcementMode::Strict {
                     anyhow::bail!("Depth policy unmet: {}", reason);
                 }
             }
-            return Ok((strip_final_wrapper(&answer), telemetry));
+            let answer = strip_final_wrapper(&answer);
+            self.record_trajectory(query, context, &messages, &telemetry, &answer);
+            return Ok((answer, telemetry));
         }
         if let Some(reason) = self.depth_policy_unmet_reason(&telemetry) {
             if self.config.runtime_policy.depth_enforcement == DepthEnforcementMode::Strict {
                 anyhow::bail!("Depth policy unmet: {}", reason);
             }
         }
-        Ok((strip_final_wrapper(&completion.text), telemetry))
+        let answer = strip_final_wrapper(&response);
+        self.record_trajectory(query, context, &messages, &telemetry, &answer);
+        Ok((answer, telemetry))
     }
 
     fn validate_depth_policy_feasibility(&self) -> Result<()> {
@@ -804,6 +873,7 @@ impl Rlm {
                 trace_sandbox: self.config.trace_sandbox,
                 runtime_policy: self.config.runtime_policy.for_sub_rlm(),
                 tool_registry: self.config.tool_registry.clone(),
+                trace_sink: None,
             });
             let (result, child_telemetry) = Box::pin(sub.completion_with_telemetry(
                 "Analyze the context and answer the question within it.",
@@ -1026,6 +1096,7 @@ mod tests {
             trace_sandbox: false,
             runtime_policy: RuntimePolicy::default(),
             tool_registry: empty_registry(),
+            trace_sink: None,
         })
     }
 
@@ -1069,7 +1140,7 @@ mod tests {
     }
 
     #[test]
-    fn test_find_final_answer_direct() {
+    fn parser_test_find_final_answer_direct() {
         let text = "The answer is:\nFINAL(42 is the answer)";
         let (kind, content) = find_final_answer(text).unwrap();
         assert!(matches!(kind, FinalType::Direct));
@@ -1077,7 +1148,7 @@ mod tests {
     }
 
     #[test]
-    fn test_find_final_answer_variable() {
+    fn parser_test_find_final_answer_variable() {
         let text = "FINAL_VAR(result)";
         let (kind, content) = find_final_answer(text).unwrap();
         assert!(matches!(kind, FinalType::Variable));
@@ -1150,6 +1221,7 @@ mod tests {
                 require_min_recursive_calls: None,
             },
             tool_registry: empty_registry(),
+            trace_sink: None,
         });
         let telemetry = DepthTelemetry::new(0);
         let reason = rlm.depth_policy_unmet_reason(&telemetry);
@@ -1178,6 +1250,7 @@ mod tests {
                 require_min_recursive_calls: Some(1),
             },
             tool_registry: empty_registry(),
+            trace_sink: None,
         });
         let telemetry = DepthTelemetry::new(0);
         let reason = rlm.depth_policy_unmet_reason(&telemetry);
@@ -1206,6 +1279,7 @@ mod tests {
                 require_min_recursive_calls: None,
             },
             tool_registry: empty_registry(),
+            trace_sink: None,
         });
         let err = rlm.validate_depth_policy_feasibility().unwrap_err();
         assert!(
@@ -1237,6 +1311,7 @@ mod tests {
                 require_min_recursive_calls: Some(1),
             },
             tool_registry: empty_registry(),
+            trace_sink: None,
         });
         let err = rlm.validate_depth_policy_feasibility().unwrap_err();
         assert!(
@@ -1473,6 +1548,7 @@ mod tests {
             trace_sandbox: false,
             runtime_policy: RuntimePolicy::default(),
             tool_registry,
+            trace_sink: None,
         })
     }
 
@@ -1490,14 +1566,28 @@ mod tests {
         let mut telemetry = DepthTelemetry::new(0);
 
         let result = rlm
-            .handle_external(&mut sandbox, "MY_SEARCH", &[Object::String("query".to_string())], &mut runtime, &mut telemetry)
+            .handle_external(
+                &mut sandbox,
+                "MY_SEARCH",
+                &[Object::String("query".to_string())],
+                &mut runtime,
+                &mut telemetry,
+            )
             .await
             .unwrap();
         match result {
             Object::String(s) => {
-                assert!(s.contains("MY_SEARCH"), "should contain tool name, got: {}", s);
+                assert!(
+                    s.contains("MY_SEARCH"),
+                    "should contain tool name, got: {}",
+                    s
+                );
                 assert!(s.contains("query"), "should contain args, got: {}", s);
-                assert!(!s.contains("Error: unknown function"), "should not be unknown function error, got: {}", s);
+                assert!(
+                    !s.contains("Error: unknown function"),
+                    "should not be unknown function error, got: {}",
+                    s
+                );
             }
             other => panic!("expected Object::String, got: {:?}", other),
         }
@@ -1511,12 +1601,22 @@ mod tests {
         let mut telemetry = DepthTelemetry::new(0);
 
         let result = rlm
-            .handle_external(&mut sandbox, "NONEXISTENT_TOOL", &[], &mut runtime, &mut telemetry)
+            .handle_external(
+                &mut sandbox,
+                "NONEXISTENT_TOOL",
+                &[],
+                &mut runtime,
+                &mut telemetry,
+            )
             .await
             .unwrap();
         match result {
             Object::String(s) => {
-                assert!(s.contains("Error: unknown function 'NONEXISTENT_TOOL'"), "got: {}", s);
+                assert!(
+                    s.contains("Error: unknown function 'NONEXISTENT_TOOL'"),
+                    "got: {}",
+                    s
+                );
             }
             other => panic!("expected Object::String, got: {:?}", other),
         }
@@ -1541,7 +1641,11 @@ mod tests {
             .unwrap();
         match result {
             Object::String(s) => {
-                assert!(!s.contains("Error: unknown function"), "registered tool should not produce unknown function error, got: {}", s);
+                assert!(
+                    !s.contains("Error: unknown function"),
+                    "registered tool should not produce unknown function error, got: {}",
+                    s
+                );
             }
             other => panic!("expected Object::String, got: {:?}", other),
         }
@@ -1583,7 +1687,7 @@ mod tests {
         }
 
         #[test]
-        fn test_strip_final_wrapper_idempotent_for_non_final(text in "[^F]{0,100}") {
+        fn parser_test_strip_final_wrapper_idempotent_for_non_final(text in "[^F]{0,100}") {
             let result1 = strip_final_wrapper(&text);
             let result2 = strip_final_wrapper(&result1);
             assert_eq!(result1, result2);
@@ -1594,5 +1698,141 @@ mod tests {
             let normalized = normalize_vfs_path(&path);
             assert!(normalized.starts_with('/'), "path '{}' normalized to '{}' which doesn't start with /", path, normalized);
         }
+    }
+
+    // --- Prompt parser tests ---
+
+    #[test]
+    fn parser_test_find_code_blocks_single() {
+        let text = "before\n```repl\nx = 1\n```\nafter";
+        let blocks = find_code_blocks(text);
+        assert_eq!(blocks.len(), 1);
+        assert_eq!(blocks[0], "x = 1");
+    }
+
+    #[test]
+    fn parser_test_find_code_blocks_multiple() {
+        let text = "```repl\na = 1\n```\nmid\n```repl\nb = 2\n```";
+        let blocks = find_code_blocks(text);
+        assert_eq!(blocks.len(), 2);
+        assert_eq!(blocks[0], "a = 1");
+        assert_eq!(blocks[1], "b = 2");
+    }
+
+    #[test]
+    fn parser_test_find_code_blocks_ignore_non_repl() {
+        let text = "```python\nprint(1)\n```\n```repl\nx = 1\n```";
+        let blocks = find_code_blocks(text);
+        assert_eq!(blocks.len(), 1);
+        assert_eq!(blocks[0], "x = 1");
+    }
+
+    #[test]
+    fn parser_test_find_code_blocks_empty() {
+        let blocks = find_code_blocks("no fences here");
+        assert!(blocks.is_empty());
+    }
+
+    #[test]
+    fn test_find_final_answer_direct() {
+        let text = "I will answer now.\nFINAL(42)";
+        let (kind, value) = find_final_answer(text).unwrap();
+        assert!(matches!(kind, FinalType::Direct));
+        assert_eq!(value, "42");
+    }
+
+    #[test]
+    fn test_find_final_answer_variable() {
+        let text = "Let me check.\nFINAL_VAR(answer)";
+        let (kind, value) = find_final_answer(text).unwrap();
+        assert!(matches!(kind, FinalType::Variable));
+        assert_eq!(value, "answer");
+    }
+
+    #[test]
+    fn parser_test_find_final_answer_nested() {
+        let text = "FINAL(value (with parens) inside)";
+        let (kind, value) = find_final_answer(text).unwrap();
+        assert!(matches!(kind, FinalType::Direct));
+        assert_eq!(value, "value (with parens) inside");
+    }
+
+    #[test]
+    fn parser_test_find_final_answer_none() {
+        assert!(find_final_answer("no answer here").is_none());
+    }
+
+    #[test]
+    fn parser_test_find_final_answer_prefers_var() {
+        let text = "FINAL(ignored)\nFINAL_VAR(used)";
+        let (kind, _) = find_final_answer(text).unwrap();
+        assert!(matches!(kind, FinalType::Variable));
+    }
+
+    #[test]
+    fn parser_test_strip_function_call() {
+        let text = "Here is my answer.\n<FunctionCall>\n<invoke name=\"inspect\">\n</invoke>\n</FunctionCall>\nDone.";
+        let stripped = strip_hallucinated_tool_calls(text);
+        assert!(!stripped.contains("<FunctionCall>"));
+        assert!(!stripped.contains("<invoke"));
+        assert!(stripped.contains("Here is my answer"));
+        assert!(stripped.contains("Done."));
+    }
+
+    #[test]
+    fn parser_test_strip_minimax() {
+        let text = "answer\n<minimax:tool_call>x</minimax:tool_call>\nmore";
+        let stripped = strip_hallucinated_tool_calls(text);
+        assert!(!stripped.contains("<minimax:tool_call>"));
+        assert!(stripped.contains("answer"));
+        assert!(stripped.contains("more"));
+    }
+
+    #[test]
+    fn parser_test_strip_final_wrapper_unwrap() {
+        let text = "FINAL(my answer)";
+        assert_eq!(strip_final_wrapper(text), "my answer");
+    }
+
+    #[test]
+    fn test_strip_final_wrapper_idempotent() {
+        let once = strip_final_wrapper("FINAL(answer)");
+        let twice = strip_final_wrapper(&once);
+        assert_eq!(once, twice);
+    }
+
+    #[test]
+    fn parser_test_extract_balanced_nested() {
+        let text = "FINAL(x(y)z)";
+        let inner = extract_balanced_parens(text, "FINAL".len()).unwrap();
+        assert_eq!(inner, "x(y)z");
+    }
+
+    #[test]
+    fn parser_test_extract_balanced_unclosed() {
+        let text = "FINAL(unclosed";
+        let inner = extract_balanced_parens(text, "FINAL".len());
+        assert!(inner.is_some());
+        assert_eq!(inner.unwrap(), "unclosed");
+    }
+
+    #[test]
+    fn parser_test_describe_args() {
+        let args = vec![Object::String("hello".to_string()), Object::Int(42)];
+        let s = describe_args(&args);
+        assert!(s.contains("hello"));
+        assert!(s.contains("42"));
+    }
+
+    #[test]
+    fn parser_test_truncate_short() {
+        let s = truncate_for_trace("short", 100);
+        assert_eq!(s, "short");
+    }
+
+    #[test]
+    fn parser_test_truncate_long() {
+        let s = truncate_for_trace(&"x".repeat(200), 50);
+        assert!(s.contains("[+150 chars]"));
     }
 }

@@ -112,7 +112,7 @@ def plot_result_frontier(df_results: pd.DataFrame, out_dir: Path) -> None:
 
 
 def main() -> int:
-    parser = argparse.ArgumentParser(description="Generate plots and summary CSVs for Axon benchmark findings")
+    parser = argparse.ArgumentParser(description="Generate plots and summary CSVs for Altum benchmark findings")
     parser.add_argument(
         "--task-files",
         nargs="*",

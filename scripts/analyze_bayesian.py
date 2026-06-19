@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Bayesian inference, Thompson sampling, and latency variability analysis for Axon benchmarks.
+"""Bayesian inference, Thompson sampling, and latency variability analysis for Altum benchmarks.
 
 Reads results JSON files and produces:
   - Beta-Binomial posterior analysis for pass rates
@@ -638,7 +638,7 @@ def latex_latency_cv_figure(groups: Dict[Tuple[str, str], List[RunRecord]],
 # ---------------------------------------------------------------------------
 
 def main():
-    parser = argparse.ArgumentParser(description="Bayesian and MAB analysis for Axon benchmarks")
+    parser = argparse.ArgumentParser(description="Bayesian and MAB analysis for Altum benchmarks")
     parser.add_argument("files", nargs="*", help="Results JSON files")
     parser.add_argument("--from-log", type=Path, default=None, help="Parse benchmark log instead")
     parser.add_argument("--exclude-error-models", action="store_true", default=True,

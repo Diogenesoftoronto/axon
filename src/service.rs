@@ -1,5 +1,5 @@
-use std::sync::Arc;
 use arc_swap::ArcSwap;
+use std::sync::Arc;
 use tokio::sync::Mutex;
 
 use anyhow::Result;
@@ -81,7 +81,7 @@ impl RlmService {
         }
 
         let stored_context = self.store.read_context(thread_id);
-        
+
         let context = if let Some(req_ctx) = req.request_context {
             if stored_context.trim().is_empty() {
                 req_ctx
@@ -113,7 +113,9 @@ impl RlmService {
         }
 
         let model = req.model_override.unwrap_or_else(|| self.model.clone());
-        let sub_model = req.sub_model_override.unwrap_or_else(|| self.sub_model.clone());
+        let sub_model = req
+            .sub_model_override
+            .unwrap_or_else(|| self.sub_model.clone());
         let tool_registry = self.tool_registry.load_full();
 
         let rlm = Rlm::new(RlmConfig {
@@ -127,6 +129,7 @@ impl RlmService {
             trace_sandbox: self.trace_sandbox,
             runtime_policy,
             tool_registry,
+            trace_sink: None,
         });
 
         let answer = tokio::task::block_in_place(|| {

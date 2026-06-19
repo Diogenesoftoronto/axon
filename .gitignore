@@ -19,3 +19,5 @@ __marimo__/
 
 # Local tool config
 .claude/
+.chrysalis/
+chrysalis.config.json

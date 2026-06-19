@@ -1,6 +1,6 @@
-# Gemini Peer Review (2026-02-24)
+# Gemini Peer Review Notes (2026-02-24)
 
-This note captures a one-shot review of the Altum paper draft and benchmarking plan, generated using Gemini CLI with `gemini-3-pro-preview`.
+This document records a one-shot external review of the Altum paper and benchmarking plan, generated using Gemini CLI with `gemini-3-pro-preview`. It is kept as source material for future paper and benchmark revisions, not as an active implementation checklist.
 
 Command used:
 
@@ -10,12 +10,12 @@ cat /tmp/gemini_peer_review_prompt.txt | gemini -m gemini-3-pro-preview -p "Foll
 
 ## Output
 
-Here is the peer review feedback and actionable benchmark expansion plan for Altum.
+The review feedback and benchmark expansion recommendations follow.
 
 ### A. Paper Peer Review
 
 **General Assessment:**
-The paper presents a solid systems engineering contribution (Altum) but currently fails as an empirical research paper due to critically small sample sizes ($N=2$) and lack of variance quantification. It frames itself as an evaluation of RLM physics (scaling, density), but the "Preliminary Ablations" are too thin to support the claims.
+The paper presents a solid systems engineering contribution (Altum), while its empirical claims depend on small sample sizes ($N=2$) and lack variance quantification. It frames itself as an evaluation of RLM physics (scaling, density), but the "Preliminary Ablations" do not yet support the strongest claims.
 
 **Specific Recommendations:**
 
@@ -24,8 +24,8 @@ The paper presents a solid systems engineering contribution (Altum) but currentl
     *   **Clarify "True Recursion":** The distinction between "context-stuffing" and "recursive spawning" is your moat. Explicitly define the state separation: does the child RLM inherit the parent's sandbox variables, or is it a fresh environment? (Code suggests fresh; Paper should justify this design choice regarding state isolation vs. context overhead).
 
 2.  **Experimental Rigor (Critical):**
-    *   **Sample Size:** $N=2$ is anecdotal. You must scale to at least $N=50$ per suite to claim any reliability.
-    *   **Baselines:** You are comparing `max-depth 2` vs `max-depth 0` (No Recursion). You *must* add a **"Full Context" baseline**: attempting to stuff the entire prompt into the context window (up to model limits) without recursion. This proves recursion is necessary for *processing*, not just fitting context.
+    *   **Sample Size:** $N=2$ is anecdotal. Scale to at least $N=50$ per suite before claiming reliability.
+    *   **Baselines:** The current comparison is `max-depth 2` vs `max-depth 0` (No Recursion). Add a **"Full Context" baseline**: attempting to stuff the entire prompt into the context window (up to model limits) without recursion. This tests whether recursion helps with *processing*, not just fitting context.
     *   **Metrics:** Add **"Time-to-First-Token" (TTFT)** and **"Wall-clock Overhead"**. RLM introduces latency (spawning sandboxes, multiple calls). Quantify the "tax" of recursion.
 
 3.  **Missing Sections:**

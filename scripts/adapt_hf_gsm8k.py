@@ -15,7 +15,7 @@ def extract_final_number(answer: str) -> str:
 
 
 def main() -> int:
-    parser = argparse.ArgumentParser(description="Adapt HF GSM8K into Axon benchmark format")
+    parser = argparse.ArgumentParser(description="Adapt HF GSM8K into Altum benchmark format")
     parser.add_argument("--split", default="test")
     parser.add_argument("--limit", type=int, default=100)
     parser.add_argument("--out", default="-")

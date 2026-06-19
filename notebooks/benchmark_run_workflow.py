@@ -8,9 +8,9 @@ app = marimo.App(width="full")
 def __(mo):
     mo.md(
         r"""
-        # Axon Benchmark Runner (Marimo Workflow)
+        # Altum Benchmark Runner (Marimo Workflow)
 
-        This notebook runs Axon benchmarks across one or more datasets, captures
+        This notebook runs Altum benchmarks across one or more datasets, captures
         run-level and summary-level dataframes, and emits standardized artifacts
         for paper analysis.
 
@@ -38,7 +38,7 @@ def __():
     import matplotlib.pyplot as plt
     import pandas as pd
 
-    from scripts import benchmark_axon as bench
+    from scripts import benchmark_altum as bench
 
     return Path, asdict, bench, datetime, json, mo, os, pd, plt, re, time
 
@@ -58,7 +58,7 @@ def __():
         },
         "benchmarks/hallucination_guardrails.json": {
             "name": "Hallucination Guardrails",
-            "what_it_tests": "Whether Axon abstains when evidence is insufficient instead of fabricating.",
+            "what_it_tests": "Whether Altum abstains when evidence is insufficient instead of fabricating.",
             "work_profile": "Safety-oriented reliability check; complements pure pass-rate metrics.",
         },
         "benchmarks/long_context_books_distractor.json": {
@@ -127,11 +127,11 @@ def __(DEFAULT_DATASETS, MODE_PRESETS, mo):
     model_ids = mo.ui.text_area(
         value="hf:MiniMaxAI/MiniMax-M2.5",
         rows=2,
-        label="Model ids (comma or newline separated; blank = Axon defaults)",
+        label="Model ids (comma or newline separated; blank = Altum defaults)",
     )
     sub_model = mo.ui.text(
         value="",
-        label="Sub-model override (blank = model id for recursive calls, or Axon default)",
+        label="Sub-model override (blank = model id for recursive calls, or Altum default)",
     )
 
     base_url = mo.ui.text(value="https://api.synthetic.new/openai/v1/", label="Base URL")
@@ -139,12 +139,12 @@ def __(DEFAULT_DATASETS, MODE_PRESETS, mo):
     runs = mo.ui.number(value=1, start=1, stop=20, step=1, label="Runs per task")
     attempts = mo.ui.number(value=1, start=1, stop=10, step=1, label="Attempts per logical run")
     retry_backoff_s = mo.ui.number(value=2.0, start=0.0, stop=30.0, step=0.5, label="Retry backoff (s)")
-    timeout_s = mo.ui.number(value=600, start=10, stop=3600, step=10, label="Timeout per Axon call (s)")
+    timeout_s = mo.ui.number(value=600, start=10, stop=3600, step=10, label="Timeout per Altum call (s)")
     max_tasks = mo.ui.number(value=0, start=0, stop=2000, step=1, label="Max tasks per dataset (0 = all)")
     fetch_pricing = mo.ui.checkbox(value=True, label="Fetch pricing from /models API")
     prompt_cost = mo.ui.number(value=0.0, start=0.0, stop=50.0, step=0.01, label="Prompt cost USD per 1M tokens")
     completion_cost = mo.ui.number(value=0.0, start=0.0, stop=50.0, step=0.01, label="Completion cost USD per 1M tokens")
-    axon_verbose = mo.ui.checkbox(value=False, label="Enable `-v` on Axon runs")
+    altum_verbose = mo.ui.checkbox(value=False, label="Enable `-v` on Altum runs")
 
     add_prev_ref = mo.ui.checkbox(value=False, label="Include `previous-default` mode from git ref")
     prev_ref = mo.ui.text(value="", label="Previous git ref (when enabled)")
@@ -163,7 +163,7 @@ def __(DEFAULT_DATASETS, MODE_PRESETS, mo):
             mo.hstack([model_ids, sub_model], align="start"),
             mo.hstack([base_url, api_key_env], justify="start"),
             mo.hstack([runs, attempts, retry_backoff_s, timeout_s, max_tasks], justify="start"),
-            mo.hstack([fetch_pricing, prompt_cost, completion_cost, axon_verbose], justify="start"),
+            mo.hstack([fetch_pricing, prompt_cost, completion_cost, altum_verbose], justify="start"),
             mo.hstack([add_prev_ref, prev_ref], justify="start"),
             mo.hstack([scoring_policy, runtime_policy, evidence_tier], justify="start"),
             mo.hstack([experiment_tag, output_root, run_btn], justify="start"),
@@ -174,7 +174,7 @@ def __(DEFAULT_DATASETS, MODE_PRESETS, mo):
         add_prev_ref,
         api_key_env,
         attempts,
-        axon_verbose,
+        altum_verbose,
         base_url,
         completion_cost,
         controls,
@@ -241,7 +241,7 @@ def __(
     api_key_env,
     asdict,
     attempts,
-    axon_verbose,
+    altum_verbose,
     base_url,
     bench,
     completion_cost,
@@ -360,7 +360,7 @@ def __(
                                             timeout_s=int(timeout_s.value),
                                             prompt_cost_per_1m=float(prompt_cost.value),
                                             completion_cost_per_1m=float(completion_cost.value),
-                                            axon_verbose=bool(axon_verbose.value),
+                                            altum_verbose=bool(altum_verbose.value),
                                             is_hallucination_probe=(
                                                 bench.normalize_text(task.get("check", {}).get("value", ""))
                                                 == "insufficient_information"

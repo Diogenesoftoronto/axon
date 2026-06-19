@@ -175,7 +175,11 @@ mod tests {
     #[test]
     fn test_all_external_functions_with_custom_tools() {
         let mut reg = ToolRegistry::new();
-        reg.register(ToolSpec { name: "my_tool".to_string(), description: "custom".to_string(), input_schema: None });
+        reg.register(ToolSpec {
+            name: "my_tool".to_string(),
+            description: "custom".to_string(),
+            input_schema: None,
+        });
         let funcs = all_external_functions(&reg);
         let builtins = builtin_external_functions();
         assert!(funcs.len() > builtins.len());
@@ -188,7 +192,11 @@ mod tests {
     #[test]
     fn test_all_external_functions_dedup_builtin_names() {
         let mut reg = ToolRegistry::new();
-        reg.register(ToolSpec { name: "FINAL".to_string(), description: "shadow".to_string(), input_schema: None });
+        reg.register(ToolSpec {
+            name: "FINAL".to_string(),
+            description: "shadow".to_string(),
+            input_schema: None,
+        });
         let funcs = all_external_functions(&reg);
         let final_count = funcs.iter().filter(|f| *f == "FINAL").count();
         assert_eq!(final_count, 1, "builtin name should not be duplicated");
@@ -197,16 +205,26 @@ mod tests {
     #[test]
     fn test_sandbox_new_with_custom_tool() {
         let mut reg = ToolRegistry::new();
-        reg.register(ToolSpec { name: "SEARCH".to_string(), description: "search tool".to_string(), input_schema: None });
+        reg.register(ToolSpec {
+            name: "SEARCH".to_string(),
+            description: "search tool".to_string(),
+            input_schema: None,
+        });
         let sandbox = Sandbox::new(&reg);
-        assert!(sandbox.is_ok(), "sandbox should initialize with custom tool registry");
+        assert!(
+            sandbox.is_ok(),
+            "sandbox should initialize with custom tool registry"
+        );
     }
 
     #[test]
     fn test_builtins_are_valid_identifiers() {
         for name in builtin_external_functions() {
             assert!(
-                name.chars().next().map(|c| c.is_alphabetic() || c == '_').unwrap_or(false),
+                name.chars()
+                    .next()
+                    .map(|c| c.is_alphabetic() || c == '_')
+                    .unwrap_or(false),
                 "builtin '{}' must be a valid Python identifier",
                 name
             );

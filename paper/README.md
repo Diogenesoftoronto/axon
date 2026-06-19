@@ -1,6 +1,6 @@
-# Axon Paper Draft
+# Altum Paper Draft
 
-This directory contains a peer review style draft describing Axon and summarizing current benchmark results.
+This directory contains a peer review style draft describing Altum and summarizing current benchmark results.
 
 ## Files
 

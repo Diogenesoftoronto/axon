@@ -27,10 +27,10 @@
   columns=fullflexible
 }
 
-\newcommand{\axon}{Axon}
+\newcommand{\altum}{Altum}
 \newcommand{\rlm}{RLM}
 
-\title{\axon: Do Recursive Scaffolds Help Short-Horizon Tasks Beyond Extra Iterations?}
+\title{\altum: Do Recursive Scaffolds Help Short-Horizon Tasks Beyond Extra Iterations?}
 \author{Anonymous Authors}
 \date{}
 
@@ -38,7 +38,7 @@
 \maketitle
 
 \begin{abstract}
-Recursive language model (RLM) scaffolds are typically motivated by long-horizon reasoning tasks, yet many practical workloads are short-horizon but demand strict output compliance. Here we ask whether recursion provides measurable benefit beyond simply granting a non-recursive setup more attempts. Using Axon, a Rust implementation of an RLM scaffold with checkpointed branching and per-fork workspace state, we evaluate four mode profiles across seven models on the Synthetic inference platform (224 runs). We find that attempt budget, not recursion depth, is the dominant factor: both shallow recursion with three iterations and non-recursive best-of-three consistently outperform deep single-pass recursion, which scores 0\% across all six pre-fix models on our eight-task synthetic suite. Evaluation policy is equally consequential---switching from strict string matching to typed lenient checks on the same 40 Hugging Face runs raises measured pass rate from 10\% to 75\%. A multi-model Pareto analysis identifies two co-dominant configurations, Qwen3.5-397B (75\% pass, 11.9\,s, \$0.004 per task) and Kimi-K2.5 (75\% pass, 38.1\,s, \$0.006 per task), with tenfold speed variation across models. Crucially, the optimal scaffold mode is model-dependent: Qwen3.5 strongly favours recursion while MiniMax-M2.5 favours pure iteration. These results support a calibrated conclusion: shallow recursion can help on short-horizon tasks, but gains are tightly coupled to attempt budget, evaluator design, and output-contract compliance rather than recursion depth per se.
+Recursive language model (RLM) scaffolds are typically motivated by long-horizon reasoning tasks, yet many practical workloads are short-horizon but demand strict output compliance. Here we ask whether recursion provides measurable benefit beyond simply granting a non-recursive setup more attempts. Using Altum, a Rust implementation of an RLM scaffold with checkpointed branching and per-fork workspace state, we evaluate four mode profiles across seven models on the Synthetic inference platform (224 runs). We find that attempt budget, not recursion depth, is the dominant factor: both shallow recursion with three iterations and non-recursive best-of-three consistently outperform deep single-pass recursion, which scores 0\% across all six pre-fix models on our eight-task synthetic suite. Evaluation policy is equally consequential---switching from strict string matching to typed lenient checks on the same 40 Hugging Face runs raises measured pass rate from 10\% to 75\%. A multi-model Pareto analysis identifies two co-dominant configurations, Qwen3.5-397B (75\% pass, 11.9\,s, \$0.004 per task) and Kimi-K2.5 (75\% pass, 38.1\,s, \$0.006 per task), with tenfold speed variation across models. Crucially, the optimal scaffold mode is model-dependent: Qwen3.5 strongly favours recursion while MiniMax-M2.5 favours pure iteration. These results support a calibrated conclusion: shallow recursion can help on short-horizon tasks, but gains are tightly coupled to attempt budget, evaluator design, and output-contract compliance rather than recursion depth per se.
 \end{abstract}
 
 \section{Introduction}
@@ -50,12 +50,12 @@ Most prior framing, however, centers on long-horizon settings. In practical depl
 \textbf{RQ:} When horizon is short, does recursion provide measurable benefit beyond giving a non-recursive setup more iterations?
 \end{quote}
 
-We study this question using \axon, an open Rust implementation of an \rlm-style scaffold with sandboxed execution and deterministic benchmark harnessing (implementation details and code: \url{https://github.com/diogenesoftoronto/axon}).
+We study this question using \altum, an open Rust implementation of an \rlm-style scaffold with sandboxed execution and deterministic benchmark harnessing (implementation details and code: \url{https://github.com/diogenesoftoronto/altum}).
 
 Our findings challenge the assumption that recursion depth is the primary lever for scaffold performance. Deep single-pass recursion (depth 6, one iteration) is consistently the weakest profile on short-horizon slices, while configurations with larger attempt budgets---whether recursive or not---dominate. The choice of evaluation policy proves equally consequential: switching from strict string matching to typed lenient checks on the same 40 Hugging Face runs raises measured pass rate from 10\% to 75\%, revealing that apparent quality differences can be artefacts of checker design. Runtime hardening reduces hard engine errors from 7 to 1, though a single residual timeout shows that systems risk is not fully eliminated. On Codeforces-like executable tasks, the failure bottleneck shifts from runtime crashes to compile-quality and output-contract compliance, indicating that the scaffold's value is bounded by the model's ability to produce well-formed artefacts.
 
 \section{System and Comparison Setup}
-\axon implements a recursive controller that can call a child model loop and run sandboxed Python tools between reasoning steps. For this paper, we treat implementation as fixed and vary only mode profiles.
+\altum implements a recursive controller that can call a child model loop and run sandboxed Python tools between reasoning steps. For this paper, we treat implementation as fixed and vary only mode profiles.
 
 \begin{table}[h]
 \centering
@@ -77,13 +77,13 @@ Table~\ref{tab:modes} defines the core experimental axis: recursion depth versus
 
 Depth-profile comparisons are evaluated under two explicitly reported conditions: \emph{policy-off} and \emph{policy-conditioned}. In policy-off runs, all modes receive identical task query/context text and differ only by runtime controls (max depth, max iterations). In policy-conditioned runs, the harness can inject a selected policy profile that adds format-contract and depth-strategy instructions (optionally prepended into runtime context) and can enable strict depth gates. All result artifacts therefore log policy settings (\texttt{policy\_profile}, \texttt{inject\_policy\_into\_context}, \texttt{depth\_enforcement}, thresholds) so depth effects and policy effects remain distinguishable.
 
-\subsection{Checkpointed Branching State as an Axon Extension}
-Relative to recursion-centric \rlm descriptions \cite{zhang2025rlm,primeintellect2026rlm}, Axon exposes explicit state-management operators inside each sandbox loop: \texttt{CHECKPOINT\_CREATE}/\texttt{CHECKPOINT\_RESTORE} for recoverable snapshots, \texttt{FORK\_CREATE}/\texttt{FORK\_SWITCH}/\texttt{FORK\_LIST} for branch navigation, \texttt{VFS\_WRITE}/\texttt{VFS\_READ}/\texttt{VFS\_LIST} for per-branch scratch state, and \texttt{STRATEGY\_COMMIT}/\texttt{STRATEGY\_STATUS} for rationale tracking.
+\subsection{Checkpointed Branching State as an Altum Extension}
+Relative to recursion-centric \rlm descriptions \cite{zhang2025rlm,primeintellect2026rlm}, Altum exposes explicit state-management operators inside each sandbox loop: \texttt{CHECKPOINT\_CREATE}/\texttt{CHECKPOINT\_RESTORE} for recoverable snapshots, \texttt{FORK\_CREATE}/\texttt{FORK\_SWITCH}/\texttt{FORK\_LIST} for branch navigation, \texttt{VFS\_WRITE}/\texttt{VFS\_READ}/\texttt{VFS\_LIST} for per-branch scratch state, and \texttt{STRATEGY\_COMMIT}/\texttt{STRATEGY\_STATUS} for rationale tracking.
 
 This shifts the agent from pure recursive delegation toward checkpointed exploratory search with reversible branch-local state. In this paper, these controls are held fixed across all profiles; mode comparisons therefore isolate depth/iteration settings rather than a checkpointing ablation.
 
 \subsection{Policy Profiles and Depth Enforcement}
-To improve reproducibility of strict-format evaluations, Axon supports explicit policy bundles loaded from a versioned JSON catalog (\texttt{config/prompt\_policies.json}). Each bundle combines format-contract text with depth-strategy instructions, a flag controlling whether policy text is prepended into the model's runtime context, and default depth-enforcement thresholds.
+To improve reproducibility of strict-format evaluations, Altum supports explicit policy bundles loaded from a versioned JSON catalog (\texttt{config/prompt\_policies.json}). Each bundle combines format-contract text with depth-strategy instructions, a flag controlling whether policy text is prepended into the model's runtime context, and default depth-enforcement thresholds.
 
 Depth enforcement operates at three levels: in \emph{off} mode, no depth gate is applied, preserving legacy behaviour; in \emph{soft} mode, the system emits depth-guidance telemetry without constraining execution; and in \emph{strict} mode, the engine rejects final answers whose recursive-call count or achieved depth falls below configurable thresholds. Both the command-line interface and MCP tool endpoint expose these controls, enabling fixed-policy offline benchmarking and per-call policy overrides in tool-driven workflows.
 
@@ -1099,7 +1099,7 @@ CV ranges from 0.33 (DSV3.2 default, most stable) to 0.98 (Kimi-K2 depth6-single
 
 \section{Implementation Architecture}
 
-Axon's architecture extends the core RLM recursive-decomposition pattern \cite{zhang2025rlm} with explicit state-management operators for checkpointed exploratory search. The key architectural difference from standard RLM is the addition of fork/checkpoint/VFS primitives that enable branch-local reasoning state.
+Altum's architecture extends the core RLM recursive-decomposition pattern \cite{zhang2025rlm} with explicit state-management operators for checkpointed exploratory search. The key architectural difference from standard RLM is the addition of fork/checkpoint/VFS primitives that enable branch-local reasoning state.
 
 \begin{figure}[t]
 \centering
@@ -1125,7 +1125,7 @@ Axon's architecture extends the core RLM recursive-decomposition pattern \cite{z
 \draw[->,thick,dashed] (rlm) -- node[right,font=\scriptsize]{depth$<$max} (sub);
 \draw[->,thick] (sub) -- (llm);
 \end{tikzpicture}
-\caption{Axon architecture. The RLM engine orchestrates iteration loops over a Python sandbox (ouros) and LLM client (genai), with RuntimeState managing fork/checkpoint/VFS state. When depth $<$ max\_depth, \texttt{llm\_query()} spawns a child RLM with its own sandbox.}
+\caption{Altum architecture. The RLM engine orchestrates iteration loops over a Python sandbox (ouros) and LLM client (genai), with RuntimeState managing fork/checkpoint/VFS state. When depth $<$ max\_depth, \texttt{llm\_query()} spawns a child RLM with its own sandbox.}
 \label{fig:architecture}
 \end{figure}
 
@@ -1161,9 +1161,9 @@ As an engineering mitigation, we implemented a post-processing step that strips 
 
 The principled solution is to train models that natively understand the RLM interface. The updated RLM paper (v2) \cite{zhang2025rlm} provides the first evidence that this is both feasible and highly effective. Zhang et al.\ post-trained \textbf{RLM-Qwen3-8B} by distilling only ${\sim}1{,}000$ filtered RLM trajectories from a larger model (Qwen3-Coder-480B-A35B) evaluated on LongBenchPro \cite{chen2026longbenchpro} tasks. The resulting model outperforms the base Qwen3-8B by 28.3\% on average across long-context tasks and approaches vanilla GPT-5 quality on three benchmarks, despite a remarkably small training budget of 300 steps with batch size 64 using the prime-rl library \cite{primerl2025}. Crucially, training focused on improving the root model's ability to interact with the REPL and to discern when sub-calls are useful; sub-call behaviour generalises from general-purpose reasoning capability rather than requiring explicit sub-call supervision. A programmatic trajectory correction step proved critical: 16\% of collected trajectories contained incorrect \texttt{FINAL} usage and 13\% incorrectly called REPL variables as final answers, and fixing these template errors substantially improved the distilled model's performance.
 
-This result directly addresses our observed hallucination failures. A natively trained RLM would not revert to provider-specific tool-call conventions because it has learned the correct REPL interaction patterns. The trajectory correction finding is particularly relevant to Axon: it demonstrates that even large frontier models make systematic template mistakes in RLM usage, and that cleaning these during training data preparation is essential.
+This result directly addresses our observed hallucination failures. A natively trained RLM would not revert to provider-specific tool-call conventions because it has learned the correct REPL interaction patterns. The trajectory correction finding is particularly relevant to Altum: it demonstrates that even large frontier models make systematic template mistakes in RLM usage, and that cleaning these during training data preparation is essential.
 
-For Axon specifically, two paths forward are most promising. The first is trajectory collection and distillation: collecting RLM trajectories from strong scaffold runs (for example, using GPT-5 or Qwen3-Coder as the root model), filtering and correcting template errors, and distilling the result into a smaller model following the recipe in \cite{zhang2025rlm}. Axon's existing trajectory logging infrastructure makes this directly applicable. The second path is reinforcement learning from scaffold feedback, in which scaffold-level signals---pass/fail outcomes, depth utilisation, and format compliance---serve as reward signals for RLHF or DPO fine-tuning, building on the STaR bootstrapping approach \cite{zelikman2022star,zelikman2024quiet}. Axon's benchmark harness already produces the per-task scoring artefacts needed for this pipeline.
+For Altum specifically, two paths forward are most promising. The first is trajectory collection and distillation: collecting RLM trajectories from strong scaffold runs (for example, using GPT-5 or Qwen3-Coder as the root model), filtering and correcting template errors, and distilling the result into a smaller model following the recipe in \cite{zhang2025rlm}. Altum's existing trajectory logging infrastructure makes this directly applicable. The second path is reinforcement learning from scaffold feedback, in which scaffold-level signals---pass/fail outcomes, depth utilisation, and format compliance---serve as reward signals for RLHF or DPO fine-tuning, building on the STaR bootstrapping approach \cite{zelikman2022star,zelikman2024quiet}. Altum's benchmark harness already produces the per-task scoring artefacts needed for this pipeline.
 
 \section{Future Work: Plan Annealing and Prompt-Policy Learning}
 Our results point to two concrete directions for improving recursive scaffold performance. The first is plan annealing: explicit progress propagation across recursive calls so that child models receive only the unresolved objectives from a structured plan, rather than the entire problem context.
@@ -1183,7 +1183,7 @@ This mechanism is aligned with emerging evidence that stable internal structure,
 In parallel, prompt-policy optimization should be treated as a first-class scaffold optimization layer rather than ad-hoc prompt edits. We now expose policy bundles and depth gates as explicit knobs in both CLI and MCP, which enables offline policy search over benchmark artifacts. A practical optimization loop is to score candidate policies on pass rate, format-leak rate, and cost, then promote Pareto-dominant policies per model/mode family. This is directly compatible with LLM-driven prompt optimization methods such as OPRO \cite{zhou2023opro}, automatic prompt engineering \cite{zhou2023ape}, and iterative self-improvement pipelines \cite{zelikman2022star}; for decomposition-aware tasks, policy search can also borrow branch/search structure from Tree-of-Thought style methods \cite{yao2023tot}.
 
 \section{Conclusion}
-This paper reframes \axon evaluation around a practical question arising from \rlm deployment: whether recursion provides measurable benefit over extra iterations on short-horizon tasks. A multi-model Pareto analysis across six pre-fix models and one post-fix model (Kimi-K2.5) on the Synthetic platform (224 total runs) yields three principal conclusions.
+This paper reframes \altum evaluation around a practical question arising from \rlm deployment: whether recursion provides measurable benefit over extra iterations on short-horizon tasks. A multi-model Pareto analysis across six pre-fix models and one post-fix model (Kimi-K2.5) on the Synthetic platform (224 total runs) yields three principal conclusions.
 
 The most immediate lesson is that scaffold bugs can masquerade as model limitations. A FINAL-extraction bug in the fallback path caused depth6-single-pass to score 0\% across all pre-fix models, even when the underlying answers were correct; after fixing, Kimi-K2.5 achieved 62.5\% in depth6-single-pass, demonstrating that deep recursion can work when the scaffold faithfully surfaces model outputs. This finding underscores the importance of end-to-end contract verification before attributing failure to model capability.
 

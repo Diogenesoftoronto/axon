@@ -280,7 +280,7 @@ def render_markdown_report(
         category_examples[row["category"]].append(row)
 
     lines: List[str] = []
-    lines.append("# Failure Taxonomy")
+    lines.append("# Failure Taltumomy")
     lines.append("")
     lines.append(
         f"Generated: {datetime.now(timezone.utc).strftime('%Y-%m-%d %H:%M:%S UTC')}"
@@ -384,7 +384,7 @@ def analyze_result_file(path: Path) -> List[Dict[str, Any]]:
 
 def main() -> int:
     parser = argparse.ArgumentParser(
-        description="Create a failure taxonomy from Axon benchmark results JSON files."
+        description="Create a failure taltumomy from Altum benchmark results JSON files."
     )
     parser.add_argument(
         "inputs",
@@ -393,12 +393,12 @@ def main() -> int:
     )
     parser.add_argument(
         "--out-md",
-        default="benchmarks/analysis/failure_taxonomy.md",
+        default="benchmarks/analysis/failure_taltumomy.md",
         help="Markdown report output path.",
     )
     parser.add_argument(
         "--out-csv",
-        default="benchmarks/analysis/failure_taxonomy_rows.csv",
+        default="benchmarks/analysis/failure_taltumomy_rows.csv",
         help="Flat CSV output path.",
     )
     parser.add_argument(

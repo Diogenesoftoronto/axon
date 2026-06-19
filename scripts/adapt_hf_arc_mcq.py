@@ -7,7 +7,7 @@ from typing import Any, Dict, List
 
 def main() -> int:
     parser = argparse.ArgumentParser(
-        description="Adapt Hugging Face ARC (AI2 ARC) into Axon deterministic MCQ tasks"
+        description="Adapt Hugging Face ARC (AI2 ARC) into Altum deterministic MCQ tasks"
     )
     parser.add_argument("--config", default="ARC-Challenge", help="ARC-Challenge or ARC-Easy")
     parser.add_argument("--split", default="validation")

@@ -7,12 +7,14 @@ use genai::adapter::AdapterKind;
 use genai::resolver::{AuthData, AuthResolver, Endpoint, ServiceTargetResolver};
 use genai::{Client, ModelIden, ServiceTarget};
 
+use altum::export::{export_sft, ExportOptions, ExportStats};
 use altum::mcp::McpServer;
 use altum::openai::OpenAiServer;
 use altum::policy::{DepthEnforcementMode, PolicyCatalog, RuntimePolicy};
 use altum::rlm::{Rlm, RlmConfig};
 use altum::store::ContextStore;
 use altum::tools::ToolRegistry;
+use altum::trajectory::TrajectoryRecorder;
 
 #[derive(Debug, Parser)]
 #[command(
@@ -59,6 +61,10 @@ struct Cli {
     /// Trace sandbox execution steps (code blocks, external calls, vars) to stderr
     #[arg(long)]
     trace_sandbox: bool,
+
+    /// Optional path to append per-run trajectory JSONL records
+    #[arg(long)]
+    trace_output: Option<PathBuf>,
 
     /// Prompt policy profile name
     #[arg(long, default_value = "baseline")]
@@ -146,6 +152,38 @@ enum Commands {
         /// OpenAI-compatible models endpoint to expose from /v1/models
         #[arg(long, env = "ALTUM_MODELS_URL")]
         models_url: Option<String>,
+    },
+
+    /// Convert recorded trajectory JSONL into SFT finetuning data (OpenAI messages).
+    #[command(name = "export-sft")]
+    ExportSft {
+        /// Path to input trajectory JSONL (one trajectory per line)
+        #[arg(long)]
+        input: PathBuf,
+
+        /// Path to output SFT JSONL
+        #[arg(long)]
+        output: PathBuf,
+
+        /// SFT format (only `openai` / `openai-messages` / `messages` supported)
+        #[arg(long, default_value = "openai")]
+        format: String,
+
+        /// Drop trajectories whose final answer is empty
+        #[arg(long, default_value_t = true)]
+        require_final: bool,
+
+        /// Minimum number of internal messages per kept trajectory
+        #[arg(long, default_value_t = 2)]
+        min_messages: usize,
+
+        /// Cap the number of internal messages per kept trajectory
+        #[arg(long)]
+        max_messages: Option<usize>,
+
+        /// Truncate each message content to at most N characters
+        #[arg(long)]
+        max_chars_per_message: Option<usize>,
     },
 }
 
@@ -326,12 +364,50 @@ async fn main() -> Result<()> {
             eprintln!("Altum OpenAI-compatible server listening on http://{bind}/v1");
             server.serve(bind).await?;
         }
+
+        Commands::ExportSft {
+            ref input,
+            ref output,
+            ref format,
+            require_final,
+            min_messages,
+            max_messages,
+            max_chars_per_message,
+        } => {
+            let fmt = altum::export::SftFormat::parse(format)
+                .ok_or_else(|| anyhow::anyhow!("unsupported --format '{}'", format))?;
+            let opts = ExportOptions {
+                format: fmt,
+                require_final,
+                min_messages,
+                max_messages,
+                max_chars_per_message,
+            };
+            let stats: ExportStats = export_sft(input, output, &opts)?;
+            eprintln!(
+                "ExportSft: read={} kept={} skipped_no_final={} skipped_too_few_messages={} skipped_truncated={} -> {}",
+                stats.read,
+                stats.kept,
+                stats.skipped_no_final,
+                stats.skipped_too_few_messages,
+                stats.skipped_truncated_messages,
+                output.display()
+            );
+        }
     }
 
     Ok(())
 }
 
 fn make_rlm(client: &Client, cli: &Cli, depth: usize, runtime_policy: RuntimePolicy) -> Rlm {
+    let trace_sink = cli
+        .trace_output
+        .as_ref()
+        .map(TrajectoryRecorder::to_path)
+        .transpose()
+        .ok()
+        .flatten()
+        .map(std::sync::Arc::new);
     Rlm::new(RlmConfig {
         client: client.clone(),
         model: cli.model.clone(),
@@ -343,6 +419,7 @@ fn make_rlm(client: &Client, cli: &Cli, depth: usize, runtime_policy: RuntimePol
         trace_sandbox: cli.trace_sandbox,
         runtime_policy,
         tool_registry: std::sync::Arc::new(ToolRegistry::new()),
+        trace_sink,
     })
 }
 

@@ -10,7 +10,7 @@ LABELS = ["A", "B", "C", "D"]
 
 def main() -> int:
     parser = argparse.ArgumentParser(
-        description="Adapt Hugging Face MMLU into Axon deterministic MCQ tasks"
+        description="Adapt Hugging Face MMLU into Altum deterministic MCQ tasks"
     )
     parser.add_argument("--split", default="validation")
     parser.add_argument("--limit", type=int, default=100)

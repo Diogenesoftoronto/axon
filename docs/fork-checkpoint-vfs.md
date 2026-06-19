@@ -1,6 +1,6 @@
-# Fork, Checkpoint, and VFS Extension (Potential Feature)
+# Fork, Checkpoint, and VFS Extension Design
 
-This document proposes a workflow extension for Altum where the agent can:
+This document defines a candidate workflow extension for Altum where the agent can:
 
 1. Fork reasoning into multiple candidate paths.
 2. Checkpoint state at meaningful milestones.
@@ -22,13 +22,13 @@ A fork and checkpoint flow allows Altum to:
 
 The VFS adds a structured scratchpad where candidate plans, evidence, and partial artifacts can be stored and revisited.
 
-## Proposed Concepts
+## Concepts
 
 ### Checkpoint
 
 A checkpoint is a restorable snapshot of runtime state at one moment.
 
-Suggested checkpoint payload:
+Checkpoint payload:
 
 - sandbox state reference (or replay journal boundary),
 - current message window id,
@@ -50,9 +50,9 @@ Each fork has:
 
 The VFS is a logical filesystem visible to the model as a workspace, not host FS access.
 
-Suggested virtual paths:
+Virtual paths:
 
-- `/plans/` for strategy drafts,
+- `/plans/` for strategy candidates,
 - `/evidence/` for extracted facts and citations,
 - `/artifacts/` for generated code or text,
 - `/scores/` for branch evaluation notes.
@@ -78,9 +78,9 @@ The model can write, read, diff, and promote files across forks through controll
 
 This defers commitment until enough evidence exists.
 
-## API Shape (Draft)
+## API Shape
 
-Potential external calls exposed in sandbox:
+External calls exposed in sandbox:
 
 - `CHECKPOINT_CREATE(label: str) -> checkpoint_id`
 - `CHECKPOINT_RESTORE(checkpoint_id: str) -> status`

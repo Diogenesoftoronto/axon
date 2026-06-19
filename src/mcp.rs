@@ -181,9 +181,9 @@ impl McpServer {
         if args.tools.is_empty() {
             return tool_error("tools list cannot be empty");
         }
-        
+
         let _guard = self.service.registry_lock.lock().await;
-        
+
         let mut registry = (**self.service.tool_registry.load()).clone();
         let mut registered = Vec::new();
         for spec in args.tools {
@@ -191,9 +191,11 @@ impl McpServer {
             registry.register(spec);
             registered.push(name);
         }
-        
-        self.service.tool_registry.store(std::sync::Arc::new(registry));
-        
+
+        self.service
+            .tool_registry
+            .store(std::sync::Arc::new(registry));
+
         tool_result(&format!("Registered tools: {}", registered.join(", ")))
     }
 }
@@ -364,8 +366,16 @@ mod tests {
 
         let args = ConfigureToolsArgs {
             tools: vec![
-                ToolSpec { name: "SEARCH".to_string(), description: "searches".to_string(), input_schema: None },
-                ToolSpec { name: "FETCH".to_string(), description: "fetches".to_string(), input_schema: None },
+                ToolSpec {
+                    name: "SEARCH".to_string(),
+                    description: "searches".to_string(),
+                    input_schema: None,
+                },
+                ToolSpec {
+                    name: "FETCH".to_string(),
+                    description: "fetches".to_string(),
+                    input_schema: None,
+                },
             ],
         };
         let result = server.run_configure_tools(args).await;
@@ -387,12 +397,20 @@ mod tests {
     async fn test_configure_tools_overwrites_existing() {
         let server = make_test_mcp_server();
         let args1 = ConfigureToolsArgs {
-            tools: vec![ToolSpec { name: "TOOL".to_string(), description: "v1".to_string(), input_schema: None }],
+            tools: vec![ToolSpec {
+                name: "TOOL".to_string(),
+                description: "v1".to_string(),
+                input_schema: None,
+            }],
         };
         server.run_configure_tools(args1).await;
 
         let args2 = ConfigureToolsArgs {
-            tools: vec![ToolSpec { name: "TOOL".to_string(), description: "v2".to_string(), input_schema: None }],
+            tools: vec![ToolSpec {
+                name: "TOOL".to_string(),
+                description: "v2".to_string(),
+                input_schema: None,
+            }],
         };
         server.run_configure_tools(args2).await;
 
@@ -416,8 +434,12 @@ mod tests {
         };
         // We can't call run_chat_rlm_query (it would make LLM calls),
         // but we can verify the arg resolution logic by checking the struct.
-        let resolved_model = args_no_override.model.unwrap_or_else(|| server.service.model.clone());
-        let resolved_sub = args_no_override.sub_model.unwrap_or_else(|| server.service.sub_model.clone());
+        let resolved_model = args_no_override
+            .model
+            .unwrap_or_else(|| server.service.model.clone());
+        let resolved_sub = args_no_override
+            .sub_model
+            .unwrap_or_else(|| server.service.sub_model.clone());
         assert_eq!(resolved_model, "default-model");
         assert_eq!(resolved_sub, "default-sub-model");
 
@@ -432,8 +454,12 @@ mod tests {
             require_min_depth: None,
             require_min_recursive_calls: None,
         };
-        let resolved_model = args_with_override.model.unwrap_or_else(|| server.service.model.clone());
-        let resolved_sub = args_with_override.sub_model.unwrap_or_else(|| server.service.sub_model.clone());
+        let resolved_model = args_with_override
+            .model
+            .unwrap_or_else(|| server.service.model.clone());
+        let resolved_sub = args_with_override
+            .sub_model
+            .unwrap_or_else(|| server.service.sub_model.clone());
         assert_eq!(resolved_model, "custom-model");
         assert_eq!(resolved_sub, "custom-sub");
     }
@@ -445,7 +471,11 @@ mod tests {
         assert!(reg1_snapshot.is_empty());
 
         let args = ConfigureToolsArgs {
-            tools: vec![ToolSpec { name: "NEW_TOOL".to_string(), description: "new".to_string(), input_schema: None }],
+            tools: vec![ToolSpec {
+                name: "NEW_TOOL".to_string(),
+                description: "new".to_string(),
+                input_schema: None,
+            }],
         };
         server.run_configure_tools(args).await;
 
