@@ -3,7 +3,7 @@
   "checkpoint_id": "c7c3125c0de1",
   "strategy": "manual-commit",
   "branch": "main",
-  "checkpoints_count": 1,
+  "checkpoints_count": 2,
   "files_touched": [
     ".gitignore",
     "CHANGELOG.md",
@@ -32,11 +32,14 @@
     "scripts/plot_benchmark_findings.py",
     "scripts/run_hf_benchmarks.sh",
     "scripts/run_overall_tests.sh",
+    "src/bin/bench_registry.rs",
     "src/export.rs",
     "src/lib.rs",
     "src/llm.rs",
     "src/main.rs",
+    "src/mcp.rs",
     "src/rlm.rs",
+    "src/sandbox.rs",
     "src/service.rs",
     "src/store.rs",
     "src/trajectory.rs"
@@ -47,13 +50,19 @@
       "transcript": "/c7/c3125c0de1/0/full.jsonl",
       "content_hash": "/c7/c3125c0de1/0/content_hash.txt",
       "prompt": "/c7/c3125c0de1/0/prompt.txt"
+    },
+    {
+      "metadata": "/c7/c3125c0de1/1/metadata.json",
+      "transcript": "/c7/c3125c0de1/1/full.jsonl",
+      "content_hash": "/c7/c3125c0de1/1/content_hash.txt",
+      "prompt": "/c7/c3125c0de1/1/prompt.txt"
     }
   ],
   "token_usage": {
-    "input_tokens": 288830,
+    "input_tokens": 385394,
     "cache_creation_tokens": 0,
-    "cache_read_tokens": 8678656,
-    "output_tokens": 15793,
-    "api_call_count": 83
+    "cache_read_tokens": 9587712,
+    "output_tokens": 20928,
+    "api_call_count": 96
   }
 }
