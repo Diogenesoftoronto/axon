@@ -68,13 +68,13 @@ altum --help
 Download a prebuilt binary from the latest release:
 
 ```bash
-gh release download --repo Diogenesoftoronto/altum --pattern "altum-*" --dir .
+gh release download --repo Diogenesoftoronto/axon --pattern "altum-*" --dir .
 ```
 
 You can also download a specific version:
 
 ```bash
-gh release download v0.1.0 --repo Diogenesoftoronto/altum --pattern "altum-*"
+gh release download v0.2.0 --repo Diogenesoftoronto/axon --pattern "altum-*"
 ```
 
 ### Usage
@@ -318,10 +318,10 @@ This repo publishes binaries from `.github/workflows/release.yml`.
 With `gh`:
 
 ```bash
-git tag v0.1.0
-git push origin v0.1.0
-gh run list --repo Diogenesoftoronto/altum --workflow release.yml
-gh release view v0.1.0 --repo Diogenesoftoronto/altum
+git tag v0.2.0
+git push origin v0.2.0
+gh run list --repo Diogenesoftoronto/axon --workflow release.yml
+gh release view v0.2.0 --repo Diogenesoftoronto/axon
 ```
 
 ## Benchmarking

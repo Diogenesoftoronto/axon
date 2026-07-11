@@ -6,9 +6,18 @@ use crate::tools::ToolRegistry;
 
 pub const MAIN_SESSION_ID: &str = "main";
 
+/// Read-only snapshot of the tool registry used to construct a [`Sandbox`].
+///
+/// Returns a clone of the (cheaply cloneable, lock-free) registry, suitable
+/// for caller-side introspection without leaking the live `SessionManager`.
+pub fn all_external_functions_for_read(tool_registry: &ToolRegistry) -> Vec<String> {
+    all_external_functions(tool_registry)
+}
+
 pub struct Sandbox {
     mgr: SessionManager,
     active_session: String,
+    tool_registry: ToolRegistry,
 }
 
 fn builtin_external_functions() -> Vec<String> {
@@ -50,6 +59,7 @@ impl Sandbox {
         Ok(Self {
             mgr,
             active_session: MAIN_SESSION_ID.to_string(),
+            tool_registry: tool_registry.clone(),
         })
     }
 
@@ -87,6 +97,16 @@ impl Sandbox {
             .collect()
     }
 
+    /// Borrow the underlying ouros `SessionManager` (read-only).
+    pub fn session_manager(&self) -> &SessionManager {
+        &self.mgr
+    }
+
+    /// Borrow the underlying ouros `SessionManager` (mutable).
+    pub fn session_manager_mut(&mut self) -> &mut SessionManager {
+        &mut self.mgr
+    }
+
     pub fn fork_session(&mut self, source_session: &str, new_session: &str) -> Result<()> {
         Ok(self.mgr.fork_session(source_session, new_session)?)
     }
@@ -116,11 +136,16 @@ impl Sandbox {
         Ok(self.mgr.fork_session(source_session, target_session)?)
     }
 
-    fn session_exists(&self, session_id: &str) -> bool {
+    pub fn session_exists(&self, session_id: &str) -> bool {
         self.mgr
             .list_sessions()
             .iter()
             .any(|info| info.id == session_id)
+    }
+
+    /// Borrow the tool registry that backs this sandbox's external functions.
+    pub fn tool_registry(&self) -> &ToolRegistry {
+        &self.tool_registry
     }
 }
 

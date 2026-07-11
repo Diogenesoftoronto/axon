@@ -23,10 +23,10 @@ jobs:
           - os: windows-latest
             target: x86_64-pc-windows-msvc
             bin_ext: ".exe"
-          - os: macos-13
+          - os: macos-15-intel
             target: x86_64-apple-darwin
             bin_ext: ""
-          - os: macos-14
+          - os: macos-15
             target: aarch64-apple-darwin
             bin_ext: ""
 
